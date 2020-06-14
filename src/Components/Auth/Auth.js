@@ -29,7 +29,11 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function Auth() {
     const classes = useStyles();
-    const { authOpen, setAuthOpen, user, setUser } = useContext(AppContext);
+
+    const { authOpen, setAuthOpen, user, userDispatch } = useContext(AppContext);
+
+
+    
 
     const [isSuccess, setIsSuccess] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -97,7 +101,7 @@ export default function Auth() {
                             authOpen.comp == 1 ?
 
                                 <LoginForm
-                                    setUser={setUser}
+                                    userDispatch={userDispatch}
                                     isSuccess={isSuccess}
                                     setIsSuccess={setIsSuccess}
                                     loading={loading}
@@ -112,7 +116,7 @@ export default function Auth() {
                                 />
                                 :
                                 <RegistrationForm
-                                    setUser={setUser}
+                                userDispatch={userDispatch}
                                     isSuccess={isSuccess}
                                     setIsSuccess={setIsSuccess}
                                     loading={loading}

@@ -15,6 +15,7 @@ import Category from './Components/Category/Category';
 import Body from './Components/Index/Body';
 import Footer from './Components/Common/Footer';
 import userReducer from './Components/Reducers/UserReducer'
+import UserReducer from './Components/Reducers/UserReducer';
 
 const useStyles = makeStyles((theme) => ({
   topClass: {
@@ -30,6 +31,14 @@ function App() {
 
   const styleClasses = useStyles();
 
+  const [user, userDispatch] = useReducer(UserReducer,{
+    user:{},
+    loading:true,
+    error:{
+      message:''
+    }
+  })
+
   const [cartItems, setCartItems] = useState({})
   const [cartItemsLoading, setCartItemsLoading] = useState(true)
   const [wishListItems, setWishListItems] = useState([])
@@ -38,11 +47,12 @@ function App() {
     state: false,
     comp: 1
   })
-  const [user, setUser] = useState({})
+  
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState({
     state: [],
-    loading: true
+    loading: true,
+   
   });
 
   useEffect(() => {
@@ -67,12 +77,17 @@ function App() {
     )
       .then(response => {
 
-        setUser(response.data.data)
-        setLoading(false)
+        userDispatch({
+          type:'LOGIN',
+          payload:response.data.data
+        })
 
       }).catch(error => {
-        // console.log(error.response.status)
-        setLoading(false)
+        console.log(error.response)
+        userDispatch({
+          type:'ERROR',
+          payload:error.response.data.error
+        })
       })
 
   }, [])
@@ -81,7 +96,7 @@ function App() {
 
     if (Object.entries(user).length > 0) {
 
-      axios.get(`${process.env.REACT_APP_DOMAIN}/api/wishlist?customer_id=${user.id}&token=true`,
+      axios.get(`${process.env.REACT_APP_DOMAIN}/api/wishlist?customer_id=${user.user.id}&token=true`,
         { 
           withCredentials: true 
         }
@@ -111,7 +126,7 @@ function App() {
         setCartItemsLoading(false)
       })
 
-  }, [user])
+  }, [user.user])
 
 
 
@@ -119,10 +134,10 @@ function App() {
     <BrowserRouter>
 
       {
-        !loading ?
+        !user.loading ?
         // true &&
 
-        <AppContext.Provider value={{ user, setUser, cartItems, setCartItems, authOpen, setAuthOpen, categories,wishListItems, setWishListItems }}>
+        <AppContext.Provider value={{ user, userDispatch, cartItems, setCartItems, authOpen, setAuthOpen, categories,wishListItems, setWishListItems }}>
 
           <Appbar />
           <SnackbarProvider

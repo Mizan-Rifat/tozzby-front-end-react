@@ -26,6 +26,7 @@ import Select from '@material-ui/core/Select';
 import SearchBox from './SearchBox';
 import CategoryDrawer from './CategoryDrawer';
 import { useHistory } from 'react-router-dom';
+import AuthCheck from '../Common/AuthCheck';
 
 
 
@@ -144,7 +145,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PrimarySearchAppBar() {
   const history = useHistory();
-  const { user, setUser, cartItems,wishListItems, authOpen, setAuthOpen } = useContext(AppContext);
+
+  const { user, userDispatch, cartItems,wishListItems, authOpen, setAuthOpen } = useContext(AppContext);
+  const [authenticated] = AuthCheck();
+
   const [showCart, setShowCart] = useState(false);
   const [showCategories, setShowCategories] = useState(false);
   const [catOpen, setCatOpen] = useState(false);
@@ -195,7 +199,11 @@ export default function PrimarySearchAppBar() {
       }
     )
       .then(response => {
-        setUser({})
+        userDispatch({
+          type:'LOGOUT',
+        })
+      }).catch(error=>{
+        console.log(error)
       })
   }
 
@@ -217,7 +225,7 @@ export default function PrimarySearchAppBar() {
       onClose={handleMenuClose}
     >
       {
-        Object.entries(user).length > 0 ?
+        authenticated ?
           <>
             <MenuItem onClick={handleAccount}>My account</MenuItem>
             <MenuItem onClick={handleLogout}>Logout</MenuItem>

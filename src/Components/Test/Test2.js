@@ -55,12 +55,6 @@ export default function NewsLetter() {
 
     const classes = useStyles();
 
-    const style={
-        backgroundImage:`url(https://laz-img-cdn.alicdn.com/tfs/TB1iD3fNbvpK1RjSZFqXXcXUVXa-317-281.png)`,
-        height:'100px',
-        width:'100px'
-    }
-
 
     return (
         <div className="d-flex pdiv">

@@ -5,16 +5,16 @@ export default function AuthCheck() {
 
     const [authenticated,setAuthenticated] = useState(false);
 
-    const {initState, initDispatch} = useContext(AppContext)
+    const {user, userDispatch} = useContext(AppContext)
 
 
     useEffect(()=>{
-        if(Object.entries(initState.user).length > 0){
+        if(Object.entries(user.user).length > 0){
             setAuthenticated(true);
         }else{
             setAuthenticated(false);
         }
-    },[user])
+    },[user.user])
 
     return [authenticated];
 }

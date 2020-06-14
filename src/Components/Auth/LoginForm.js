@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export default function LoginForm({ setUser, loading, setLoading, isSuccess, setIsSuccess, formData, setFormData, hasError, renderError, handleFieldChange, authOpen, setAuthOpen }) {
+export default function LoginForm({ userDispatch, loading, setLoading, isSuccess, setIsSuccess, formData, setFormData, hasError, renderError, handleFieldChange, authOpen, setAuthOpen }) {
 
     const classes = useStyles();
 
@@ -78,7 +78,12 @@ export default function LoginForm({ setUser, loading, setLoading, isSuccess, set
                 if (response.status === 200) {
                     console.log(response)
                     setLoading(false)
-                    setUser(response.data.data)
+
+                    userDispatch({
+                        type:'LOGIN',
+                        payload:response.data.data
+                    })
+                    
                     setIsSuccess(true)
                 }
             })
