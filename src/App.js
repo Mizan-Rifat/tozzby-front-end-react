@@ -39,6 +39,13 @@ function App() {
     }
   })
 
+
+  const [cart, cartDispatch] = useReducer(cartReducer, {
+    cartItems:{},
+    cartItemsFetchingLoading:true,
+    
+  })
+
   const [cartItems, setCartItems] = useState({})
   const [cartItemsLoading, setCartItemsLoading] = useState(true)
   const [wishListItems, setWishListItems] = useState([])

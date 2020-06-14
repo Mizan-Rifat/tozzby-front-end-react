@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export default function RegistrationForm({ setUser, loading, setLoading, isSuccess, setIsSuccess, formData, setFormData, hasError, renderError, handleFieldChange,authOpen,setAuthOpen}) {
+export default function RegistrationForm({ setUser, loading, setLoading, setSuccessMsg, setIsSuccess, formData, setFormData, hasError, renderError, handleFieldChange,authOpen,setAuthOpen}) {
 
     const classes = useStyles();
 
@@ -83,6 +83,7 @@ export default function RegistrationForm({ setUser, loading, setLoading, isSucce
                     console.log(response)
                     setLoading(false)
                     setIsSuccess(true)
+                    setSuccessMsg(response.data.message)
                 }
             })
             .catch(error => {

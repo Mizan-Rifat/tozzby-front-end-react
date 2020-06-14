@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export default function LoginForm({ userDispatch, loading, setLoading, isSuccess, setIsSuccess, formData, setFormData, hasError, renderError, handleFieldChange, authOpen, setAuthOpen }) {
+export default function LoginForm({ userDispatch, loading, setLoading, setSuccessMsg, setIsSuccess, formData, setFormData, hasError, renderError, handleFieldChange, authOpen, setAuthOpen }) {
 
     const classes = useStyles();
 
@@ -83,8 +83,9 @@ export default function LoginForm({ userDispatch, loading, setLoading, isSuccess
                         type:'LOGIN',
                         payload:response.data.data
                     })
-                    
+
                     setIsSuccess(true)
+                    setSuccessMsg(response.data.message)
                 }
             })
             .catch(error => {

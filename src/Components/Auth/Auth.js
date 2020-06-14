@@ -36,6 +36,7 @@ export default function Auth() {
     
 
     const [isSuccess, setIsSuccess] = useState(false)
+    const [successMsg, setSuccessMsg] = useState('')
     const [loading, setLoading] = useState(false)
 
     const handleClickOpen = () => {
@@ -93,7 +94,7 @@ export default function Auth() {
                         isSuccess ?
 
                             <div className="text-center">
-                                Logged in successfully
+                                {successMsg}
                             </div>
 
                             :
@@ -103,6 +104,7 @@ export default function Auth() {
                                 <LoginForm
                                     userDispatch={userDispatch}
                                     isSuccess={isSuccess}
+                                    setSuccessMsg={setSuccessMsg}
                                     setIsSuccess={setIsSuccess}
                                     loading={loading}
                                     setLoading={setLoading}
@@ -118,6 +120,7 @@ export default function Auth() {
                                 <RegistrationForm
                                 userDispatch={userDispatch}
                                     isSuccess={isSuccess}
+                                    setSuccessMsg={setSuccessMsg}
                                     setIsSuccess={setIsSuccess}
                                     loading={loading}
                                     setLoading={setLoading}
