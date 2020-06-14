@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles(theme => ({
     imgStyle: {
-        height: '400px',
+        height: '365px',
         ['@media (max-width:780px)'] : {
             height:'150px'
           }
@@ -16,7 +16,7 @@ export default function Slider() {
     const classes = useStyles();
     
     return (
-        <div className="mt-2">
+        <div className="">
             <Carousel showArrows={true} showThumbs={false} infiniteLoop={true} showStatus={false} dynamicHeight={true}>
                 <div>
                     <img src={require('../images/1.jpg')} className={classes.imgStyle} />
