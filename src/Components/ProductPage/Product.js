@@ -1,10 +1,10 @@
-import React, { useState, useEffect,createContext } from 'react'
+import React, { useState, useEffect, createContext } from 'react'
 import { Grid, Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import ProductDetails from './ProductDetails';
 import ProductImages from './ProductImages';
 import Axios from 'axios';
-
+import useLoadingBar from '../Common/useLoadingBar';
 
 export const ProductContext = createContext();
 
@@ -36,44 +36,51 @@ export default function Product(props) {
 
     const [product, setproduct] = useState({});
     const [loading, setLoading] = useState(true);
+    const [addLoadingBar, loadingBarJsx] = useLoadingBar();
+
     useEffect(() => {
         window.scrollTo(0, 0)
-    },[]);
+    }, []);
 
 
     useEffect(() => {
+        addLoadingBar(20)
         Axios.get(`${process.env.REACT_APP_DOMAIN}/api/products/${id}`)
             .then(response => {
                 setproduct(response.data.data)
                 setLoading(false)
+                addLoadingBar(80)
             })
-            // .catch(error=>{
-            //     error.response.status == 404 ? console.log('sadfkasjdfasdfasdasd') : console.log('s')
-            // })
+        .catch(error=>{
+            addLoadingBar(80)
+        })
     }, [])
 
 
     const classes = useStyles();
     return (
-        <Container style={{ marginTop: '70px' }}>
-            <Grid container spacing={3}>
+        <>
+            {loadingBarJsx}
+            <Container style={{ marginTop: '70px' }}>
+                <Grid container spacing={3}>
 
-                {
-                    loading ? '' :
+                    {
+                        loading ? '' :
 
-                        <ProductContext.Provider value={{product}}>
-                            <Grid item xs={12} md={6}>
-                                <ProductImages />
-                            </Grid>
+                            <ProductContext.Provider value={{ product }}>
+                                <Grid item xs={12} md={6}>
+                                    <ProductImages />
+                                </Grid>
 
-                            <Grid item xs={12} md={6}>
-                                <ProductDetails />
-                            </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <ProductDetails />
+                                </Grid>
 
-                        </ProductContext.Provider>
-                }
+                            </ProductContext.Provider>
+                    }
 
-            </Grid>
-        </Container>
+                </Grid>
+            </Container>
+        </>
     )
 }

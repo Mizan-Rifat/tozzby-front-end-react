@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext,useReducer } from 'react';
+import React, { useState, useEffect, createContext, useReducer } from 'react';
 import Appbar from './Components/Appbar/Appbar'
 import Index from './Components/Index/Index';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
@@ -15,6 +15,8 @@ import Category from './Components/Category/Category';
 import Body from './Components/Index/Body';
 import Footer from './Components/Common/Footer';
 import userReducer from './Components/Reducers/UserReducer'
+import loadingBarReducer from './Components/Reducers/loadingBarReducer';
+import LoadingBar from 'react-top-loading-bar';
 
 const useStyles = makeStyles((theme) => ({
   topClass: {
@@ -29,6 +31,12 @@ export const AppContext = createContext();
 function App() {
 
   const styleClasses = useStyles();
+
+  const [loadingBarProgress, dispatchLoadingBarProgress] = useReducer(loadingBarReducer, {
+    value: 0
+  })
+
+
 
   const [cartItems, setCartItems] = useState({})
   const [cartItemsLoading, setCartItemsLoading] = useState(true)
@@ -82,17 +90,17 @@ function App() {
     if (Object.entries(user).length > 0) {
 
       axios.get(`${process.env.REACT_APP_DOMAIN}/api/wishlist?customer_id=${user.id}&token=true`,
-        { 
-          withCredentials: true 
+        {
+          withCredentials: true
         }
       )
         .then(response => {
           if (response.data.data != null) {
             setWishListItems(response.data.data)
-            
+
           }
           setWishListItemsLoading(false)
-        }).catch(error=>{
+        }).catch(error => {
           console.log(error)
           setWishListItemsLoading(false)
         })
@@ -103,10 +111,10 @@ function App() {
       .then(response => {
         if (response.data.data != null) {
           setCartItems(response.data.data)
-          
+
         }
         setCartItemsLoading(false)
-      }).catch(error=>{
+      }).catch(error => {
         console.log(error)
         setCartItemsLoading(false)
       })
@@ -120,33 +128,35 @@ function App() {
 
       {
         !loading ?
-        // true &&
+          // true &&
 
-        <AppContext.Provider value={{ user, setUser, cartItems, setCartItems, authOpen, setAuthOpen, categories,wishListItems, setWishListItems }}>
+          <AppContext.Provider value={{ user, setUser, cartItems, setCartItems, cartItemsLoading, authOpen, setAuthOpen, categories, wishListItems, setWishListItems, loadingBarProgress, dispatchLoadingBarProgress }}>
 
-          <Appbar />
-          <SnackbarProvider
-            classes={{
-              anchorOriginTopRight: styleClasses.topClass
-            }}
+            <Appbar />
 
-          >
-            <div className="topMargin">
-              <Switch>
-                <Route path='/' exact component={Body} />
-                <Route path='/product/:id' component={Product} />
-                <Route path='/category/:slug' component={Category} />
-                <Route path='/test' component={Test} />
-                <Route path='/cart' component={Cart} />
-                <Route path='/checkout' component={Checkout} />
-                <Route path='/account' component={User} />
-              </Switch>
-            </div>
-          </SnackbarProvider>
-          <Auth />
-          <Footer />
-        </AppContext.Provider>
-        : ''
+
+            <SnackbarProvider
+              classes={{
+                anchorOriginTopRight: styleClasses.topClass
+              }}
+
+            >
+              <div className="topMargin">
+                <Switch>
+                  <Route path='/' exact component={Body} />
+                  <Route path='/product/:id' component={Product} />
+                  <Route path='/category/:slug' component={Category} />
+                  <Route path='/test' component={Test} />
+                  <Route path='/cart' component={Cart} />
+                  <Route path='/checkout' component={Checkout} />
+                  <Route path='/account' component={User} />
+                </Switch>
+              </div>
+            </SnackbarProvider>
+            <Auth />
+            <Footer />
+          </AppContext.Provider>
+          : ''
       }
     </BrowserRouter>
   );

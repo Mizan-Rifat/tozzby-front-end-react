@@ -9,7 +9,7 @@ import ProductSection from '../Sections/ProductSection';
 import SpecialProducts from '../Sections/SpecialProducts';
 import axios from 'axios'
 import { Link } from '@material-ui/core';
-
+import useLoadingBar from '../Common/useLoadingBar';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -61,13 +61,12 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function IndexTabs() {
+export default function IndexTabs({addLoadingBar}) {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
     const [newProducts, setNewProducts] = useState(Array.from(Array(5).keys()))
     const [featuredProducts, setFeaturedProducts] = useState(Array.from(Array(5).keys()));
     const [loading, setLoading] = React.useState(true);
-
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -91,14 +90,19 @@ export default function IndexTabs() {
                     setFeaturedProducts(responseTwo.data.data)
                     setLoading(false)
                     // console.log({responseOne, responseTwo});
+
+                    addLoadingBar(10)
                 })
             )
             .catch(errors => {
                 console.error(errors);
                 setLoading(false)
+
+                addLoadingBar(10)
             });
 
     }, [])
+
 
 
     return (

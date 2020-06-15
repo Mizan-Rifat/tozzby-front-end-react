@@ -144,7 +144,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PrimarySearchAppBar() {
   const history = useHistory();
-  const { user, setUser, cartItems,wishListItems, authOpen, setAuthOpen } = useContext(AppContext);
+  const { user, setUser, cartItems,wishListItems, authOpen, setAuthOpen,dispatchLoadingBarProgress } = useContext(AppContext);
   const [showCart, setShowCart] = useState(false);
   const [showCategories, setShowCategories] = useState(false);
   const [catOpen, setCatOpen] = useState(false);
@@ -276,6 +276,16 @@ export default function PrimarySearchAppBar() {
       </MenuItem>
     </Menu>
   );
+
+
+    // useEffect(()=>{
+    //   dispatchLoadingBarProgress({
+    //     type:'MAKE_NULL'
+    //   })
+    //   console.log('apply')
+    // },[history.location])
+
+
 
   return (
     <div className={classes.grow}>

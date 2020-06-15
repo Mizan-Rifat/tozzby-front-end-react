@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import { Paper, Grid,Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import FacebookIcon from '@material-ui/icons/Facebook';
@@ -6,7 +6,7 @@ import InstagramIcon from '@material-ui/icons/Instagram';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import YouTubeIcon from '@material-ui/icons/YouTube';
 import RedditIcon from '@material-ui/icons/Reddit';
-
+import useLoadingBar from '../Common/useLoadingBar';
 
 const useStyles = makeStyles(theme => ({
 
@@ -55,9 +55,12 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export default function NewsLetter() {
+export default function NewsLetter({addLoadingBar}) {
 
     const classes = useStyles();
+    useEffect(() => {
+        addLoadingBar(10)
+    }, [])
 
 
     return (

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import SingleCategoryBar from './SingleCategoryBar';
 import { Grid, Container } from '@material-ui/core';
+import useLoadingBar from '../Common/useLoadingBar';
 
-
-export default function CategoryBars() {
+export default function CategoryBars({addLoadingBar}) {
 
 
     const [category, setcategory] = useState([
@@ -60,6 +60,10 @@ export default function CategoryBars() {
             image: 'Album4.png'
         }
     ])
+
+    useEffect(() => {
+        addLoadingBar(10)
+    }, [])
 
 
 

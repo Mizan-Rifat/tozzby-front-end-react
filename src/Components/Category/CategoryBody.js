@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect, useState,useContext } from 'react'
 import { Grid } from '@material-ui/core'
 import SingleProduct from '../Sections/SingleProduct';
 import { spring } from "react-flip-toolkit";
@@ -13,6 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import { useQueryState } from 'react-router-use-location-state';
+import {AppContext} from '../../App';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -37,8 +38,15 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function CategoryBody({ id, search }) {
+export default function CategoryBody({ id, search,addLoadingBar }) {
     const classes = useStyles();
+
+
+    const {dispatchLoadingBarProgress} =useContext(AppContext);
+
+
+
+
     const [sortQry, setSortQry] = useQueryState('sort', '')
     const [orderQry, setOrderQry] = useQueryState('order', '')
     const query = new URLSearchParams(search);
@@ -100,9 +108,11 @@ export default function CategoryBody({ id, search }) {
         ).then(response => {
             setProducts(response.data.data)
             setLoading(false)
+            addLoadingBar(50)
         }).catch(error => {
             console.log(error)
             setLoading(false)
+            addLoadingBar(50)
         })
     }, [attribute, search])
 
@@ -126,6 +136,15 @@ export default function CategoryBody({ id, search }) {
             });
         });
     }, [products]);
+
+    useEffect(()=>{
+        if(!loading){
+            dispatchLoadingBarProgress({
+                type:'ADD',
+                payload:10
+            })
+        }
+    },[loading])
 
     return (
         <>

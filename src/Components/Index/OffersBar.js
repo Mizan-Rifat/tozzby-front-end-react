@@ -1,7 +1,7 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import { Grid, Paper } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles';
-
+import useLoadingBar from '../Common/useLoadingBar';
 
 const useStyles = makeStyles(theme => ({
     imgStyle: {
@@ -25,8 +25,11 @@ const useStyles = makeStyles(theme => ({
         padding: '15px 0',
     }
 }))
-export default function OffersBar({ banner }) {
+export default function OffersBar({ banner,addLoadingBar }) {
     const classes = useStyles();
+    useEffect(() => {
+        addLoadingBar(10)
+    }, [])
     return (
         <>
             {

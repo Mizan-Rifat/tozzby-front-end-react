@@ -10,29 +10,32 @@ import JustForYou from './JustForYou';
 import OffersBar from './OffersBar';
 import Elementor from './Elementor';
 import NewsLetter from './NewsLetter';
+import useLoadingBar from '../Common/useLoadingBar';
 
 export default function Body() {
 
-    const { categories } = useContext(AppContext)
+    const { categories,loadingBarProgress, dispatchLoadingBarProgress } = useContext(AppContext)
+    const [addLoadingBar, loadingBarJsx] = useLoadingBar();
     return (
 
         <div >
-            <Hero />
-            <Elementor />
-            <CategoryBars />
-            <OffersBar />
-            <IndexTabs />
+            {loadingBarJsx}
+            <Hero addLoadingBar={addLoadingBar}/>
+            <Elementor addLoadingBar={addLoadingBar}/>
+            <CategoryBars addLoadingBar={addLoadingBar}/>
+            <OffersBar addLoadingBar={addLoadingBar}/>
+            <IndexTabs addLoadingBar={addLoadingBar}/>
 
             {
                     categories.state.filter(item => item.show_ == 1).map((category, index) => (
-                        <ProductSection key={index} category={category} />
+                        <ProductSection key={index} category={category} addLoadingBar={addLoadingBar} />
                     ))
             }
 
-            <OffersBar banner={2} />
+            <OffersBar banner={2} addLoadingBar={addLoadingBar}/>
 
-            <JustForYou />
-            <NewsLetter />
+            <JustForYou addLoadingBar={addLoadingBar}/>
+            <NewsLetter addLoadingBar={addLoadingBar}/>
         </div>
     )
 }

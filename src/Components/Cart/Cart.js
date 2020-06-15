@@ -14,6 +14,7 @@ import Auth from '../Auth/Auth';
 import useWishList from '../Common/useWishList';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import useLoadingBar from '../Common/useLoadingBar';
 
 const useStyles = makeStyles((theme) => ({
     image: {
@@ -67,8 +68,8 @@ const useStyles = makeStyles((theme) => ({
 export default function Cart() {
 
 
-    const { user, cartItems, setCartItems, authOpen, setAuthOpen, wishListItems, setWishListItems } = useContext(AppContext);
-
+    const { user, cartItems, setCartItems, cartItemsLoading, setAuthOpen, wishListItems, setWishListItems, dispatchLoadingBarProgress } = useContext(AppContext);
+    const [addLoadingBar, loadingBarJsx] = useLoadingBar();
     useEffect(() => {
         window.scrollTo(0, 0)
     }, []);
@@ -80,56 +81,66 @@ export default function Cart() {
 
 
 
-
+    useEffect(() => {
+        addLoadingBar(50)
+    }, []);
+    useEffect(() => {
+        if (!cartItemsLoading) {
+            addLoadingBar(50)
+        }
+    }, [cartItemsLoading]);
 
 
 
 
     return (
-        <Container style={{ paddingLeft: '50px', paddingRight: '50px', marginTop: '100px' }}>
-            <Paper variant="outlined" square className={classes.paper} style={{ border: 'none' }}>
-                <div className="">
-                    <h5 style={{ fontWeight: 700 }}>Shopping Cart</h5>
-                </div>
-            </Paper>
-            <Grid container spacing={3}>
+        <>
+            {loadingBarJsx}
+            <Container style={{ paddingLeft: '50px', paddingRight: '50px', marginTop: '100px' }}>
+                <Paper variant="outlined" square className={classes.paper} style={{ border: 'none' }}>
+                    <div className="">
+                        <h5 style={{ fontWeight: 700 }}>Shopping Cart</h5>
+                    </div>
+                </Paper>
+                <Grid container spacing={3}>
 
-                <Grid item xs={12} sm={8}>
-                    {
-                        Object.entries(cartItems).length > 0 ?
-                            <>
-                                {
-                                    cartItems.items.map((item, index) => (
+                    <Grid item xs={12} sm={8}>
+                        {
+                            Object.entries(cartItems).length > 0 ?
+                                <>
+                                    {
+                                        cartItems.items.map((item, index) => (
 
-                                        <Paper variant="outlined" key={index} square className={classes.paper}>
-                                            <SingleItem
-                                                item={item}
-                                                setCartItems={setCartItems}
-                                                wishListItems={wishListItems}
-                                                setWishListItems={setWishListItems}
-                                            />
-                                        </Paper>
+                                            <Paper variant="outlined" key={index} square className={classes.paper}>
+                                                <SingleItem
+                                                    item={item}
+                                                    setCartItems={setCartItems}
+                                                    wishListItems={wishListItems}
+                                                    setWishListItems={setWishListItems}
+                                                />
+                                            </Paper>
 
-                                    ))
-                                }
+                                        ))
+                                    }
 
-                            </>
+                                </>
 
-                            :
-                            <div className="text-center mt-5">
-                                <h5>Cart Is Empty</h5>
-                            </div>
-                    }
+                                :
+                                <div className="text-center mt-5">
+                                    <h5>Cart Is Empty</h5>
+                                </div>
+                        }
 
+                    </Grid>
+
+                    <Grid item xs={12} sm={4}>
+                        <Paper variant="outlined" square className={classes.paper}>
+                            <CartSummary user={user} cart={cartItems} setCart={setCartItems} setAuthOpen={setAuthOpen} />
+                        </Paper>
+                    </Grid>
                 </Grid>
-
-                <Grid item xs={12} sm={4}>
-                    <Paper variant="outlined" square className={classes.paper}>
-                        <CartSummary user={user} cart={cartItems} setCart={setCartItems} setAuthOpen={setAuthOpen} />
-                    </Paper>
-                </Grid>
-            </Grid>
-        </Container >
+            </Container >
+        </>
     )
 }
 
@@ -183,7 +194,7 @@ function SingleItem({ item, setCartItems, wishListItems, setWishListItems }) {
 
 
 
-console.log({inWishList})
+    console.log({ inWishList })
     return (
         <div className="row mt-2">
 
