@@ -1,11 +1,15 @@
 import { Container, Grid, Hidden, Button } from '@material-ui/core';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useContext } from 'react';
 import CategoryBody from './CategoryBody';
 import CategorySidebar from './CategorySidebar';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
+import {AppContext} from '../../App';
+import useLoadingBar from '../Common/useLoadingBar'
+
+
 
 const useStyles = makeStyles((theme) => ({
     separator: {
@@ -21,10 +25,14 @@ export default function Category(props) {
     let pathnameArray = array.filter((item, index) => index > 1)
     const slug = pathnameArray.slice(-1).pop();
 
+    const [addLoadingBar, loadingBarJsx] = useLoadingBar();
 
     const [categories, setCategories] = useState({})
     const [id, setId] = useState('')
     const [loading, setLoading] = useState(true)
+
+
+    const {dispatchLoadingBarProgress} =useContext(AppContext);
 
     const toTitleCase = (phrase) => {
         return phrase
@@ -46,60 +54,76 @@ export default function Category(props) {
             setCategories(response.data.data)
             setId(response.data.data.id)
             setLoading(false)
+            addLoadingBar(30)
         }).catch(error => {
             console.log(error)
             setLoading(false)
+            addLoadingBar(30)
         })
     }, [slug])
+
     useEffect(() => {
         window.scrollTo(0, 0)
-    },[]);
+        addLoadingBar(20)
+    }, []);
 
+
+    useEffect(()=>{
+        if(!loading){
+            dispatchLoadingBarProgress({
+                type:'ADD',
+                payload:50
+            })
+        }
+    },[loading])
 
 
     return (
-        <Container >
-            {
-                !loading &&
+        <>
+            {loadingBarJsx}
+            <Container >
+                {
+                    !loading &&
 
-                <>
-                    <Breadcrumbs aria-label="breadcrumb" separator="›" classes={{ separator: classes.separator }}>
-                        <Link color="inherit" href="/">
-                            Home
+                    <>
+                        <Breadcrumbs aria-label="breadcrumb" separator="›" classes={{ separator: classes.separator }}>
+                            <Link color="inherit" href="/">
+                                Home
                         </Link>
-                        {
+                            {
 
-                            pathnameArray.map((item, index) => (
+                                pathnameArray.map((item, index) => (
 
-                                <Link
-                                    color={index == pathnameArray.length - 1 ? 'textPrimary' : 'inherit'}
-                                    href={`/category/${item}`}
-                                >
-                                    {toTitleCase(item)}
-                                </Link>
-                            ))
-                        }
-
-
-                    </Breadcrumbs>
+                                    <Link
+                                        color={index == pathnameArray.length - 1 ? 'textPrimary' : 'inherit'}
+                                        href={`/category/${item}`}
+                                    >
+                                        {toTitleCase(item)}
+                                    </Link>
+                                ))
+                            }
 
 
+                        </Breadcrumbs>
 
-                    <Grid container spacing={3}>
 
-                        <Hidden smDown>
-                            <Grid item md={2}>
-                                <CategorySidebar attributes={categories.attributes} search={props.location.search} />
+
+                        <Grid container spacing={3}>
+
+                            <Hidden smDown>
+                                <Grid item md={2}>
+                                    <CategorySidebar attributes={categories.attributes} search={props.location.search} />
+                                </Grid>
+                            </Hidden>
+                            <Grid item md={10}>
+                                <CategoryBody id={id} loading={loading} search={props.location.search} addLoadingBar={addLoadingBar} />
                             </Grid>
-                        </Hidden>
-                        <Grid item md={10}>
-                            <CategoryBody id={id} loading={loading} search={props.location.search} />
                         </Grid>
-                    </Grid>
 
 
-                </>
-            }
-        </Container>
+                    </>
+                }
+            </Container>
+        </>
     )
 }

@@ -1,8 +1,12 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import { Grid, Hidden, Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import CategoryList from '../Sidebars/CategoryList';
 import Slider from './Slider';
+import useLoadingBar from '../Common/useLoadingBar';
+
+
+
 const styles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
@@ -20,9 +24,14 @@ const styles = makeStyles(theme => ({
     }
 }))
 
-export default function Hero() {
+export default function Hero({ addLoadingBar}) {
 
     const classes = styles();
+    
+    useEffect(() => {
+        addLoadingBar(10)
+    }, [])
+    
     return (
 
         <Grid container spacing={3} className={classes.root}>

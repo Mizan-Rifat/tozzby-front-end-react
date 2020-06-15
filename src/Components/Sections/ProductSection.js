@@ -76,6 +76,7 @@ export default function ProductSection(props ) {
 
     const classes = useStyles();
     const { category } = props
+    const { addLoadingBar } = props
     const { flashSale = false } = props
     const { newProduct = false } = props
     const { featured = false } = props
@@ -97,10 +98,16 @@ export default function ProductSection(props ) {
             .then(response => {
                 setproducts(response.data.data)
                 setLoading(false)
+                addLoadingBar(10)
+            })
+            .catch(eeror=>{
+                addLoadingBar(10)
             })
 
 
     }, [])
+
+  
 
     return (
         <>
