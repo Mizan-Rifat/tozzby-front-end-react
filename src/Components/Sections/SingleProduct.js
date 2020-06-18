@@ -118,7 +118,7 @@ export default function SingleProduct(props) {
 
     const addToCart = () => {
         setInCartPending(true)
-        axios.post(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/add/${product.id}`, {
+        axios.post(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/add/${product.id}?token=true`, {
             "product_id": product.id,
             "quantity": 1,
             "is_configurable": false
@@ -138,7 +138,7 @@ export default function SingleProduct(props) {
         const cartitem = cartItems.items.find(item => item.product.id == product.id)
 
 
-        axios.get(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/remove-item/${cartitem.id}`, {
+        axios.get(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/remove-item/${cartitem.id}?token=true`, {
             withCredentials: true
         }).then(response => {
             console.log(response)
