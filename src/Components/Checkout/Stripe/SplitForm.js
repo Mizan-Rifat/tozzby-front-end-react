@@ -1,14 +1,17 @@
-import React,{useContext} from 'react';
-import {CardElement, useStripe, useElements} from '@stripe/react-stripe-js';
+import React, { useContext } from 'react';
+import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import axios from 'axios';
-import {AppContext} from '../../../App';
+import { AppContext } from '../../../App';
+import { useHistory } from 'react-router-dom';
+import { orderContext } from '../Checkout';
 
 
+export default function CheckoutForm() {
 
-export default function CheckoutForm(){
+  const { cartItems, setCartItems } = useContext(AppContext);
+  const { order, setOrder } = useContext(orderContext);
 
-  const { cartItems, setCartItems} = useContext(AppContext);
-
+  const history = useHistory();
 
   const stripe = useStripe();
   const elements = useElements();
@@ -22,7 +25,7 @@ export default function CheckoutForm(){
     }
     const cardElement = elements.getElement(CardElement);
 
-    const {error, paymentMethod} = await stripe.createPaymentMethod({
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: 'card',
       card: cardElement,
     });
@@ -38,7 +41,7 @@ export default function CheckoutForm(){
   const handleFormSubmit = async ev => {
     ev.preventDefault();
     if (!stripe || !elements) {
-     
+
       return;
     }
 
@@ -47,12 +50,12 @@ export default function CheckoutForm(){
 
     try {
       const { data: clientSecret } = await axios.post(`${process.env.REACT_APP_DOMAIN}/api/stripe/payment_intents`, {
-        
+
       },
-      {
-        withCredentials:true
-      });
-      console.log({clientSecret})
+        {
+          withCredentials: true
+        });
+      console.log({ clientSecret })
 
       const paymentMethodReq = await stripe.createPaymentMethod({
         type: "card",
@@ -65,21 +68,26 @@ export default function CheckoutForm(){
         payment_method: paymentMethodReq.paymentMethod.id
       });
 
-      console.log({result})
-  
+      console.log({ result })
+
       if (result.error) {
         console.log(result.error.message);
       } else {
         if (result.paymentIntent.status === 'succeeded') {
-          const { data: order } = await axios.get(`${process.env.REACT_APP_DOMAIN}/api/stripe/success`,
-          {
-            withCredentials:true
-          });          
+          const { data: order } = await axios.get(`${process.env.REACT_APP_DOMAIN}/api/stripe/success?token=true`,
+            {
+              withCredentials: true
+            });
+
+          console.log({ order })
+          setOrder(order.order)
+          setCartItems({})
+          history.push(`/checkout/order_success`)
 
         }
       }
 
-  
+
     } catch (err) {
       // setCheckoutError(err.message);
 
@@ -88,15 +96,15 @@ export default function CheckoutForm(){
 
   return (
     <form onSubmit={handleFormSubmit}>
-      <CardElement 
+      <CardElement
         options={{
-          hidePostalCode:true
+          hidePostalCode: true
         }}
-     
-         
+
+
       />
       <button type="submit" disabled={!stripe}>
-        Pay
+        Pay {cartItems.formated_grand_total}
       </button>
     </form>
   );

@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react'
 import { Paper, Divider, Button, } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { AppContext } from '../../App';
+import { orderContext } from './Checkout';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios'
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -35,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
 export default function OrderSummary() {
     const history = useHistory();
     const { user, cartItems, setCartItems, setAuthOpen } = useContext(AppContext);
+    const { order,setOrder} = useContext(orderContext);
     const classes = useStyles();
     const toast = NotiToast();
 
@@ -57,12 +59,15 @@ export default function OrderSummary() {
         ).then(response => {
             if(response.data.hasOwnProperty('redirect_url')){
                 history.push('/checkout/card_payment')
+            }else{
+                setLoading(false)
+                setIsSuccess(true)
+                setOrder(response.data.order)
+                history.push('/checkout/order_success')
+                setCartItems({})
+                
             }
-            console.log(response)
-            setLoading(false)
-            setIsSuccess(true)
-            // setCartItems({})
-            toast('Order Successfully Placed.', 'success')
+            
         })
             .catch(error => {
                 setLoading(false)
@@ -74,7 +79,7 @@ export default function OrderSummary() {
             {
                 Object.entries(cartItems).length > 0 &&
 
-                    !isSuccess ?
+                   
                     <>
                         <div className="address">
                             <p style={{ fontWeight: 700 }}>Address</p>
@@ -182,20 +187,8 @@ export default function OrderSummary() {
                             </Button>
                         </div>
                     </>
-                    :
-                    <div className="mt-2">
-                        <h5>Thank you for your order!</h5>
-                        <p>Your order id is #4</p>
-                        <p>We will email you, your order details and tracking information.</p>
-                        <Button
-                            variant='contained'
-                            onClick={() => history.push('/')}
-                            color='primary'
-                            style={{ borderRadius: 0, }}
-                        >
-                            Continue Shopping
-                    </Button>
-                    </div>
+                    
+                    
             }
         </div>
     )
