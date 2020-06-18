@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react'
 import { Paper, Divider, Button, } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { AppContext } from '../../App';
+import { orderContext } from './Checkout';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios'
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -35,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
 export default function OrderSummary() {
     const history = useHistory();
     const { user, cartItems, setCartItems, setAuthOpen } = useContext(AppContext);
+    const { order,setOrder} = useContext(orderContext);
     const classes = useStyles();
     const toast = NotiToast();
 
@@ -44,6 +46,8 @@ export default function OrderSummary() {
 
 
     const placeOrder = () => {
+
+
         setLoading(true)
         axios.post(`${process.env.REACT_APP_DOMAIN}/api/checkout/save-order?token=true`,
             {
@@ -53,11 +57,17 @@ export default function OrderSummary() {
                 withCredentials: true
             }
         ).then(response => {
-            console.log(response)
-            setLoading(false)
-            setIsSuccess(true)
-            setCartItems({})
-            toast('Order Successfully Placed.', 'success')
+            if(response.data.hasOwnProperty('redirect_url')){
+                history.push('/checkout/card_payment')
+            }else{
+                setLoading(false)
+                setIsSuccess(true)
+                setOrder(response.data.order)
+                history.push('/checkout/order_success')
+                setCartItems({})
+                
+            }
+            
         })
             .catch(error => {
                 setLoading(false)
@@ -69,7 +79,7 @@ export default function OrderSummary() {
             {
                 Object.entries(cartItems).length > 0 &&
 
-                    !isSuccess ?
+                   
                     <>
                         <div className="address">
                             <p style={{ fontWeight: 700 }}>Address</p>
@@ -117,21 +127,26 @@ export default function OrderSummary() {
 
                                 <div className="col-6 mt-4">
                                     <p style={{ fontWeight: 700, fontSize: '16px', marginBottom: 0 }}>Payment Method</p>
-                                    <p className="">{cartItems.payment != null ? cartItems.payment.method_title : ''}</p>
+                                    <p className="">
+                                        {cartItems.payment != null ?
+                                                cartItems.payment.method_title
+                                            :
+                                            ''
+                                        }</p>
 
-                                            <div className="mt-3" style={{ position: 'relative' }}>
-                                                <Button
-                                                    variant='contained'
-                                                    onClick={placeOrder}
-                                                    color='primary'
-                                                    disabled={loading}
-                                                    style={{ borderRadius: 0, }}
-                                                >
-                                                    Place Order
+                                    <div className="mt-3" style={{ position: 'relative' }}>
+                                        <Button
+                                            variant='contained'
+                                            onClick={placeOrder}
+                                            color='primary'
+                                            disabled={loading}
+                                            style={{ borderRadius: 0, }}
+                                        >
+                                            Place Order
                                         </Button>
-                                                {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
-                                            </div>
-                                  
+                                        {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                    </div>
+
                                 </div>
 
                                 <div className="col-6">
@@ -172,20 +187,8 @@ export default function OrderSummary() {
                             </Button>
                         </div>
                     </>
-                    :
-                    <div className="mt-2">
-                        <h5>Thank you for your order!</h5>
-                        <p>Your order id is #4</p>
-                        <p>We will email you, your order details and tracking information.</p>
-                        <Button
-                            variant='contained'
-                            onClick={() => history.push('/')}
-                            color='primary'
-                            style={{ borderRadius: 0, }}
-                        >
-                            Continue Shopping
-                    </Button>
-                    </div>
+                    
+                    
             }
         </div>
     )

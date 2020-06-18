@@ -136,7 +136,7 @@ export default function IndexTabs({addLoadingBar}) {
 
 
             <TabPanel value={value} index={0} classes={{}}>
-                <SpecialProducts products={featuredProducts} loading={loading} style={{ padding: 0 }} />
+                <SpecialProducts products={featuredProducts} loading={loading} style={{ padding: 0 }}/>
             </TabPanel>
 
             <TabPanel value={value} index={1}>

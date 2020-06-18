@@ -152,7 +152,7 @@ function SingleItem({ item, setCartItems, wishListItems, setWishListItems }) {
     const toast = NotiToast();
 
     const updateItem = () => {
-        axios.post(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/update`,
+        axios.post(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/update?token=true`,
             {
                 qty: { [item.id]: quantity }
             },
@@ -170,7 +170,7 @@ function SingleItem({ item, setCartItems, wishListItems, setWishListItems }) {
 
     const deleteItem = () => {
         // setLoading(true)
-        axios.get(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/remove-item/${item.id}`, {
+        axios.get(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/remove-item/${item.id}?token=true`, {
             withCredentials: true
         }).then(response => {
             console.log(response)

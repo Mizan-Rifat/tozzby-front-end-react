@@ -26,14 +26,6 @@ export default function JustForYou({addLoadingBar}) {
     }, [])
 
 
-    // useEffect(()=>{
-    //     if(!loading){
-    //         dispatchLoadingBarProgress({
-    //             type:'ADD',
-    //             payload:10
-    //         })
-    //     }
-    // },[loading])
 
     return (
         <Paper elevation={0} style={{position:'relative',marginTop:'5rem'}}>

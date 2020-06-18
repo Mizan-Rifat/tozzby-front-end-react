@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, createContext } from 'react'
 import { Grid, Container, Paper, IconButton, Divider, Button, } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { AppContext } from '../../App';
@@ -7,6 +7,8 @@ import { useHistory, Route, Switch, Redirect } from 'react-router-dom';
 import AddressForm from './AddressForm';
 import PaymentMethod from './PaymentMethod';
 import OrderSummary from './OrderSummary';
+import PaymentCard from './PaymentCard';
+import Success from './Success';
 
 // ----------------------------------------------------
 
@@ -60,15 +62,17 @@ const useStyles = makeStyles((theme) => ({
     }
 
 }))
+export const orderContext = createContext();
 
 export default function Checkout(props) {
     const history = useHistory();
-    const { user, setAuthOpen } = useContext(AppContext);
+    const [order,setOrder] = useState('');
+    const { user, cartItems, setAuthOpen } = useContext(AppContext);
 
     const classes = useStyles();
     useEffect(() => {
         window.scrollTo(0, 0)
-    },[]);
+    }, []);
 
     useEffect(() => {
         if (Object.entries(user).length == 0) {
@@ -102,32 +106,46 @@ export default function Checkout(props) {
                             <Grid item xs={12} sm={8}>
 
 
+                                <orderContext.Provider value={{ order, setOrder }}>
 
-                                <Switch>
+                                    <Switch>
 
 
-                                    <Route
-                                        path='/checkout/billing_information'
-                                        render={(props) =>
-                                            <SingleComponent {...props} heading='Billing Information' component={<AddressForm />} />}
-                                    />
+                                        <Route
+                                            path='/checkout/billing_information'
+                                            render={(props) =>
+                                                <SingleComponent {...props} heading='Billing Information' component={<AddressForm />} />}
+                                        />
 
-                                    <Route
-                                        path='/checkout/payment_method'
-                                        render={(props) =>
-                                            <SingleComponent {...props} heading='Paymeny Method' component={<PaymentMethod />} />}
-                                    />
+                                        <Route
+                                            path='/checkout/payment_method'
+                                            render={(props) =>
+                                                <SingleComponent {...props} heading='Paymeny Method' component={<PaymentMethod />} />}
+                                        />
 
-                                    <Route
-                                        path='/checkout/order_summary'
-                                        render={(props) =>
-                                            <SingleComponent {...props} heading='Order Summary' component={<OrderSummary />} />}
-                                    />
+                                        <Route
+                                            path='/checkout/order_summary'
+                                            render={(props) =>
+                                                <SingleComponent {...props} heading='Order Summary' component={<OrderSummary />} />}
+                                        />
 
-                                    <Redirect from='/checkout' to='/checkout/billing_information' />
 
-                                </Switch>
+                                        <Route
+                                            path='/checkout/card_payment'
+                                            render={(props) =>
+                                                <SingleComponent {...props} heading='Add Debit/Credit Card' component={<PaymentCard />} />}
+                                        />
 
+                                        <Route
+                                            path='/checkout/order_success'
+                                            render={(props) =>
+                                                <SingleComponent {...props} heading='Order Placed' component={<Success />} />}
+                                        />
+
+                                        <Redirect from='/checkout' to='/checkout/billing_information' />
+
+                                    </Switch>
+                                </orderContext.Provider>
 
 
                             </Grid>

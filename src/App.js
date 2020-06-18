@@ -107,9 +107,10 @@ function App() {
 
     }
 
-    axios.get(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart`, { withCredentials: true })
+    axios.get(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart?token=true`, { withCredentials: true })
       .then(response => {
         if (response.data.data != null) {
+          console.log('cart',response)
           setCartItems(response.data.data)
 
         }
@@ -128,7 +129,7 @@ function App() {
 
       {
         !loading ?
-          // true &&
+          // true ?
 
           <AppContext.Provider value={{ user, setUser, cartItems, setCartItems, cartItemsLoading, authOpen, setAuthOpen, categories, wishListItems, setWishListItems, loadingBarProgress, dispatchLoadingBarProgress }}>
 
