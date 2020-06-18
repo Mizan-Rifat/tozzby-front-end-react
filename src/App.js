@@ -128,7 +128,7 @@ function App() {
 
       {
         !loading ?
-          // true &&
+          // true ?
 
           <AppContext.Provider value={{ user, setUser, cartItems, setCartItems, cartItemsLoading, authOpen, setAuthOpen, categories, wishListItems, setWishListItems, loadingBarProgress, dispatchLoadingBarProgress }}>
 

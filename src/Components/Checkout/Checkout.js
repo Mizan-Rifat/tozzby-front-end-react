@@ -7,6 +7,7 @@ import { useHistory, Route, Switch, Redirect } from 'react-router-dom';
 import AddressForm from './AddressForm';
 import PaymentMethod from './PaymentMethod';
 import OrderSummary from './OrderSummary';
+import PaymentCard from './PaymentCard';
 
 // ----------------------------------------------------
 
@@ -63,12 +64,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Checkout(props) {
     const history = useHistory();
-    const { user, setAuthOpen } = useContext(AppContext);
+    const { user, cartItems, setAuthOpen } = useContext(AppContext);
 
     const classes = useStyles();
     useEffect(() => {
         window.scrollTo(0, 0)
-    },[]);
+    }, []);
 
     useEffect(() => {
         if (Object.entries(user).length == 0) {
@@ -122,6 +123,13 @@ export default function Checkout(props) {
                                         path='/checkout/order_summary'
                                         render={(props) =>
                                             <SingleComponent {...props} heading='Order Summary' component={<OrderSummary />} />}
+                                    />
+
+
+                                    <Route
+                                        path='/checkout/card_payment'
+                                        render={(props) =>
+                                            <SingleComponent {...props} heading='Add Debit/Credit Card' component={<PaymentCard />} />}
                                     />
 
                                     <Redirect from='/checkout' to='/checkout/billing_information' />

@@ -44,6 +44,8 @@ export default function OrderSummary() {
 
 
     const placeOrder = () => {
+
+
         setLoading(true)
         axios.post(`${process.env.REACT_APP_DOMAIN}/api/checkout/save-order?token=true`,
             {
@@ -53,10 +55,13 @@ export default function OrderSummary() {
                 withCredentials: true
             }
         ).then(response => {
+            if(response.data.hasOwnProperty('redirect_url')){
+                history.push('/checkout/card_payment')
+            }
             console.log(response)
             setLoading(false)
             setIsSuccess(true)
-            setCartItems({})
+            // setCartItems({})
             toast('Order Successfully Placed.', 'success')
         })
             .catch(error => {
@@ -117,21 +122,26 @@ export default function OrderSummary() {
 
                                 <div className="col-6 mt-4">
                                     <p style={{ fontWeight: 700, fontSize: '16px', marginBottom: 0 }}>Payment Method</p>
-                                    <p className="">{cartItems.payment != null ? cartItems.payment.method_title : ''}</p>
+                                    <p className="">
+                                        {cartItems.payment != null ?
+                                                cartItems.payment.method_title
+                                            :
+                                            ''
+                                        }</p>
 
-                                            <div className="mt-3" style={{ position: 'relative' }}>
-                                                <Button
-                                                    variant='contained'
-                                                    onClick={placeOrder}
-                                                    color='primary'
-                                                    disabled={loading}
-                                                    style={{ borderRadius: 0, }}
-                                                >
-                                                    Place Order
+                                    <div className="mt-3" style={{ position: 'relative' }}>
+                                        <Button
+                                            variant='contained'
+                                            onClick={placeOrder}
+                                            color='primary'
+                                            disabled={loading}
+                                            style={{ borderRadius: 0, }}
+                                        >
+                                            Place Order
                                         </Button>
-                                                {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
-                                            </div>
-                                  
+                                        {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                    </div>
+
                                 </div>
 
                                 <div className="col-6">
