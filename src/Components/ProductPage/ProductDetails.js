@@ -5,6 +5,7 @@ import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import { IconButton, Chip } from '@material-ui/core';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
 import Tooltip from '@material-ui/core/Tooltip';
 import ProductExpansionPanel from './ProductExpansionPanel'
@@ -16,7 +17,12 @@ import { ProductContext } from './Product';
 import CreateReviewExpansionPanel from './CreateReviewExpansionPanel';
 import axios from 'axios';
 import { AppContext } from '../../App';
-import NotiToast from '../Common/NotiToast'
+import NotiToast from '../Common/NotiToast';
+import useCartItem from '../Common/useCartItem';
+import useWishList from '../Common/useWishList';
+import clsx from 'clsx'
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 
 
 const useStyles = makeStyles(theme => ({
@@ -28,6 +34,7 @@ const useStyles = makeStyles(theme => ({
     },
     chip1: {
         background: '#FF7426',
+        minWidth:'130px',
         color: '#fff',
         '&:hover': {
             background: 'red'
@@ -38,6 +45,7 @@ const useStyles = makeStyles(theme => ({
     },
     chip2: {
         background: 'red',
+        minWidth:'130px',
         color: '#fff',
         '&:hover': {
             background: '#FF7426'
@@ -45,6 +53,9 @@ const useStyles = makeStyles(theme => ({
         '&:focus': {
             background: 'red'
         }
+    },
+    chip3:{
+        opacity:.2,
     },
     stock: {
         margin: 0,
@@ -71,14 +82,19 @@ const useStyles = makeStyles(theme => ({
             background: '#ff7426'
 
         }
-    }
+    },
+    buttonProgress: {
+        position: 'absolute',
+        top: '4px',
+        right: '55px',
+    },
 
 }))
 
 export default function ProductDetails() {
     const classes = useStyles();
     const [qty, setqty] = useState(1);
-    const [inCart, setInCart] = useState(false);
+    // const [inCart, setInCart] = useState(false);
     const [quantity, setQuantity] = useState(1);
 
     const { product } = useContext(ProductContext)
@@ -87,57 +103,63 @@ export default function ProductDetails() {
 
     const { cartItems, setCartItems } = useContext(AppContext)
 
+    const [inWishList, inWishListPending, toWishList, setWishListProduct] = useWishList();
+    const [inCart, inCartPending, addToCart, removeFromCart, setCartItemProduct] = useCartItem();
 
-    const addToCart = (product_id) => {
-        setInCart(!inCart)
-
-
-        axios.post(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/add/${product_id}`, {
-            "product_id": product_id,
-            "quantity": quantity,
-            "is_configurable": false
-        }, { withCredentials: true })
-            .then(response => {
-                console.log(response)
-                setCartItems(response.data.data)
-                toast('Item Added to Cart', 'success')
-            })
-    }
+    // const addToCart = (product_id) => {
+    //     setInCart(!inCart)
 
 
-    const removeFromCart = () => {
-        setInCart(!inCart)
-        const cartitem = cartItems.items.find(item => item.product.id == product.id)
+    //     axios.post(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/add/${product_id}`, {
+    //         "product_id": product_id,
+    //         "quantity": quantity,
+    //         "is_configurable": false
+    //     }, { withCredentials: true })
+    //         .then(response => {
+    //             console.log(response)
+    //             setCartItems(response.data.data)
+    //             toast('Item Added to Cart', 'success')
+    //         })
+    // }
 
 
-        axios.get(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/remove-item/${cartitem.id}`, {
-            withCredentials: true
-        }).then(response => {
-            console.log(response)
-            if (response.data.data == null) {
-                setCartItems({})
-            } else {
-                setCartItems(response.data.data)
-            }
+    // const removeFromCart = () => {
+    //     setInCart(!inCart)
+    //     const cartitem = cartItems.items.find(item => item.product.id == product.id)
 
-            toast('Item removed', 'error')
-        })
-    }
+
+    //     axios.get(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/remove-item/${cartitem.id}`, {
+    //         withCredentials: true
+    //     }).then(response => {
+    //         console.log(response)
+    //         if (response.data.data == null) {
+    //             setCartItems({})
+    //         } else {
+    //             setCartItems(response.data.data)
+    //         }
+
+    //         toast('Item removed', 'error')
+    //     })
+    // }
+
+
+    // useEffect(() => {
+    //     setQuantity(cartItems.quantity)
+    //     if (Object.entries(cartItems).length > 0) {
+    //         if (cartItems.items.some(item => item.product.id == product.id)) {
+
+    //             setInCart(true)
+    //         }
+    //     }
+
+    // }, [cartItems])
 
 
     useEffect(() => {
         setQuantity(cartItems.quantity)
-        if (Object.entries(cartItems).length > 0) {
-            if (cartItems.items.some(item => item.product.id == product.id)) {
-
-                setInCart(true)
-            }
-        }
-
-    }, [cartItems])
-
-
-
+        setCartItemProduct(product)
+        setWishListProduct(product)
+    }, [product])
 
 
 
@@ -161,16 +183,42 @@ export default function ProductDetails() {
 
                 <div className="ml-2">
 
-                    <Chip
-                        label={inCart ? "Remove From Cart" : "Add To Cart"}
-                        disabled={product.in_stock ? false : true}
-                        className={inCart ? classes.chip2 : classes.chip1}
-                        onClick={() => inCart ? removeFromCart() : addToCart(product.id)}
-                    />
+                    <div className="" style={{ display: 'inline-block', position: 'relative' }}>
 
-                    <Tooltip title="Add To Wishlist">
-                        <FavoriteBorderIcon className={classes.fIcon} />
-                    </Tooltip>
+                        <Chip
+                            label={inCart ? "Remove From Cart" : "Add To Cart"}
+                            disabled={product.in_stock ? false : true}
+                            className={
+                                clsx({
+                                  [classes.chip2] : inCart,  
+                                  [classes.chip1] : !inCart,  
+                                  [classes.chip3] : inCartPending, 
+                                })
+                            }
+                            onClick={() => inCart ? removeFromCart() : addToCart(quantity)}
+                        />
+                        {inCartPending && <CircularProgress size={24} className={classes.buttonProgress} />}
+                    </div>
+
+                    {
+                        inWishList ?
+
+                            <Tooltip title="Remove From Wishlist">
+                                {/* <div className={classes.iconContainer}> */}
+                                <FavoriteIcon className={clsx(classes.fIcon, { animate: inWishListPending })} onClick={toWishList} />
+                                {/* </div> */}
+                            </Tooltip>
+                            :
+                            <Tooltip title="Add To Wishlist">
+                                {/* <div className={classes.iconContainer}> */}
+                                <FavoriteBorderIcon className={clsx(classes.fIcon, { animate: inWishListPending })} onClick={toWishList} />
+                                {/* </div> */}
+                            </Tooltip>
+                    }
+
+
+
+
                     <Tooltip title="Compare">
                         <CompareArrowsIcon className={classes.fIcon} />
                     </Tooltip>
