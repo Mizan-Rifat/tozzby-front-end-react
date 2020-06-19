@@ -5,7 +5,7 @@ import NotiToast from '../Common/NotiToast';
 
 export default function useWishList() {
 
-    const [product,setProduct] = useState('');
+    const [product,setWishListProduct] = useState('');
 
     const {wishListItems, setWishListItems} = useContext(AppContext);
 
@@ -48,5 +48,5 @@ console.log(typeof product == 'object')
 
 
 
-    return [inWishList,inWishListPending,toWishList,setProduct];
+    return [inWishList,inWishListPending,toWishList,setWishListProduct];
 }

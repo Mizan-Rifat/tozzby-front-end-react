@@ -15,7 +15,9 @@ import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
 import { useHistory } from 'react-router-dom';
 import Skeleton from '@material-ui/lab/Skeleton';
 import clsx from 'clsx'
+
 import useWishList from '../Common/useWishList';
+import useCartItem from '../Common/useCartItem';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -105,71 +107,73 @@ export default function SingleProduct(props) {
     const { cartItems, setCartItems} = useContext(AppContext)
     const [showOptions, setShowOptions] = useState()
 
-    const [inCart, setInCart] = useState(false);
-    const [inCartPending, setInCartPending] = useState(false);
+    // const [inCart, setInCart] = useState(false);
+    // const [inCartPending, setInCartPending] = useState(false);
 
 
-    const [inWishList, inWishListPending, toWishList,setProduct] = useWishList();
+    const [inWishList, inWishListPending, toWishList,setWishListProduct] = useWishList();
+    const [inCart,inCartPending,addToCart,removeFromCart,setCartItemProduct] = useCartItem();
 
     const toast = NotiToast();
 
 
 
 
-    const addToCart = () => {
-        setInCartPending(true)
-        axios.post(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/add/${product.id}?token=true`, {
-            "product_id": product.id,
-            "quantity": 1,
-            "is_configurable": false
-        }, { withCredentials: true })
-            .then(response => {
-                console.log(response)
-                setCartItems(response.data.data)
-                setInCartPending(false)
-                setInCart(!inCart)
-                toast('Item Added to Cart', 'success')
-            })
-    }
+    // const addToCart = () => {
+    //     setInCartPending(true)
+    //     axios.post(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/add/${product.id}?token=true`, {
+    //         "product_id": product.id,
+    //         "quantity": 1,
+    //         "is_configurable": false
+    //     }, { withCredentials: true })
+    //         .then(response => {
+    //             console.log(response)
+    //             setCartItems(response.data.data)
+    //             setInCartPending(false)
+    //             setInCart(!inCart)
+    //             toast('Item Added to Cart', 'success')
+    //         })
+    // }
 
 
-    const removeFromCart = () => {
-        setInCartPending(true)
-        const cartitem = cartItems.items.find(item => item.product.id == product.id)
+    // const removeFromCart = () => {
+    //     setInCartPending(true)
+    //     const cartitem = cartItems.items.find(item => item.product.id == product.id)
 
 
-        axios.get(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/remove-item/${cartitem.id}?token=true`, {
-            withCredentials: true
-        }).then(response => {
-            console.log(response)
-            if (response.data.data == null) {
-                setCartItems({})
-            } else {
-                setCartItems(response.data.data)
-            }
-            setInCartPending(false)
-            setInCart(!inCart)
-            toast('Item removed', 'error')
-        })
-    }
+    //     axios.get(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/remove-item/${cartitem.id}?token=true`, {
+    //         withCredentials: true
+    //     }).then(response => {
+    //         console.log(response)
+    //         if (response.data.data == null) {
+    //             setCartItems({})
+    //         } else {
+    //             setCartItems(response.data.data)
+    //         }
+    //         setInCartPending(false)
+    //         setInCart(!inCart)
+    //         toast('Item removed', 'error')
+    //     })
+    // }
 
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        if (Object.entries(cartItems).length > 0) {
-            if (cartItems.items.some(item => item.product.id == product.id)) {
+    //     if (Object.entries(cartItems).length > 0) {
+    //         if (cartItems.items.some(item => item.product.id == product.id)) {
 
-                setInCart(true)
-            } else {
-                setInCart(false)
-            }
-        }
+    //             setInCart(true)
+    //         } else {
+    //             setInCart(false)
+    //         }
+    //     }
 
-    }, [cartItems])
+    // }, [cartItems])
 
    
     useEffect(()=>{
-            setProduct(product)
+        setWishListProduct(product)
+            setCartItemProduct(product)
     },[product])
 
     return (
@@ -235,7 +239,7 @@ export default function SingleProduct(props) {
 
                                             <Tooltip title="Add To Cart">
                                                 <div className={classes.iconContainer}>
-                                                    <ShoppingCartIcon className={clsx(classes.fIcon, { animate: inCartPending })} onClick={addToCart} />
+                                                    <ShoppingCartIcon className={clsx(classes.fIcon, { animate: inCartPending })} onClick={()=>addToCart(1)} />
                                                 </div>
                                             </Tooltip>
 
