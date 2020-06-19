@@ -15,6 +15,8 @@ import useWishList from '../Common/useWishList';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import useLoadingBar from '../Common/useLoadingBar';
+import useCartItem from '../Common/useCartItem';
+import clsx from 'clsx'
 
 const useStyles = makeStyles((theme) => ({
     image: {
@@ -186,10 +188,13 @@ function SingleItem({ item, setCartItems, wishListItems, setWishListItems }) {
 
     }
 
-    const [inWishList, inWishListPending, toWishList, setProduct] = useWishList();
+    const [inWishList, inWishListPending, toWishList, setWishListProduct] = useWishList();
+    
+    const {inCart,inCartPending,addToCart,removeFromCart,setCartItemProduct,updateCartItem} = useCartItem();
 
     useEffect(() => {
-        setProduct(item.product)
+        setWishListProduct(item.product)
+        setCartItemProduct(item.product)
     }, [item])
 
 
@@ -212,9 +217,9 @@ function SingleItem({ item, setCartItems, wishListItems, setWishListItems }) {
                         <IconButton className={classes.btn} onClick={toWishList}>
                             {
                                 inWishList ?
-                                    <FavoriteIcon className={classes.fIcon} />
+                                    <FavoriteIcon className={clsx(classes.fIcon, { animate: inWishListPending })} />
                                     :
-                                    <FavoriteBorderIcon className={classes.fIcon} />
+                                    <FavoriteBorderIcon className={clsx(classes.fIcon, { animate: inWishListPending })} />
                             }
 
                         </IconButton>
@@ -223,8 +228,8 @@ function SingleItem({ item, setCartItems, wishListItems, setWishListItems }) {
 
 
                     <Tooltip title="Remove Item From Cart">
-                        <IconButton className={classes.btn} onClick={deleteItem}>
-                            <DeleteIcon className={classes.fIcon} />
+                        <IconButton className={classes.btn} onClick={removeFromCart}>
+                            <DeleteIcon className={clsx(classes.fIcon, { animate: inCartPending })} />
                         </IconButton>
                     </Tooltip>
                 </div>
@@ -240,7 +245,7 @@ function SingleItem({ item, setCartItems, wishListItems, setWishListItems }) {
                 <Quantity quantity={quantity} setQuantity={setQuantity} />
 
                 <div className="text-center mt-2">
-                    <Button variant='contained' size='small' color='primary' className={classes.updtBtn} onClick={updateItem}>Update</Button>
+                    <Button variant='contained' size='small' color='primary' className={classes.updtBtn} onClick={()=>updateCartItem(quantity)}>Update</Button>
                 </div>
             </div>
             <div className="col-2 text-center">

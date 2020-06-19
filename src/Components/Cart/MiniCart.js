@@ -106,7 +106,7 @@ function SingleItem({ item, setCartItems }) {
     const deleteItem = (id) => {
         console.log(id)
         setLoading(true)
-        axios.get(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/remove-item/${id}`, {
+        axios.get(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/remove-item/${id}?token=true`, {
             withCredentials: true
         }).then(response => {
             console.log(response)

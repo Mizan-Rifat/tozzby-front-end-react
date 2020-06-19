@@ -104,7 +104,7 @@ export default function ProductDetails() {
     const { cartItems, setCartItems } = useContext(AppContext)
 
     const [inWishList, inWishListPending, toWishList, setWishListProduct] = useWishList();
-    const [inCart, inCartPending, addToCart, removeFromCart, setCartItemProduct] = useCartItem();
+    const {inCart, inCartPending, addToCart, removeFromCart, setCartItemProduct} = useCartItem();
 
     // const addToCart = (product_id) => {
     //     setInCart(!inCart)
