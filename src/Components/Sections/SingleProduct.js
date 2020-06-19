@@ -112,7 +112,7 @@ export default function SingleProduct(props) {
 
 
     const [inWishList, inWishListPending, toWishList,setWishListProduct] = useWishList();
-    const [inCart,inCartPending,addToCart,removeFromCart,setCartItemProduct] = useCartItem();
+    const {inCart,inCartPending,addToCart,removeFromCart,setCartItemProduct} = useCartItem();
 
     const toast = NotiToast();
 

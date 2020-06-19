@@ -17,6 +17,7 @@ import Footer from './Components/Common/Footer';
 import userReducer from './Components/Reducers/UserReducer'
 import loadingBarReducer from './Components/Reducers/loadingBarReducer';
 import LoadingBar from 'react-top-loading-bar';
+import NotiToast from './Components/Common/NotiToast';
 
 const useStyles = makeStyles((theme) => ({
   topClass: {
@@ -42,11 +43,14 @@ function App() {
   const [cartItemsLoading, setCartItemsLoading] = useState(true)
   const [wishListItems, setWishListItems] = useState([])
   const [wishListItemsLoading, setWishListItemsLoading] = useState(true)
+ 
+
   const [authOpen, setAuthOpen] = useState({
     state: false,
     comp: 1
   })
   const [user, setUser] = useState({})
+  const [loggedOut, setLoggedOut] = useState(false);
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState({
     state: [],
@@ -122,6 +126,12 @@ function App() {
 
   }, [user])
 
+  useEffect(() => {
+    if(loggedOut){
+      // toast('sadfsda','success')
+    }
+  }, [loggedOut])
+
 
 
   return (
@@ -131,7 +141,7 @@ function App() {
         !loading ?
           // true ?
 
-          <AppContext.Provider value={{ user, setUser, cartItems, setCartItems, cartItemsLoading, authOpen, setAuthOpen, categories, wishListItems, setWishListItems, loadingBarProgress, dispatchLoadingBarProgress }}>
+          <AppContext.Provider value={{ user, setUser, cartItems, setCartItems, cartItemsLoading, authOpen, setAuthOpen, categories, wishListItems, setWishListItems, loadingBarProgress, dispatchLoadingBarProgress,loggedOut, setLoggedOut}}>
 
             <Appbar />
 

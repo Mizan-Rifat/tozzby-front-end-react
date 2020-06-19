@@ -26,7 +26,7 @@ import Select from '@material-ui/core/Select';
 import SearchBox from './SearchBox';
 import CategoryDrawer from './CategoryDrawer';
 import { useHistory } from 'react-router-dom';
-
+import NotiToast from '../Common/NotiToast';
 
 
 
@@ -144,7 +144,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PrimarySearchAppBar() {
   const history = useHistory();
-  const { user, setUser, cartItems,wishListItems, authOpen, setAuthOpen,dispatchLoadingBarProgress } = useContext(AppContext);
+  // const toast = NotiToast();
+  const { user, setUser, cartItems,wishListItems,setCartItems,setWishListItems, authOpen, setAuthOpen,dispatchLoadingBarProgress,setLoggedOut } = useContext(AppContext);
   const [showCart, setShowCart] = useState(false);
   const [showCategories, setShowCategories] = useState(false);
   const [catOpen, setCatOpen] = useState(false);
@@ -196,6 +197,11 @@ export default function PrimarySearchAppBar() {
     )
       .then(response => {
         setUser({})
+        setCartItems({})
+        setWishListItems([])
+        setLoggedOut(true)
+      })
+      .catch(error=>{
       })
   }
 
