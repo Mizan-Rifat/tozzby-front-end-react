@@ -9,6 +9,9 @@ import PaymentMethod from './PaymentMethod';
 import OrderSummary from './OrderSummary';
 import PaymentCard from './PaymentCard';
 import Success from './Success';
+import {CartSummary} from '../Cart/Cart';
+import AuthCheck from '../Common/AuthCheck';
+import BackDrop from '../Common/BackDrop';
 
 // ----------------------------------------------------
 
@@ -62,30 +65,37 @@ const useStyles = makeStyles((theme) => ({
     }
 
 }))
-export const orderContext = createContext();
+export const OrderContext = createContext();
 
 export default function Checkout(props) {
     const history = useHistory();
-    const [order,setOrder] = useState('');
-    const { user, cartItems, setAuthOpen } = useContext(AppContext);
-
     const classes = useStyles();
+
+    
+    const { cartItems,cartItemsLoading } = useContext(AppContext);
+    const [authenticated,userLoading] = AuthCheck();
+
+    
+
+    const [order,setOrder] = useState('');
+
+
     useEffect(() => {
         window.scrollTo(0, 0)
     }, []);
 
-    useEffect(() => {
-        if (Object.entries(user).length == 0) {
-            setAuthOpen({ comp: 1, state: true })
-        }
-
-    }, [user])
 
     return (
         <>
             {
 
-                Object.entries(user).length == 0 ?
+                userLoading && cartItemsLoading ?
+
+                <BackDrop />
+                
+                :
+
+                !authenticated ?
 
 
                     <div className="text-center">
@@ -94,7 +104,7 @@ export default function Checkout(props) {
 
                     :
 
-                    < Container style={{ paddingLeft: '50px', paddingRight: '50px', marginTop: '100px' }
+                    < Container style={{ paddingLeft: '50px', paddingRight: '50px', marginTop: '100px',minHeight:'100px' }
                     }>
                         <Paper variant="outlined" square className={classes.paper} style={{ border: 'none', }}>
                             <div className="">
@@ -106,7 +116,7 @@ export default function Checkout(props) {
                             <Grid item xs={12} sm={8}>
 
 
-                                <orderContext.Provider value={{ order, setOrder }}>
+                                <OrderContext.Provider value={{ order, setOrder }}>
 
                                     <Switch>
 
@@ -145,14 +155,14 @@ export default function Checkout(props) {
                                         <Redirect from='/checkout' to='/checkout/billing_information' />
 
                                     </Switch>
-                                </orderContext.Provider>
+                                </OrderContext.Provider>
 
 
                             </Grid>
 
                             <Grid item xs={12} sm={4}>
                                 <Paper variant="outlined" square className={classes.paper} style={{ position: 'sticky', top: '70px' }}>
-                                    <CartSummary />
+                                    <CartSummary cart={cartItems} />
                                 </Paper>
                             </Grid>
                         </Grid>
@@ -165,62 +175,7 @@ export default function Checkout(props) {
 
 
 
-function CartSummary({ }) {
-    const classes = useStyles();
-    return (
-        <div className="" style={{ padding: '30px' }}>
-            <div className="">
-                <h5>Cart Summary</h5>
-            </div>
-            <div className="" >
-                <div className="d-flex justify-content-between " style={{ margin: '5px 0' }}>
-                    <div className='text-secondary'>Sub Total</div>
-                    <div className="font-weight-bold" style={{ fontSize: "16px" }}>$100</div>
-                </div>
-                <div className="d-flex justify-content-between " style={{ margin: '5px 0' }}>
-                    <div className='text-secondary'>Sub Total</div>
-                    <div className="font-weight-bold" style={{ fontSize: "16px" }}>$100</div>
-                </div>
-                <div className="d-flex justify-content-between " style={{ margin: '5px 0' }}>
-                    <div className='text-secondary'>Sub Total</div>
-                    <div className="font-weight-bold" style={{ fontSize: "16px" }}>$100</div>
-                </div>
-                <div className="d-flex justify-content-between " style={{ margin: '5px 0' }}>
-                    <div className='text-secondary'>Sub Total</div>
-                    <div className="font-weight-bold" style={{ fontSize: "16px" }}>$100</div>
-                </div>
-                <div className="d-flex justify-content-between " style={{ margin: '5px 0' }}>
-                    <div className='text-secondary'>Sub Total</div>
-                    <div className="font-weight-bold" style={{ fontSize: "16px" }}>$100</div>
-                </div>
 
-
-
-
-                <div className="">
-                    <div className="form-group d-flex">
-                        <input type="text" className={`form-control ${classes.couponBox}`} placeholder="Coupon" />
-                        <Button color='primary' style={{ borderRadius: 0, marginLeft: '5px' }} variant="contained">Apply</Button>
-                    </div>
-
-
-
-
-                </div>
-
-
-
-                <Divider style={{ margin: '10px 0' }} />
-
-                <div className="d-flex justify-content-between">
-                    <div className='font-weight-bold' >Grand Total</div>
-                    <div className="font-weight-bold" style={{ fontSize: "16px" }}>$100</div>
-                </div>
-                <Button variant='contained' disableFocusRipple={true} className={classes.checkoutBtn}>Proceed To Checkout</Button>
-            </div>
-        </div>
-    )
-}
 
 function SingleComponent({ heading, component }) {
     const classes = useStyles();

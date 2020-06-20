@@ -4,7 +4,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
 
-export default function Test() {
+export default function NotiToast() {
 
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 

@@ -65,6 +65,9 @@ box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
 .Completed {
     background: #43A047 !important;
 }
+.Canceled {
+    background: red !important;
+}
 
 .wrapper {
     overflow-x: auto;
@@ -227,6 +230,8 @@ box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
     background: red;
     margin: 5px;
 }
+
+
 
 .animate {
     animation: spin 2s linear infinite;

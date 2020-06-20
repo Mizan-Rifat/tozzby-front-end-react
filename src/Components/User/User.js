@@ -4,23 +4,24 @@ import UserSidebar from './UserSidebar';
 import UserBody from './UserBody';
 import Profile from './Profile'
 import { AppContext } from '../../App';
+import AuthCheck from '../Common/AuthCheck';
+import BackDrop from '../Common/BackDrop';
 
 
 export default function User() {
 
-    const { user, setAuthOpen } = useContext(AppContext);
+    const [authenticated, userLoading] = AuthCheck();
 
+    // useEffect(() => {
+    //     if (Object.entries(user).length == 0) {
+    //         setAuthOpen({ comp: 1, state: true })
+    //     }
 
+    // }, [user])
 
-    useEffect(() => {
-        if (Object.entries(user).length == 0) {
-            setAuthOpen({ comp: 1, state: true })
-        }
-
-    }, [user])
     useEffect(() => {
         window.scrollTo(0, 0)
-    },[]);
+    }, []);
 
 
 
@@ -28,29 +29,35 @@ export default function User() {
         <>
             {
 
-                Object.entries(user).length == 0 ?
+                userLoading ?
 
-                    <div className="text-center">
-                        <h5 style={{ marginTop: '100px' }}>You need to be logged in to view this page.</h5>
-                    </div>
+                    <BackDrop />
+
                     :
 
-                    <Container >
+                    !authenticated ?
 
-                        <Grid container spacing={3}>
+                        <div className="text-center">
+                            <h5 style={{ marginTop: '100px' }}>You need to be logged in to view this page.</h5>
+                        </div>
+                        :
 
-                            <Grid item md={3}>
-                                <UserSidebar />
+                        <Container >
+
+                            <Grid container spacing={3}>
+
+                                <Grid item md={3}>
+                                    <UserSidebar />
+                                </Grid>
+
+                                <Grid item xs={12} md={9}>
+                                    <UserBody />
+                                    {/* <Profile /> */}
+                                </Grid>
                             </Grid>
 
-                            <Grid item xs={12} md={9}>
-                                <UserBody />
-                                {/* <Profile /> */}
-                            </Grid>
-                        </Grid>
 
-
-                    </Container>
+                        </Container>
             }
         </>
     )

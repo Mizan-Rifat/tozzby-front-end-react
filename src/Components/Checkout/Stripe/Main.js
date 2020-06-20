@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect} from "react";
 import ReactDOM from "react-dom";
 
 import { loadStripe } from "@stripe/stripe-js";
@@ -10,6 +10,9 @@ const stripePromise = loadStripe("pk_test_51GuKLVDkImmDuu4ZdHlgrluBdfj1f5kTfVIQt
 
 
 export default function Main(){
+  useEffect(() => {
+    window.scrollTo(0, 0)
+}, []);
   return (
       <Elements stripe={stripePromise}>
         <SplitForm />

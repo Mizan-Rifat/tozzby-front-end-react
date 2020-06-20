@@ -1,14 +1,14 @@
 import React, { useContext,useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Paper, Divider, Button, } from '@material-ui/core';
-import { orderContext } from './Checkout';
+import { OrderContext } from './Checkout';
 import NotiToast from '../Common/NotiToast';
 
 
 export default function Success() {
 
     const history = useHistory();
-    const { order, setOrder } = useContext(orderContext);
+    const { order, setOrder } = useContext(OrderContext);
     const toast = NotiToast();
 
     const handleClick = (e) => {

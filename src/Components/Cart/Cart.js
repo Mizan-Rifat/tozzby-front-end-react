@@ -98,7 +98,7 @@ export default function Cart() {
     return (
         <>
             {loadingBarJsx}
-            <Container style={{ paddingLeft: '50px', paddingRight: '50px', marginTop: '100px' }}>
+            <Container style={{ paddingLeft: '50px', paddingRight: '50px', marginTop: '100px',minHeight:'1500px' }}>
                 <Paper variant="outlined" square className={classes.paper} style={{ border: 'none' }}>
                     <div className="">
                         <h5 style={{ fontWeight: 700 }}>Shopping Cart</h5>
@@ -137,7 +137,7 @@ export default function Cart() {
 
                     <Grid item xs={12} sm={4}>
                         <Paper variant="outlined" square className={classes.paper}>
-                            <CartSummary user={user} cart={cartItems} setCart={setCartItems} setAuthOpen={setAuthOpen} />
+                            <CartSummary cart={cartItems} setCart={setCartItems} addditionalData={true} />
                         </Paper>
                     </Grid>
                 </Grid>
@@ -189,8 +189,8 @@ function SingleItem({ item, setCartItems, wishListItems, setWishListItems }) {
     }
 
     const [inWishList, inWishListPending, toWishList, setWishListProduct] = useWishList();
-    
-    const {inCart,inCartPending,addToCart,removeFromCart,setCartItemProduct,updateCartItem} = useCartItem();
+
+    const { inCart, inCartPending, addToCart, removeFromCart, setCartItemProduct, updateCartItem } = useCartItem();
 
     useEffect(() => {
         setWishListProduct(item.product)
@@ -245,7 +245,7 @@ function SingleItem({ item, setCartItems, wishListItems, setWishListItems }) {
                 <Quantity quantity={quantity} setQuantity={setQuantity} />
 
                 <div className="text-center mt-2">
-                    <Button variant='contained' size='small' color='primary' className={classes.updtBtn} onClick={()=>updateCartItem(quantity)}>Update</Button>
+                    <Button variant='contained' size='small' color='primary' className={classes.updtBtn} onClick={() => updateCartItem(quantity)}>Update</Button>
                 </div>
             </div>
             <div className="col-2 text-center">
@@ -257,8 +257,8 @@ function SingleItem({ item, setCartItems, wishListItems, setWishListItems }) {
     )
 }
 
-function CartSummary({ user, cart, setCart, setAuthOpen }) {
-
+export function CartSummary({ cart, setCart, addditionalData = false }) {
+    // const { addditionalData = false } = addditionalData
     const [grand_total, set_grand_total] = useState('$0')
     const [sub_total, set_sub_total] = useState('$0')
     const [discount, setDiscount] = useState('$0')
@@ -268,7 +268,7 @@ function CartSummary({ user, cart, setCart, setAuthOpen }) {
 
 
     const applyCoupon = () => {
-        axios.post(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/coupon`,
+        axios.post(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/coupon?token=true`,
             {
                 code: coupon
             },
@@ -285,7 +285,7 @@ function CartSummary({ user, cart, setCart, setAuthOpen }) {
     }
 
     const handleCouponDelete = () => {
-        axios.get(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/coupon`, { withCredentials: true })
+        axios.get(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/coupon?token=true`, { withCredentials: true })
             .then(response => {
                 console.log(response)
                 setCart(response.data.data)
@@ -293,11 +293,7 @@ function CartSummary({ user, cart, setCart, setAuthOpen }) {
             })
     }
     const handleChekout = () => {
-        if (Object.entries(user).length > 0) {
-            history.push('/checkout/billing_information')
-        } else {
-            setAuthOpen(true)
-        }
+        history.push('/checkout/billing_information')
     }
 
     useEffect(() => {
@@ -335,34 +331,50 @@ function CartSummary({ user, cart, setCart, setAuthOpen }) {
 
 
 
-                <div className="">
-                    <div className="form-group d-flex">
-                        <input
-                            type="text"
-                            className={`form-control ${classes.couponBox}`}
-                            value={coupon}
-                            onChange={(e) => setCoupon(e.target.value)}
-                            placeholder="Coupon"
-                        />
-                        <Button color='primary' style={{ borderRadius: 0, marginLeft: '5px' }} variant="contained" onClick={applyCoupon}>Apply</Button>
-                    </div>
-
-                </div>
 
                 {
-                    cart.coupon_code != null ?
+                    addditionalData &&
+                    <>
+                        <div className="">
+                            <div className="form-group d-flex">
+                                <input
+                                    type="text"
+                                    className={`form-control ${classes.couponBox}`}
+                                    value={coupon}
+                                    onChange={(e) => setCoupon(e.target.value)}
+                                    placeholder="Coupon"
+                                />
+                                <Button 
+                                    color='primary' 
+                                    style={{ borderRadius: 0, marginLeft: '5px' }} 
+                                    variant="contained" 
+                                    onClick={applyCoupon}
+                                    disabled={Object.entries(cart).length == 0}
+                                    >
+                                        Apply
+                                </Button>
+                            </div>
 
-                        <div className="text-center mt-1">
-                            <Chip
-
-                                label={`Applied Coupon ${cart.coupon_code}`}
-                                color="primary"
-                                onDelete={handleCouponDelete}
-                                deleteIcon={<CancelIcon />}
-                            />
                         </div>
-                        :
-                        ''
+
+                        {
+                            cart.coupon_code != null ?
+
+                                <div className="text-center mt-1">
+                                    <Chip
+
+                                        label={`Applied Coupon ${cart.coupon_code}`}
+                                        color="primary"
+                                        onDelete={handleCouponDelete}
+                                        deleteIcon={<CancelIcon />}
+                                    />
+                                </div>
+                                :
+                                ''
+                        }
+
+                    </>
+
                 }
 
                 <Divider style={{ margin: '10px 0' }} />
@@ -375,15 +387,19 @@ function CartSummary({ user, cart, setCart, setAuthOpen }) {
                     </div>
                 </div>
 
-                <Button
-                    variant='contained'
-                    disableFocusRipple={true}
-                    className={classes.checkoutBtn}
-                    onClick={handleChekout}
-                    disabled={Object.entries(cart).length == 0}
-                >
-                    Proceed To Checkout
-                </Button>
+                {
+                    addditionalData &&
+
+                    <Button
+                        variant='contained'
+                        disableFocusRipple={true}
+                        className={classes.checkoutBtn}
+                        onClick={handleChekout}
+                        disabled={Object.entries(cart).length == 0}
+                    >
+                        Proceed To Checkout
+                    </Button>
+                }
 
             </div>
         </div>
