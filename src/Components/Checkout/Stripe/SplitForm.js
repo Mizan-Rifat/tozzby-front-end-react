@@ -3,7 +3,7 @@ import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import axios from 'axios';
 import { AppContext } from '../../../App';
 import { useHistory } from 'react-router-dom';
-import { orderContext } from '../Checkout';
+import { OrderContext } from '../Checkout';
 import { Button } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -11,7 +11,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 export default function CheckoutForm() {
 
   const { cartItems, setCartItems } = useContext(AppContext);
-  const { order, setOrder } = useContext(orderContext);
+  const { order, setOrder } = useContext(OrderContext);
 
   const history = useHistory();
 

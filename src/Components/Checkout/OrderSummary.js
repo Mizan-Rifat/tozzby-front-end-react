@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react'
 import { Paper, Divider, Button, } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { AppContext } from '../../App';
-import { orderContext } from './Checkout';
+import { OrderContext } from './Checkout';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios'
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 export default function OrderSummary() {
     const history = useHistory();
     const { user, cartItems, setCartItems, setAuthOpen } = useContext(AppContext);
-    const { order,setOrder} = useContext(orderContext);
+    const { order,setOrder} = useContext(OrderContext);
     const classes = useStyles();
     const toast = NotiToast();
 

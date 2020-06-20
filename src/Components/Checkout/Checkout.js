@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
     }
 
 }))
-export const orderContext = createContext();
+export const OrderContext = createContext();
 
 export default function Checkout(props) {
     const history = useHistory();
@@ -116,7 +116,7 @@ export default function Checkout(props) {
                             <Grid item xs={12} sm={8}>
 
 
-                                <orderContext.Provider value={{ order, setOrder }}>
+                                <OrderContext.Provider value={{ order, setOrder }}>
 
                                     <Switch>
 
@@ -155,7 +155,7 @@ export default function Checkout(props) {
                                         <Redirect from='/checkout' to='/checkout/billing_information' />
 
                                     </Switch>
-                                </orderContext.Provider>
+                                </OrderContext.Provider>
 
 
                             </Grid>

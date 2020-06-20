@@ -10,6 +10,8 @@ import axios from 'axios';
 import dateFormat from 'dateformat';
 import { useHistory } from 'react-router-dom';
 
+import {OrderContext} from './UserBody';
+ 
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -35,40 +37,34 @@ export default function Orders() {
     const history = useHistory();
     const classes = useStyles();
 
-    const [orders, setOrders] = useState([]);
+    const {orders, setOrders} = useContext(OrderContext);
+
     const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
 
-
-    const statusColor = (param) => {
-        switch (param) {
-            case 'pending':
-                return { background: '#0041FF' }
-            case 'processing':
-                return { background: '#FFC107' }
-            case 'completed':
-                return { background: '#43A047' }
-                
-        }
-    }
 
     useEffect(() => {
 
-        axios.get(`${process.env.REACT_APP_DOMAIN}/api/orders?token=true`,
+        axios.get(`${process.env.REACT_APP_DOMAIN}/api/orders?token=true&pagination=0`,
             {
                 withCredentials: true
             }
         ).then(response => {
-            setOrders(response.data.data)
-            setLoading(false)
+
+            setOrders({
+                orders:response.data.data,
+                loading: false
+            })
         }).catch(error => {
             console.log(error)
-            setLoading(false)
+            setOrders({
+                ...orders,
+                loading: false
+            })
         })
     }, [])
 
     useEffect(() => {
-        setData(orders.map((item) => (
+        setData(orders.orders.map((item) => (
             {
                 order_id: item.id,
                 date: dateFormat(item.created_at, 'd mmmm, yyyy h:M TT'),
@@ -86,7 +82,7 @@ export default function Orders() {
             <MaterialTable
                 style={{ boxShadow: 'unset' }}
                 title=""
-                isLoading={loading}
+                isLoading={orders.loading}
                 columns={[
                     {
                         title: 'Order ID',
@@ -140,7 +136,6 @@ export default function Orders() {
 
                 ]}
                 data={data}
-
                 actions={[
                     {
                         icon: 'visibility',
@@ -153,6 +148,7 @@ export default function Orders() {
                     headerStyle: { backgroundColor: '#F1CB29', fontWeight: 'bold' },
                     pageSize:10
                 }}
+
             />
 
         </Paper>
