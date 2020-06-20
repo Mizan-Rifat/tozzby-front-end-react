@@ -150,7 +150,8 @@ export default function Orders() {
                 ]}
                 options={{
                     actionsColumnIndex: -1,
-                    headerStyle: { backgroundColor: '#F1CB29', fontWeight: 'bold' }
+                    headerStyle: { backgroundColor: '#F1CB29', fontWeight: 'bold' },
+                    pageSize:10
                 }}
             />
 

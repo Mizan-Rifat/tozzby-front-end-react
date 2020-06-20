@@ -7,7 +7,7 @@ import Main from '../Checkout/Stripe/Main'
 export default function Test() {
   return (
     <div>
-      <Main />
+      <Test2 />
     </div>
   )
 }

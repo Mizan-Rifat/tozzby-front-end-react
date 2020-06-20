@@ -43,7 +43,7 @@ function App() {
   const [cartItemsLoading, setCartItemsLoading] = useState(true)
   const [wishListItems, setWishListItems] = useState([])
   const [wishListItemsLoading, setWishListItemsLoading] = useState(true)
- 
+
 
   const [authOpen, setAuthOpen] = useState({
     state: false,
@@ -51,7 +51,7 @@ function App() {
   })
   const [user, setUser] = useState({})
   const [loggedOut, setLoggedOut] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [userLoading, setUserLoading] = useState(true);
   const [categories, setCategories] = useState({
     state: [],
     loading: true
@@ -78,13 +78,14 @@ function App() {
       { withCredentials: true }
     )
       .then(response => {
-
+        setUserLoading(false)
         setUser(response.data.data)
-        setLoading(false)
+        
 
       }).catch(error => {
+        setUser({})
         // console.log(error.response.status)
-        setLoading(false)
+        setUserLoading(false)
       })
 
   }, [])
@@ -114,7 +115,7 @@ function App() {
     axios.get(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart?token=true`, { withCredentials: true })
       .then(response => {
         if (response.data.data != null) {
-          console.log('cart',response)
+          console.log('cart', response)
           setCartItems(response.data.data)
 
         }
@@ -127,7 +128,7 @@ function App() {
   }, [user])
 
   useEffect(() => {
-    if(loggedOut){
+    if (loggedOut) {
       // toast('sadfsda','success')
     }
   }, [loggedOut])
@@ -138,12 +139,28 @@ function App() {
     <BrowserRouter>
 
       {
-        !loading ?
-          // true ?
+        // !userLoading ?
+          true ?
 
-          <AppContext.Provider value={{ user, setUser, cartItems, setCartItems, cartItemsLoading, authOpen, setAuthOpen, categories, wishListItems, setWishListItems, loadingBarProgress, dispatchLoadingBarProgress,loggedOut, setLoggedOut}}>
-
-            <Appbar />
+          <AppContext.Provider value={{ 
+             user,
+             setUser,
+             userLoading, 
+             cartItems, 
+             setCartItems, 
+             cartItemsLoading, 
+             authOpen, 
+             setAuthOpen, 
+             categories, 
+             wishListItems, 
+             setWishListItems, 
+             loadingBarProgress, 
+             dispatchLoadingBarProgress, 
+             loggedOut, 
+             setLoggedOut
+            
+            }}
+          >
 
 
             <SnackbarProvider
@@ -152,6 +169,9 @@ function App() {
               }}
 
             >
+
+              <Appbar />
+
               <div className="topMargin">
                 <Switch>
                   <Route path='/' exact component={Body} />

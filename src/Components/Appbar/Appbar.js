@@ -144,7 +144,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PrimarySearchAppBar() {
   const history = useHistory();
-  // const toast = NotiToast();
+  const toast = NotiToast();
   const { user, setUser, cartItems,wishListItems,setCartItems,setWishListItems, authOpen, setAuthOpen,dispatchLoadingBarProgress,setLoggedOut } = useContext(AppContext);
   const [showCart, setShowCart] = useState(false);
   const [showCategories, setShowCategories] = useState(false);
@@ -200,6 +200,7 @@ export default function PrimarySearchAppBar() {
         setCartItems({})
         setWishListItems([])
         setLoggedOut(true)
+        toast(response.data.message,'success')
       })
       .catch(error=>{
       })

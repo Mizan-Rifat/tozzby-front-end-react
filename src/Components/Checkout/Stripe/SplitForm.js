@@ -1,9 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext,useEffect } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import axios from 'axios';
 import { AppContext } from '../../../App';
 import { useHistory } from 'react-router-dom';
 import { orderContext } from '../Checkout';
+import { Button } from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 export default function CheckoutForm() {
@@ -16,35 +18,41 @@ export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const [loading, setLoading] = useState(false)
+  const [checkoutError, setCheckoutError] = useState('');
+  const [billingDetails, setBillingDetails] = useState({});
 
-    if (!stripe || !elements) {
 
-      return;
-    }
-    const cardElement = elements.getElement(CardElement);
+  const iframeStyles = {
+    base: {
+      fontSize: "16px",
 
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
-      type: 'card',
-      card: cardElement,
-    });
-
-    if (error) {
-      console.log('[error]', error);
-    } else {
-      console.log('[PaymentMethod]', paymentMethod);
+    },
+    complete: {
+      // iconColor: "#cbf4c9"
     }
   };
+
+  const cardElementOpts = {
+    iconStyle: "solid",
+    // style: iframeStyles,
+    hidePostalCode: true
+  }
+
+  const handleCardDetailsChange = ev => {
+    ev.error ? setCheckoutError(ev.error.message) : setCheckoutError();
+  };
+
 
 
   const handleFormSubmit = async ev => {
     ev.preventDefault();
+
+    setLoading(true)
     if (!stripe || !elements) {
 
       return;
     }
-
 
     const cardElement = elements.getElement("card");
 
@@ -60,9 +68,14 @@ export default function CheckoutForm() {
       const paymentMethodReq = await stripe.createPaymentMethod({
         type: "card",
         card: cardElement,
-        // billing_details: billingDetails
+        billing_details: billingDetails
       });
 
+      if (paymentMethodReq.error) {
+        setCheckoutError(paymentMethodReq.error.message);
+        setLoading(false);
+        return;
+      }
 
       const result = await stripe.confirmCardPayment(clientSecret, {
         payment_method: paymentMethodReq.paymentMethod.id
@@ -71,7 +84,8 @@ export default function CheckoutForm() {
       console.log({ result })
 
       if (result.error) {
-        console.log(result.error.message);
+        setCheckoutError(result.error.message);
+        setLoading(false)
       } else {
         if (result.paymentIntent.status === 'succeeded') {
           const { data: order } = await axios.get(`${process.env.REACT_APP_DOMAIN}/api/stripe/success?token=true`,
@@ -82,6 +96,7 @@ export default function CheckoutForm() {
           console.log({ order })
           setOrder(order.order)
           setCartItems({})
+          setLoading(false)
           history.push(`/checkout/order_success`)
 
         }
@@ -89,23 +104,40 @@ export default function CheckoutForm() {
 
 
     } catch (err) {
-      // setCheckoutError(err.message);
-
+      setCheckoutError(err.message);
+      setLoading(false)
     }
   };
 
+
+  useEffect(()=>{
+    setBillingDetails({
+      name: `${cartItems.customer_first_name} ${cartItems.customer_last_name}` ,
+      email: cartItems.customer_email,
+    })
+  },[cartItems])
+
   return (
     <form onSubmit={handleFormSubmit}>
+
       <CardElement
-        options={{
-          hidePostalCode: true
-        }}
-
-
+        options={cardElementOpts}
+        onChange={handleCardDetailsChange}
       />
-      <button type="submit" disabled={!stripe}>
-        Pay {cartItems.formated_grand_total}
-      </button>
+
+      <small style={{color:'red'}}>{checkoutError}</small>
+
+      <div className="" style={{ position: 'relative' }}>
+
+        <Button type="submit" variant='contained' color='primary' disabled={loading} style={{ marginTop: '16px' }}>
+          Pay {cartItems.formated_grand_total}
+        </Button>
+        {
+          loading || Object.entries(cartItems).length == 0 ? 
+          <CircularProgress size={20} style={{ position: 'absolute', top: '25px', left: '41px' }} />
+          : ''
+        }
+      </div>
     </form>
   );
 };
