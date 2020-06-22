@@ -5,6 +5,7 @@ import ProductDetails from './ProductDetails';
 import ProductImages from './ProductImages';
 import Axios from 'axios';
 import useLoadingBar from '../Common/useLoadingBar';
+import ProductSpecification from './ProductSpecification';
 
 export const ProductContext = createContext();
 
@@ -70,6 +71,7 @@ export default function Product(props) {
                             <ProductContext.Provider value={{ product }}>
                                 <Grid item xs={12} md={6}>
                                     <ProductImages />
+                                    <ProductSpecification id={id}/>
                                 </Grid>
 
                                 <Grid item xs={12} md={6}>

@@ -74,7 +74,7 @@ function Section({ attribute,queryName,search }) {
             <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
                 <FormControlLabel value={0} control={<Radio size="small" classes={{ root: classes.radioRoot }} />} label='All' />
                 {
-                    attribute.options.map((option, index) => (
+                    attribute.options.filter(item=>item.label != '').map((option, index) => (
 
                         <FormControlLabel key={index} value={option.id} control={<Radio size="small" classes={{ root: classes.radioRoot }} />} label={option.label} />
                     ))

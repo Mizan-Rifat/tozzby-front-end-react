@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState,useContext } from 'react'
+import React, { useRef, useEffect, useState, useContext } from 'react'
 import { Grid } from '@material-ui/core'
 import SingleProduct from '../Sections/SingleProduct';
 import { spring } from "react-flip-toolkit";
@@ -13,7 +13,8 @@ import IconButton from '@material-ui/core/IconButton';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import { useQueryState } from 'react-router-use-location-state';
-import {AppContext} from '../../App';
+import { AppContext } from '../../App';
+import Pagination from '@material-ui/lab/Pagination';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -38,11 +39,11 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function CategoryBody({ id, search,addLoadingBar }) {
+export default function CategoryBody({ id, search, addLoadingBar }) {
     const classes = useStyles();
 
 
-    const {dispatchLoadingBarProgress} =useContext(AppContext);
+    const { dispatchLoadingBarProgress } = useContext(AppContext);
 
 
 
@@ -55,6 +56,10 @@ export default function CategoryBody({ id, search,addLoadingBar }) {
     const containerRef = useRef();
     const [products, setProducts] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9])
     const [loading, setLoading] = useState(true)
+
+    const [pagination,setPagination] = useState({
+        totalPage:''
+    }) 
 
     const [attribute, setattribute] = useState({
         sort: query.get('sort') ? query.get('sort') : 'created_at',
@@ -107,6 +112,10 @@ export default function CategoryBody({ id, search,addLoadingBar }) {
 
         ).then(response => {
             setProducts(response.data.data)
+            setPagination({
+                ...pagination,
+                totalPage : response.data.meta.last_page
+            })
             setLoading(false)
             addLoadingBar(50)
         }).catch(error => {
@@ -137,14 +146,14 @@ export default function CategoryBody({ id, search,addLoadingBar }) {
         });
     }, [products]);
 
-    useEffect(()=>{
-        if(!loading){
+    useEffect(() => {
+        if (!loading) {
             dispatchLoadingBarProgress({
-                type:'ADD',
-                payload:10
+                type: 'ADD',
+                payload: 10
             })
         }
-    },[loading])
+    }, [loading])
 
     return (
         <>
@@ -180,7 +189,7 @@ export default function CategoryBody({ id, search,addLoadingBar }) {
 
                 {
                     products.length == 0 ?
-                        <div className="d-flex justify-content-center" style={{marginTop:'100px',width:'100%'}}>
+                        <div className="d-flex justify-content-center" style={{ marginTop: '100px', width: '100%' }}>
                             <h5>No Product Found</h5>
                         </div>
                         :
@@ -195,6 +204,10 @@ export default function CategoryBody({ id, search,addLoadingBar }) {
 
 
             </Grid>
+
+            <div className="">
+                <Pagination count={pagination.totalPage} variant="outlined" shape="rounded" />
+            </div>
         </>
     )
 }
