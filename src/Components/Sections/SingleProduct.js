@@ -18,6 +18,7 @@ import clsx from 'clsx'
 
 import useWishList from '../Common/useWishList';
 import useCartItem from '../Common/useCartItem';
+import { Link } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -104,15 +105,15 @@ export default function SingleProduct(props) {
     const { wishlist = false } = props;
     const history = useHistory();
     const classes = useStyles();
-    const { cartItems, setCartItems} = useContext(AppContext)
+    const { cartItems, setCartItems } = useContext(AppContext)
     const [showOptions, setShowOptions] = useState()
 
     // const [inCart, setInCart] = useState(false);
     // const [inCartPending, setInCartPending] = useState(false);
 
 
-    const [inWishList, inWishListPending, toWishList,setWishListProduct] = useWishList();
-    const {inCart,inCartPending,addToCart,removeFromCart,setCartItemProduct} = useCartItem();
+    const [inWishList, inWishListPending, toWishList, setWishListProduct] = useWishList();
+    const { inCart, inCartPending, addToCart, removeFromCart, setCartItemProduct } = useCartItem();
 
     const toast = NotiToast();
 
@@ -170,11 +171,11 @@ export default function SingleProduct(props) {
 
     // }, [cartItems])
 
-   
-    useEffect(()=>{
+
+    useEffect(() => {
         setWishListProduct(product)
-            setCartItemProduct(product)
-    },[product])
+        setCartItemProduct(product)
+    }, [product])
 
     return (
 
@@ -193,23 +194,30 @@ export default function SingleProduct(props) {
 
                     <Card className={`${classes.root} productWrapper`} onMouseEnter={() => setShowOptions(true)} onMouseLeave={() => setShowOptions(false)} >
 
+                        <Link href={`/product/${product.id}`}>
+                            <CardMedia
+                                className={classes.media}
+                                image={product.base_image.medium_image_url}
+                                title={product.name}
+                                style={{ backgroundSize: 'contain' }}
+                                // onClick={() => history.push(`/product/${product.id}`)}
+                            />
 
-                        <CardMedia
-                            className={classes.media}
-                            image={product.base_image.medium_image_url}
-                            title={product.name}
-                            style={{ backgroundSize: 'contain' }}
-                            onClick={() => history.push(`/product/${product.id}`)}
-                        />
-
-
+                        </Link>
 
                         <CardContent className='text-center p-0 mt-2 position-relative'>
 
 
 
                             <div className="" style={{ height: '50px' }}>
-                                <h5 className={classes.name}>{product.name}</h5>
+                                <h5 className={classes.name}>
+                                    {
+                                        product.name.length > 39 ?
+                                            `${product.name.substring(0, 40)}...`
+                                            :
+                                            product.name
+                                    }
+                                </h5>
                             </div>
 
 
@@ -239,7 +247,7 @@ export default function SingleProduct(props) {
 
                                             <Tooltip title="Add To Cart">
                                                 <div className={classes.iconContainer}>
-                                                    <ShoppingCartIcon className={clsx(classes.fIcon, { animate: inCartPending })} onClick={()=>addToCart(1)} />
+                                                    <ShoppingCartIcon className={clsx(classes.fIcon, { animate: inCartPending })} onClick={() => addToCart(1)} />
                                                 </div>
                                             </Tooltip>
 
