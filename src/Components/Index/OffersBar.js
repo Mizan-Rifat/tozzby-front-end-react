@@ -23,6 +23,13 @@ const useStyles = makeStyles(theme => ({
     paperRoot: {
         marginTop: '2rem',
         padding: '15px 0',
+        backgroundColor:'unset'
+    },
+    imgContainer:{
+        ['@media (max-width:480px)']: { 
+            paddingBottom : '15px'
+        }
+        
     }
 }))
 export default function OffersBar({ banner,addLoadingBar }) {
@@ -36,13 +43,13 @@ export default function OffersBar({ banner,addLoadingBar }) {
                 banner == 2 ?
 
                     <Paper elevation={0} className={classes.paperRoot}>
-                        <div className='d-flex justify-content-around' >
-                            <div className='text-center col-6' >
+                        <div className='row justify-content-around' >
+                            <div className={`${classes.imgContainer} text-center col-sm-12 col-md-6`} >
 
                                 <img src={require('../images/b1.jpg')} className={classes.imgStyle2} />
 
                             </div>
-                            <div className='text-center col-6' >
+                            <div className={`${classes.imgContainer} text-center col-sm-12 col-md-6`} >
 
                                 <img src={require('../images/b2.jpg')} className={classes.imgStyle2} />
 
@@ -52,18 +59,18 @@ export default function OffersBar({ banner,addLoadingBar }) {
                     </Paper>
                     :
                     <Paper elevation={0} className={classes.paperRoot}>
-                        <div className='d-flex justify-content-around' >
-                            <div className='text-center col-4' >
+                        <div className='row justify-content-around' >
+                            <div className={`${classes.imgContainer} text-center col-sm-12 col-md-4`} >
 
                                 <img src={require('../images/bn.jpg')} className={classes.imgStyle2} />
 
                             </div>
-                            <div className='text-center col-4' >
+                            <div className={`${classes.imgContainer} text-center col-sm-12 col-md-4`} >
 
                                 <img src={require('../images/bn1.jpg')} className={classes.imgStyle2} />
 
                             </div>
-                            <div className='text-center col-4' >
+                            <div className={`${classes.imgContainer} text-center col-sm-12 col-md-4`} >
 
                                 <img src={require('../images/bn2.jpg')} className={classes.imgStyle2} />
 

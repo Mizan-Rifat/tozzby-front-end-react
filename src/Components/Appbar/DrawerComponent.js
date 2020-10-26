@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import { Paper, List, ListItem, ListItemIcon, ListItemText, Link } from '@material-ui/core';
+import { Paper, List, ListItem, ListItemIcon, ListItemText, Link,ListSubheader } from '@material-ui/core';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Skeleton from '@material-ui/lab/Skeleton';
@@ -9,11 +8,17 @@ import { AppContext } from '../../App';
 import { useHistory } from 'react-router-dom'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
+import Collapse from '@material-ui/core/Collapse';
+import DraftsIcon from '@material-ui/icons/Drafts';
+import SendIcon from '@material-ui/icons/Send';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import StarBorder from '@material-ui/icons/StarBorder';
+
 const useStyles = makeStyles((theme) => ({
     root: {
         // width: '100%',
         // maxWidth: 360,
-        width: 198,
+        // width: 198,
         // backgroundColor: 'red',
         backgroundColor: theme.palette.background.paper,
     },
@@ -25,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
     listItem: {
         padding: 0,
         paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(2),
         color: '#666666',
         transition: '.3s ease-in',
         justifyContent: 'space-between',
@@ -84,11 +90,10 @@ export default function CategoryList() {
 
 
 
-
     return (
         <>
             {
-                categories.loading ?
+                false ?
                     <div classsName='text-center' style={{ width: '198px' }}>
                         {
                             Array.from(Array(10).keys()).map((item, index) => (
@@ -104,6 +109,11 @@ export default function CategoryList() {
                         component="nav"
                         aria-labelledby="nested-list-subheader"
                         className={classes.root}
+                        subheader={
+                            <ListSubheader component="div" id="nested-list-subheader">
+                              ALL CATEGORIES
+                            </ListSubheader>
+                          }
                     >
 
                         {
@@ -119,7 +129,8 @@ export default function CategoryList() {
 }
 
 function SingleListItem({ item, href }) {
-    const [show, setShow] = React.useState(false);
+    const [show, setShow] = useState(false);
+    const [open,setOpen] = useState(false);
     const classes = useStyles();
     const history = useHistory();
 
@@ -132,47 +143,44 @@ function SingleListItem({ item, href }) {
     }, [])
     return (
         <>
-            <ListItem button className={classes.listItem} onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)} >
-                <Link href={`/category/${href}`} className={classes.link}>
-                    <div style={{ width: '100%', display: 'flex' }}>
+            <ListItem button className={classes.listItem} >
 
-                        <div className={classes.innerItem} >
-                            <ListItemIcon className={classes.listItemIcon}>
-                                <InboxIcon />
-                            </ListItemIcon>
+                    <div style={{ width: '100%', display: 'flex',borderBottom:'1px solid #eee' }}>
+                        <Link href={`/category/${href}`} className={classes.link}>
+                            <div className={classes.innerItem} >
+                                <ListItemIcon className={classes.listItemIcon}>
+                                    <InboxIcon />
+                                </ListItemIcon>
 
-                            <ListItemText primary={item.name} classes={{ primary: classes.primary }} />
-                        </div>
+                                <ListItemText primary={item.name} classes={{ primary: classes.primary }} />
+                            </div>
+                        </Link>
 
                         {
-
-                            item.children.length > 0 && <ChevronRightIcon fontSize='small' style={{ marginTop: '5px' }} />
-
+                            item.children.length > 0 ?
+                            open ? <ExpandLess onClick={()=>setOpen(false)} /> :
+                            <>
+                            <ExpandMore onClick={()=>setOpen(true)} />
+                            
+                            </>
+                            : ''
                         }
                     </div>
-                </Link>
 
 
-                {
-                    item.children.length > 0 ?
-
-                        <Paper elevation={3} className={`${classes.abs} ${show ? classes.show : classes.hide}`} onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
-
+            </ListItem>
+            <Collapse in={open} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding style={{paddingLeft:'16px'}}>
                             {
                                 item.children.map((category, index) => (
                                     <SingleListItem item={category} key={index} href={`${href}/${category.slug}`} />
                                 ))
                             }
-                        </Paper>
-                        : ''
-                }
-
-
-            </ListItem>
+                    {/* <SingleListItem item={category} key={index} href={`${category.slug}`}/> */}
+                </List>
+            </Collapse>
 
 
         </>
     )
 }
-
-

@@ -16,15 +16,21 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import useLoadingBar from '../Common/useLoadingBar';
 import useCartItem from '../Common/useCartItem';
-import clsx from 'clsx'
+import clsx from 'clsx';
 
 const useStyles = makeStyles((theme) => ({
     image: {
         width: '100%'
     },
+    image2:{
+        height: '100%',
+        backgroundSize: 'contain',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+    },
     paper: {
         padding: '5px',
-        background: '#FFFFFF',
+        background: 'unset',
         // border: 'none',
         margin: '10px 0'
     },
@@ -32,7 +38,10 @@ const useStyles = makeStyles((theme) => ({
         padding: '0 6px',
         '&:focus': {
             outline: 'none'
-        }
+        },
+        ['@media (max-width:480px)']: { 
+            padding:0,
+        },
     },
     couponBox: {
         borderRadius: 0,
@@ -51,19 +60,29 @@ const useStyles = makeStyles((theme) => ({
     },
     updtBtn: {
         // background: '#FF5420',
-        color: 'white',
+        // color: 'white',
         borderRadius: '0px',
         '&:hover': {
             // background: '#CC4A00',
-            color: 'white',
+            // color: 'white',
         },
         '&:focus': {
             outline: 'none'
-        }
+        },
+        ['@media (max-width:480px)']: { 
+            padding:0,
+            fontSize:'10px'
+        },
     },
     buttonProgress: {
         position: 'absolute',
     },
+    fIcon:{
+        ['@media (max-width:480px)']: { 
+            // padding:0,
+            fontSize:'20px'
+        },
+    }
 
 }))
 
@@ -80,9 +99,6 @@ export default function Cart() {
 
     const classes = useStyles();
 
-
-
-
     useEffect(() => {
         addLoadingBar(50)
     }, []);
@@ -98,50 +114,65 @@ export default function Cart() {
     return (
         <>
             {loadingBarJsx}
-            <Container style={{ paddingLeft: '50px', paddingRight: '50px', marginTop: '100px',minHeight:'1500px' }}>
-                <Paper variant="outlined" square className={classes.paper} style={{ border: 'none' }}>
-                    <div className="">
-                        <h5 style={{ fontWeight: 700 }}>Shopping Cart</h5>
-                    </div>
-                </Paper>
-                <Grid container spacing={3}>
 
-                    <Grid item xs={12} sm={8}>
-                        {
-                            Object.entries(cartItems).length > 0 ?
-                                <>
-                                    {
-                                        cartItems.items.map((item, index) => (
+            {
+                cartItemsLoading ?
 
-                                            <Paper variant="outlined" key={index} square className={classes.paper}>
-                                                <SingleItem
-                                                    item={item}
-                                                    setCartItems={setCartItems}
-                                                    wishListItems={wishListItems}
-                                                    setWishListItems={setWishListItems}
-                                                />
-                                            </Paper>
+                <div className='d-flex justify-content-center align-items-center' style={{minHeight:'400px'}}>
 
-                                        ))
-                                    }
+                    <CircularProgress
+                        size={24}
+                    />
+                </div> 
 
-                                </>
+                :
+        
+                <Container>
+                    <Paper variant="outlined" square className={classes.paper} style={{ border: 'none' }}>
+                        <div className="">
+                            <h5 style={{ fontWeight: 700 }}>Shopping Cart</h5>
+                        </div>
+                    </Paper>
+                    <Grid container spacing={3}>
 
-                                :
-                                <div className="text-center mt-5">
-                                    <h5>Cart Is Empty</h5>
-                                </div>
-                        }
+                        <Grid item xs={12} sm={8}>
+                            {
+                                Object.entries(cartItems).length > 0 ?
+                                    <>
+                                        {
+                                            cartItems.items.map((item, index) => (
 
+                                                <Paper variant="outlined" key={index} square className={classes.paper}>
+                                                    <SingleItem
+                                                        item={item}
+                                                        setCartItems={setCartItems}
+                                                        wishListItems={wishListItems}
+                                                        setWishListItems={setWishListItems}
+                                                    />
+                                                </Paper>
+
+                                            ))
+                                        }
+
+                                    </>
+
+                                    :
+                                    <div className="text-center mt-5">
+                                        <h5>Cart Is Empty</h5>
+                                    </div>
+                            }
+
+                        </Grid>
+
+                        <Grid item xs={12} sm={4}>
+                            <Paper variant="outlined" square className={classes.paper}>
+                                <CartSummary cart={cartItems} setCart={setCartItems} addditionalData={true} />
+                            </Paper>
+                        </Grid>
                     </Grid>
+                </Container >
 
-                    <Grid item xs={12} sm={4}>
-                        <Paper variant="outlined" square className={classes.paper}>
-                            <CartSummary cart={cartItems} setCart={setCartItems} addditionalData={true} />
-                        </Paper>
-                    </Grid>
-                </Grid>
-            </Container >
+            }
         </>
     )
 }
@@ -153,40 +184,6 @@ function SingleItem({ item, setCartItems, wishListItems, setWishListItems }) {
     const [quantity, setQuantity] = useState(item.quantity);
     const toast = NotiToast();
 
-    const updateItem = () => {
-        axios.post(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/update?token=true`,
-            {
-                qty: { [item.id]: quantity }
-            },
-            { withCredentials: true }
-        )
-            .then(response => {
-                if (response.data.data == null) {
-                    setCartItems({})
-                } else {
-                    setCartItems(response.data.data)
-                }
-                toast('Cart Updated', 'success')
-            })
-    }
-
-    const deleteItem = () => {
-        // setLoading(true)
-        axios.get(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/remove-item/${item.id}?token=true`, {
-            withCredentials: true
-        }).then(response => {
-            console.log(response)
-            if (response.data.data == null) {
-                setCartItems({})
-
-            } else {
-                setCartItems(response.data.data)
-            }
-            // setLoading(false)
-
-        })
-
-    }
 
     const [inWishList, inWishListPending, toWishList, setWishListProduct] = useWishList();
 
@@ -198,60 +195,124 @@ function SingleItem({ item, setCartItems, wishListItems, setWishListItems }) {
     }, [item])
 
 
-
-    console.log({ inWishList })
     return (
-        <div className="row mt-2">
+        window.innerWidth > 480 ?
 
-            <div className="col-2">
-                <img src={item.product.base_image.small_image_url} className={classes.image} />
-            </div>
-            <div className="col-3 mt-3">
+            <div className="row mt-2">
 
-                <p className="" style={{ fontWeight: 700, fontSize: '16px' }}> {item.product.name} </p>
+                <div className="col-2">
+                    <Link to={`/product/${item.product.id}`}>
+                        <img src={item.product.base_image.small_image_url} className={classes.image} />
+                    </Link>
+                </div>
+                <div className="col-3 mt-3">
 
-                <div className="mt-2">
+                    <p className="" style={{ fontWeight: 700, fontSize: '16px' }}> {item.product.name} </p>
 
-
-                    <Tooltip title={inWishList ? 'Remove From WishList' : "Add To Wishlist"} >
-                        <IconButton className={classes.btn} onClick={toWishList}>
-                            {
-                                inWishList ?
-                                    <FavoriteIcon className={clsx(classes.fIcon, { animate: inWishListPending })} />
-                                    :
-                                    <FavoriteBorderIcon className={clsx(classes.fIcon, { animate: inWishListPending })} />
-                            }
-
-                        </IconButton>
-                    </Tooltip>
+                    <div className="mt-2">
 
 
+                        <Tooltip title={inWishList ? 'Remove From WishList' : "Add To Wishlist"} >
+                            <IconButton className={classes.btn} onClick={toWishList}>
+                                {
+                                    inWishList ?
+                                        <FavoriteIcon className={clsx(classes.fIcon, { animate: inWishListPending })} />
+                                        :
+                                        <FavoriteBorderIcon className={clsx(classes.fIcon, { animate: inWishListPending })} />
+                                }
 
-                    <Tooltip title="Remove Item From Cart">
-                        <IconButton className={classes.btn} onClick={removeFromCart}>
-                            <DeleteIcon className={clsx(classes.fIcon, { animate: inCartPending })} />
-                        </IconButton>
-                    </Tooltip>
+                            </IconButton>
+                        </Tooltip>
+
+
+
+                        <Tooltip title="Remove Item From Cart">
+                            <IconButton className={classes.btn} onClick={removeFromCart}>
+                                <DeleteIcon className={clsx(classes.fIcon, { animate: inCartPending })} />
+                            </IconButton>
+                        </Tooltip>
+                    </div>
+
+                </div>
+                <div className="col-3 mt-3 text-center">
+                    <div className="font-weight-bold" style={{ fontSize: "16px" }}>{item.formated_price}</div>
+
+
+                </div>
+                <div className="col-2 mt-3">
+
+                    <Quantity quantity={quantity} setQuantity={setQuantity} />
+
+                    <div className="text-center mt-2">
+                        <Button variant='contained' size='small' color='primary' className={classes.updtBtn} onClick={() => updateCartItem(quantity)}>Update</Button>
+                    </div>
+                </div>
+                <div className="col-2 text-center mt-3">
+                    <p style={{ fontWeight: 700 }}>SubTotal</p>
+                    <div className="font-weight-bold" style={{ fontSize: "16px" }}>${item.price * quantity}</div>
                 </div>
 
             </div>
-            <div className="col-3 mt-3 text-center">
-                <div className="font-weight-bold" style={{ fontSize: "16px" }}>{item.formated_price}</div>
-
-
+        :
+        <div className='d-flex' style={{height:'120px'}}>
+            <div className="col-4" style={{padding:'0 5px 0 0'}}>
+                    <Link to={`/product/${item.product.id}`}>
+                        <div   
+                            className={classes.image2} 
+                            style={{ backgroundImage: `url(${item.product.base_image.original_image_url})`, }}
+                        />
+                    </Link>
             </div>
-            <div className="col-2 mt-3">
+            <div className='col-8 ' style={{padding:0}}>
+                <div className=''>
+                    <p className="" style={{ fontWeight: 700, fontSize: '14px',}}> {item.product.name} </p>
+                    <div className='d-flex'>
+                        <div className='col-4'>
+                            <div className="font-weight-bold">
+                                
+                                {item.formated_total}
+                                {/* ${item.price * quantity} */}
+                            </div>
 
-                <Quantity quantity={quantity} setQuantity={setQuantity} />
+                                <div className="d-flex ml-1">
 
-                <div className="text-center mt-2">
-                    <Button variant='contained' size='small' color='primary' className={classes.updtBtn} onClick={() => updateCartItem(quantity)}>Update</Button>
+                                    <Tooltip title={inWishList ? 'Remove From WishList' : "Add To Wishlist"} >
+                                        <IconButton className={classes.btn} onClick={toWishList}>
+                                            {
+                                                inWishList ?
+                                                    <FavoriteIcon className={clsx(classes.fIcon, { animate: inWishListPending })} />
+                                                    :
+                                                    <FavoriteBorderIcon className={clsx(classes.fIcon, { animate: inWishListPending })} />
+                                            }
+
+                                        </IconButton>
+                                    </Tooltip>
+
+                                    <Tooltip title="Remove Item From Cart">
+                                        <IconButton className={classes.btn} onClick={removeFromCart}>
+                                            <DeleteIcon className={clsx(classes.fIcon, { animate: inCartPending })} />
+                                        </IconButton>
+                                    </Tooltip>
+                                </div>
+                            
+                        </div>
+                            
+                        <div className="col-8">
+                                <Quantity quantity={quantity} setQuantity={setQuantity} />
+                                <div className="text-right">
+                                    <Button variant='outlined' size='small' color='primary' className={classes.updtBtn} onClick={() => updateCartItem(quantity)}>Update</Button>
+                                </div>
+                               
+                        </div>
+
+                    </div>
+                    
+                    {/* <div className='text-center' >
+                        <div style={{fontSize:'14px',fontWeight:700}}>Sub Total : ${item.price * quantity}</div>
+                    </div> */}
                 </div>
             </div>
-            <div className="col-2 text-center">
-                <p style={{ fontWeight: 700 }}>SubTotal</p>
-                <div className="font-weight-bold" style={{ fontSize: "16px" }}>${item.price * quantity}</div>
-            </div>
+
 
         </div>
     )

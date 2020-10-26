@@ -43,15 +43,18 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     searchIcon: {
-        padding: theme.spacing(0, 2),
-        height: '100%',
+     
         position: 'absolute',
-        cursor:'pointer',
-        // pointerEvents: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'white'
+        right: '209px',
+        height: '35px', 
+        padding: '0 7px',
+        paddingTop:'4px',
+        background:'rgba(255, 255, 255, 0.25)',
+        hover:{
+            background:'rgba(255, 255, 255, 0.3)',
+        },
+        cursor:'pointer'
+        
     },
     inputRoot: {
         minWidth: '40%',
@@ -76,9 +79,7 @@ const useStyles = makeStyles((theme) => ({
     underline: {
         border: '1px solid yellow',
     },
-    searchIcon: {
-
-    }
+    
 }));
 
 export default function SearchBox() {
@@ -126,23 +127,9 @@ export default function SearchBox() {
                 inputProps={{ 'aria-label': 'search' }}
             />
 
-            <div 
-                className={classes.searchIcon} 
-                style={{ 
-                    position: 'absolute',
-                    right: '199px',
-                    height: '35px', 
-                    padding: '0 7px',
-                    paddingTop:'4px',
-                    background:'rgba(255, 255, 255, 0.25)',
-                    hover:{
-                        background:'rgba(255, 255, 255, 0.3)',
-                    },
-                    cursor:'pointer'
-                    }}
-                >
+            <div className={classes.searchIcon} >
               
-                    <SearchIcon />
+                <SearchIcon />
               
             </div>
 

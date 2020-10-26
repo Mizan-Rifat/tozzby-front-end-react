@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect,useState } from 'react'
 import { Paper, Grid } from '@material-ui/core';
 import LocalShippingOutlinedIcon from '@material-ui/icons/LocalShippingOutlined';
 import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined';
@@ -8,7 +8,7 @@ import ThumbUpAltOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined';
 import { makeStyles } from '@material-ui/styles';
 import useLoadingBar from '../Common/useLoadingBar';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     icon: {
         fontSize: '3rem',
         color: '#FF6108'
@@ -21,25 +21,36 @@ const useStyles = makeStyles(theme => ({
         }
 
     },
+    itemContainer:{
+        padding: '20px', 
+        justifyContent: 'center',
+        display:'flex',
+        ['@media (max-width:480px)']: { 
+            padding:'5px',
+            justifyContent: 'start',
+            marginLeft:'70px'
+        }
+    }
 
 }))
 
 export default function Elementor({ addLoadingBar }) {
 
     const classes = useStyles();
+ 
     useEffect(() => {
         addLoadingBar(10)
     }, [])
 
 
+
     return (
         <>
             <Paper elevation={0} variant='outlined' style={{ marginTop: '2rem' }}>
-                <Grid container spacing={3} justify='space-around'>
-
-
-                    <Grid item md={3}>
-                        <div className="d-flex" style={{ padding: '20px', justifyContent: 'center' }}>
+                <Grid container  >
+                
+                    <Grid item xs={12} md={3}>
+                        <div className={classes.itemContainer}>
                             <LocalShippingOutlinedIcon className={classes.icon} />
                             <div className="ml-2" style={{ fontFamily: 'sans-serif', }}>
                                 <p className={classes.text}>Free Delivery</p>
@@ -48,8 +59,8 @@ export default function Elementor({ addLoadingBar }) {
                         </div>
                     </Grid>
 
-                    <Grid item md={3}>
-                        <div className="d-flex" style={{ padding: '20px', justifyContent: 'center' }}>
+                     <Grid item  xs={12} md={3}>
+                        <div className={classes.itemContainer}>
                             <MonetizationOnOutlinedIcon className={classes.icon} />
                             <div className="ml-2" style={{ fontFamily: 'sans-serif', }}>
                                 <p className={classes.text}>Moneyback Guarantee</p>
@@ -57,8 +68,8 @@ export default function Elementor({ addLoadingBar }) {
                             </div>
                         </div>
                     </Grid>
-                    <Grid item md={3}>
-                        <div className="d-flex" style={{ padding: '20px', justifyContent: 'center' }}>
+                    <Grid item xs={12} md={3}>
+                        <div className={classes.itemContainer}>
                             <PaymentOutlinedIcon className={classes.icon} />
                             <div className="ml-2" style={{ fontFamily: 'sans-serif', }}>
                                 <p className={classes.text}>Payment Method</p>
@@ -66,8 +77,8 @@ export default function Elementor({ addLoadingBar }) {
                             </div>
                         </div>
                     </Grid>
-                    <Grid item md={3}>
-                        <div className="d-flex" style={{ padding: '20px', justifyContent: 'center' }}>
+                    <Grid item xs={12} md={3}>
+                        <div className={classes.itemContainer}>
                             <ContactSupportOutlinedIcon className={classes.icon} />
                             <div className="ml-2" style={{ fontFamily: 'sans-serif', }}>
                                 <p className={classes.text}>Support</p>

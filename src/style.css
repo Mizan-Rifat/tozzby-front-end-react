@@ -1,14 +1,12 @@
 /* @import "@kapost/react-component-slider/lib/stylesheets/component-slider"; */
 
 
-box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+/* box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
 0px 1px 1px 0px rgba(0, 0, 0, 0.14),
-0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+0px 1px 3px 0px rgba(0, 0, 0, 0.12); */
 
 #root {
-    /* background-color: #F4F4F4; */
-
-
+    background-color: #F4F4F4;
     font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
 }
 
@@ -18,8 +16,15 @@ box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
     background-color: #f4f4f4;
     min-height: calc(100vh - 115px);
     overflow: hidden;
-    padding: 0 20px;
+    /* padding: 0 20px; */
 }
+
+@media (max-width: 480px) {
+    .topMargin {
+        margin-top: 20px;
+        min-height: unset;
+    }
+ }
 
 #root p {
     font-size: 14px;
@@ -123,9 +128,7 @@ box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
     display: none !important;
 }
 
-.MuiPaper-root {
-    background: red;
-}
+
 
 
 .product_top_bar {
@@ -230,8 +233,6 @@ box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
     background: red;
     margin: 5px;
 }
-
-
 
 .animate {
     animation: spin 2s linear infinite;

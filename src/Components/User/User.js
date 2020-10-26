@@ -6,9 +6,24 @@ import Profile from './Profile'
 import { AppContext } from '../../App';
 import AuthCheck from '../Common/AuthCheck';
 import BackDrop from '../Common/BackDrop';
+import { makeStyles } from '@material-ui/core/styles';
+import BottomBar from './BottomBar';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+const useStyles = makeStyles((theme) => ({
+    bottomBar:{
+        height:'60px',
+        width:'100%',
+        background:'red',
+        position:'fixed',
+        bottom:0
+    }
+}))
 
 
 export default function User() {
+
+    const classes = useStyles();
 
     const [authenticated, userLoading] = AuthCheck();
 
@@ -30,14 +45,19 @@ export default function User() {
             {
 
                 userLoading ?
+                
+                    <div className='d-flex justify-content-center align-items-center' style={{minHeight:'400px'}}>
 
-                    <BackDrop />
+                        <CircularProgress
+                            size={24}
+                        />
+                    </div> 
 
                     :
 
                     !authenticated ?
 
-                        <div className="text-center">
+                        <div className="text-center" style={{minHeight:'400px'}}>
                             <h5 style={{ marginTop: '100px' }}>You need to be logged in to view this page.</h5>
                         </div>
                         :
@@ -45,10 +65,11 @@ export default function User() {
                         <Container >
 
                             <Grid container spacing={3}>
-
-                                <Grid item md={3}>
-                                    <UserSidebar />
-                                </Grid>
+                                <Hidden xsDown>
+                                    <Grid item md={3}>
+                                        <UserSidebar />
+                                    </Grid>
+                                </Hidden>
 
                                 <Grid item xs={12} md={9}>
                                     <UserBody />
@@ -56,9 +77,11 @@ export default function User() {
                                 </Grid>
                             </Grid>
 
-
                         </Container>
             }
+            <Hidden smUp>
+                <BottomBar />
+            </Hidden>
         </>
     )
 }

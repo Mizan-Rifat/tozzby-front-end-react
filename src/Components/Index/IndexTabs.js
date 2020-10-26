@@ -57,7 +57,12 @@ const useStyles = makeStyles((theme) => ({
         display:'flex',
         justifyContent:'space-between',
         borderBottom:'1px solid rgba(0,0,0,.2)',
-        marginLeft:'30px',
+        // marginLeft:'30px',
+    },
+    panel:{
+        "& .MuiBox-root": {
+            padding: 0
+          }
     }
 }));
 
@@ -135,11 +140,11 @@ export default function IndexTabs({addLoadingBar}) {
             </div>
 
 
-            <TabPanel value={value} index={0} classes={{}}>
+            <TabPanel value={value} index={0} className={classes.panel}>
                 <SpecialProducts products={featuredProducts} loading={loading} style={{ padding: 0 }}/>
             </TabPanel>
 
-            <TabPanel value={value} index={1}>
+            <TabPanel value={value} index={1} className={classes.panel}>
                 <SpecialProducts products={newProducts} loading={loading} />
             </TabPanel>
 

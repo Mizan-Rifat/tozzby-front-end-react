@@ -1,4 +1,5 @@
 import React from 'react'
+import { Hidden } from '@material-ui/core'
 
 export default function OrderDetails({order}) {
     return (
@@ -22,13 +23,15 @@ export default function OrderDetails({order}) {
                 <div className="">{order.shipping_address.country_name}</div>
                 <p className='mt-2'>Contact: {order.shipping_address.phone}</p>
             </div>
-            <div className="">
-                <h5 style={{ fontWeight: 700 }}>Payment Method</h5>
-                <p>{order.payment_title}</p>
-            </div>
-            <div className="">
+            <Hidden xsDown>
+                <div className="">
+                    <h5 style={{ fontWeight: 700 }}>Payment Method</h5>
+                    <p>{order.payment_title}</p>
+                </div>
+                <div className="">
 
-            </div>
+                </div>
+            </Hidden>
 
 
         </div>

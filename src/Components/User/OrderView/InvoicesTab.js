@@ -33,12 +33,12 @@ export default function InfoTab({order}) {
                     :
 
                     <>
-                        <h5>Invoices #{order.invoices[0].id}</h5>
+                        <p style={{ fontWeight: 700, fontSize: '16px' }}>Invoices #{order.invoices[0].id}</p>
                         <ProductsTable items={order.items} usedFor='invoices' />
 
                         <div >
                             <div className="d-flex justify-content-end" style={{ fontSize: '14px' }}>
-                                <div className="">
+                                <div className="mt-2">
                                     <AmountTable usedFor='invoices' order={order} />
                                 </div>
                             </div>

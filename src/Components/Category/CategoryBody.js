@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, useContext } from 'react'
-import { Grid } from '@material-ui/core'
+import { Grid,Button,Hidden } from '@material-ui/core'
 import SingleProduct from '../Sections/SingleProduct';
 import { spring } from "react-flip-toolkit";
 import Skeleton from '@material-ui/lab/Skeleton';
@@ -15,6 +15,7 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import { useQueryState } from 'react-router-use-location-state';
 import { AppContext } from '../../App';
 import Pagination from '@material-ui/lab/Pagination';
+import CategoryFilterDrawer from './CategoryFilterDrawer'
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -36,10 +37,20 @@ const useStyles = makeStyles((theme) => ({
         borderRight: '1px solid rgba(0,0,0,.2)',
         padding: '3px 4px',
         height: 'unset'
+    },
+    item:{
+        ['@media (max-width:480px)']: { 
+            padding:'0 !important'
+        },
+    },
+    filterBtn:{
+        borderRadius:0,
+        
+
     }
 }));
 
-export default function CategoryBody({ id, search, addLoadingBar }) {
+export default function CategoryBody({ id, search, addLoadingBar,setPageQry,name,setOpen }) {
     const classes = useStyles();
 
 
@@ -50,16 +61,23 @@ export default function CategoryBody({ id, search, addLoadingBar }) {
 
     const [sortQry, setSortQry] = useQueryState('sort', '')
     const [orderQry, setOrderQry] = useQueryState('order', '')
+    
+
     const query = new URLSearchParams(search);
 
 
     const containerRef = useRef();
     const [products, setProducts] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9])
+
     const [loading, setLoading] = useState(true)
 
-    const [pagination,setPagination] = useState({
-        totalPage:''
-    }) 
+    
+
+    const [pagination, setPagination] = useState({
+        page:1,
+        totalPage: '',
+        firstPage: ''
+    })
 
     const [attribute, setattribute] = useState({
         sort: query.get('sort') ? query.get('sort') : 'created_at',
@@ -67,14 +85,13 @@ export default function CategoryBody({ id, search, addLoadingBar }) {
     })
 
     const handleAttributeChange = (e) => {
+        setPageQry('')
         setSortQry(e.target.value)
-        // setattribute({
-        //     ...attribute,
-        //     sort: e.target.value
-        // })
+       
     }
 
     const handleOrderChange = () => {
+        setPageQry('')
         setOrderQry(attribute.order == 'asc' ? 'desc' : 'asc')
         setattribute({
             ...attribute,
@@ -83,27 +100,22 @@ export default function CategoryBody({ id, search, addLoadingBar }) {
     }
 
 
+    const handlePagination = (e, page) => {
+        setPageQry(page)
+
+    }
 
     useEffect(() => {
         setLoading(true)
         let apiQuery = `${process.env.REACT_APP_DOMAIN}/api/products?category_id=${id}`
-        // &order=${attribute.order}${qs}`;
 
         if (query.get('sort') == null) {
-            // apiQuery += `&sort=${query.get('sort')}}`
             apiQuery += `&sort=created_at`
         }
-        // else{
-        //     apiQuery += `&sort=created_at`
-        // }
 
         if (query.get('order') == null) {
-            // apiQuery += `&order=${query.get('order')}}`
             apiQuery += `&order=desc`
         }
-        // else{
-        //     apiQuery += `&order=desc`
-        // }
 
         axios.get(`${apiQuery}${search.replace('?', '&')}`,
             {
@@ -114,7 +126,7 @@ export default function CategoryBody({ id, search, addLoadingBar }) {
             setProducts(response.data.data)
             setPagination({
                 ...pagination,
-                totalPage : response.data.meta.last_page
+                totalPage: response.data.meta.last_page,
             })
             setLoading(false)
             addLoadingBar(50)
@@ -155,9 +167,28 @@ export default function CategoryBody({ id, search, addLoadingBar }) {
         }
     }, [loading])
 
+
+
     return (
         <>
-            <div className="d-flex justify-content-end">
+
+            <h5 style={{marginTop:'3px'}}>{name}</h5>
+
+            <div className="d-flex justify-content-between my-3 w-100">
+
+                <Hidden smUp>
+                    <Button 
+                        variant='contained' 
+                        size='small' 
+                        color='primary' 
+                        className={classes.filterBtn}
+                        onClick={()=>setOpen(true)}>
+                            Filter
+                    </Button>    
+                </Hidden>
+                
+                <div></div>
+
                 <div style={{ width: '150px' }}>
                     <div className="d-flex list-group-item" style={{ padding: 0 }}>
                         <div className="form-group col-10" style={{ marginBottom: '0px', padding: 0 }}>
@@ -196,7 +227,7 @@ export default function CategoryBody({ id, search, addLoadingBar }) {
 
                         products.map((item, index) => (
 
-                            <Grid item xs={6} sm={3} className='item'>
+                            <Grid item xs={6} sm={3} className={classes.item}>
                                 <SingleProduct product={item} key={index} loading={loading} />
                             </Grid>
                         ))
@@ -205,9 +236,16 @@ export default function CategoryBody({ id, search, addLoadingBar }) {
 
             </Grid>
 
-            <div className="">
-                <Pagination count={pagination.totalPage} variant="outlined" shape="rounded" />
+            <div className="d-flex justify-content-center mt-5" >
+                <Pagination
+                    count={pagination.totalPage}
+                    variant="outlined"
+                    shape="rounded"
+                    onChange={handlePagination}
+                />
             </div>
+
+            
         </>
     )
 }

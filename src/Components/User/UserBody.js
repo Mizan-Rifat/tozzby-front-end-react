@@ -4,19 +4,25 @@ import Profile from './Profile';
 import Orders from './Orders';
 import OrderView from './OrderView/OrderView';
 import Wishlist from './Wishlist';
+import Reviews from './Reviews';
 
-export const OrderContext = createContext();
+export const ProfileContext = createContext();
 export default function UserBody() {
 
     const [orders, setOrders] = useState({
         orders:[],
         loading:true
     })
+
+    const [reviews, setReviews] = useState({
+        reviews:[],
+        loading:true
+    })
     
     return (
         <div>
 
-            <OrderContext.Provider value={{ orders, setOrders }}>
+            <ProfileContext.Provider value={{ orders, setOrders,reviews, setReviews }}>
 
                 <Switch>
 
@@ -32,13 +38,16 @@ export default function UserBody() {
                     <Route
                         path='/account/wishlist' component={Wishlist}
                     />
+                    <Route
+                        path='/account/reviews' component={Reviews}
+                    />
 
                     <Redirect from='/account' to='/account/profile' />
 
 
 
                 </Switch>
-            </OrderContext.Provider>
+            </ProfileContext.Provider>
         </div>
     )
 }

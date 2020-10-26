@@ -9,12 +9,34 @@ const useStyles = makeStyles(theme => ({
         padding: '5px 10px',
         '&:focus': {
             outline: 'none'
+        },
+        ['@media (max-width:480px)']: { 
+            padding:0,
         }
+        
+    },
+    qtyNum:{
+        padding: '4px', 
+        fontWeight: 700,
+        ['@media (max-width:480px)']: { 
+            padding:'4px 5px',
+        },
+
     },
     label:{
         '&:hover':{
             background:'#DADADA'
         }
+    },
+
+    container:{
+        display:'flex',
+        border: '1px solid rgba(0,0,0,.2)',
+        justifyContent:'center',
+        ['@media (max-width:480px)']: { 
+            justifyContent:'flex-end',
+            border:'unset',
+        }, 
     }
 }))
 
@@ -25,11 +47,11 @@ export default function Quantity({quantity,setQuantity}) {
 
 
     return (
-        <div className="d-flex justify-content-between" style={{ border: '1px solid rgba(0,0,0,.2)' }}>
+        <div className={classes.container}>
             <IconButton classes={{root:classes.btnRoot,label:classes.label}} onClick={() => setQuantity(quantity + 1)}>
                 <AddIcon size='small' />
             </IconButton>
-            <div style={{ padding: '4px', fontWeight: 700 }}>{quantity}</div>
+            <div className={classes.qtyNum} >{quantity}</div>
             <IconButton classes={{root:classes.btnRoot,label:classes.label}} onClick={() => quantity > 1 ? setQuantity(quantity - 1) : null}>
                 <RemoveIcon size='small' />
             </IconButton>

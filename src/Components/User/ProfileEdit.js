@@ -16,6 +16,17 @@ const useStyles = makeStyles((theme) => ({
         pointerEvents: 'none',
         opacity: '0.5',
         background: 'rgba(255, 255, 255, 0.6)'
+    },
+    formGroup:{
+        ['@media (max-width:480px)']: { 
+            padding:0,
+        }
+    },
+    pcBtn:{
+        marginLeft:'15px',
+        ['@media (max-width:480px)']: { 
+            marginLeft:0,
+        }
     }
 
 }))
@@ -97,7 +108,7 @@ export default function ProfileEdit({ user, setUser }) {
                     Object.keys(formData).filter(item=> item != 'password' && item != 'password_confirmation').map((item, index) => (
 
 
-                        <div className="form-group col-8" key={index}>
+                        <div className={`${classes.formGroup} form-group col-xs-12 col-md-8`} key={index}>
                             {
 
 
@@ -137,7 +148,7 @@ export default function ProfileEdit({ user, setUser }) {
                     changePass ?
 
                     <>
-                        <div className="form-group col-8">
+                        <div className={`${classes.formGroup} form-group col-xs-12 col-md-8`}>
                             <label htmlFor="password" className={classes.required}>Password</label>
                             <input
                                 type="password"
@@ -150,7 +161,7 @@ export default function ProfileEdit({ user, setUser }) {
                             />
                         </div>
 
-                        <div className="form-group col-8">
+                        <div className={`${classes.formGroup} form-group col-xs-12 col-md-8`}>
                             <label htmlFor="password_confirmation" className={classes.required}>Confirm Password</label>
                             <input
                                 type="password"
@@ -164,7 +175,7 @@ export default function ProfileEdit({ user, setUser }) {
                         </div>
                     </>
                     :
-                    <Button variant='contained' color='primary' onClick={()=>setChangePass(true)} style={{marginLeft:'15px'}}>Change PassWord</Button>
+                    <Button variant='contained' color='primary' onClick={()=>setChangePass(true)} className={classes.pcBtn}>Change PassWord</Button>
                 }
 
 

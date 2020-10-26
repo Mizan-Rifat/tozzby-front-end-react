@@ -21,7 +21,10 @@ import NotiToast from './Components/Common/NotiToast';
 
 const useStyles = makeStyles((theme) => ({
   topClass: {
-    top: '60px'
+    top: '60px',
+    ['@media (max-width:480px)']: { 
+      top:0
+  },
   },
 }));
 
@@ -47,7 +50,8 @@ function App() {
 
   const [authOpen, setAuthOpen] = useState({
     state: false,
-    comp: 1
+    comp: 1,
+    title:''
   })
   const [user, setUser] = useState({})
   const [loggedOut, setLoggedOut] = useState(false);
@@ -115,7 +119,7 @@ function App() {
     axios.get(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart?token=true`, { withCredentials: true })
       .then(response => {
         if (response.data.data != null) {
-          console.log('cart', response)
+          // console.log('cart', response)
           setCartItems(response.data.data)
 
         }
@@ -157,13 +161,15 @@ function App() {
              loadingBarProgress, 
              dispatchLoadingBarProgress, 
              loggedOut, 
-             setLoggedOut
+             setLoggedOut,
+             wishListItemsLoading
             
             }}
           >
 
 
             <SnackbarProvider
+              autoHideDuration={2000}
               classes={{
                 anchorOriginTopRight: styleClasses.topClass
               }}

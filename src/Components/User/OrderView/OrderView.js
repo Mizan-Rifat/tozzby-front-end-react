@@ -5,6 +5,7 @@ import { Paper } from '@material-ui/core';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import SimpleTabs from './SimpleTabs';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 export const OrderContext = createContext();
@@ -31,6 +32,7 @@ export default function OrderView(props) {
 
     const id = props.match.params.id
     const [order, setOrder] = useState({});
+    const [loading, setLoading] = useState(true);
 
     const [value, setValue] = React.useState(2);
 
@@ -45,24 +47,40 @@ export default function OrderView(props) {
             }
         ).then(response => {
             setOrder(response.data.data)
+            setLoading(false)
         }).catch(error => {
             console.log(error)
+            setLoading(false)
         })
     }, [])
 
     return (
-        <Paper variant='outlined' square className={classes.paper}>
+        <>
             {
-                Object.entries(order).length != 0 &&
-                <>
-                    <h5>Order #{`${id}`}</h5>
+                true ?
 
-                    <OrderContext.Provider value={{ order }}>
-                        <SimpleTabs />
-                    </OrderContext.Provider>
-                </>
+                    <div className='d-flex justify-content-center align-items-center' style={{minHeight:'300px'}}>
+
+                        <CircularProgress
+                            size={24}
+                        />
+                    </div> 
+
+                    :
+                <div style={{padding:'10px 0'}}>
+                    {
+                        Object.entries(order).length != 0 &&
+                        <>
+                            <h5 style={{ fontWeight: 700,margin:'1rem 0'}}>Order #{`${id}`}</h5>
+
+                            <OrderContext.Provider value={{ order }}>
+                                <SimpleTabs />
+                            </OrderContext.Provider>
+                        </>
+                    }
+                </div>
             }
-        </Paper>
+        </>
     )
 }
 

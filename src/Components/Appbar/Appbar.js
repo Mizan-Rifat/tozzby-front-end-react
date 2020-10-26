@@ -28,6 +28,9 @@ import CategoryDrawer from './CategoryDrawer';
 import { useHistory } from 'react-router-dom';
 import NotiToast from '../Common/NotiToast';
 
+import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
+
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -36,7 +39,10 @@ const useStyles = makeStyles((theme) => ({
     // position:'relative'
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    // marginRight: theme.spacing(2),
+    [theme.breakpoints.up('md')]: {
+      marginRight: 0,
+    },
   },
   title: {
     display: 'none',
@@ -50,7 +56,10 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       color: 'white',
       textDecoration: 'none'
-    }
+    },
+    [theme.breakpoints.down('sm')]: {
+      flex:1
+    },
   },
   search: {
     position: 'relative',
@@ -96,7 +105,7 @@ const useStyles = makeStyles((theme) => ({
 
   },
   sectionDesktop: {
-    display: 'none',
+    // display: 'none',
     [theme.breakpoints.up('md')]: {
       display: 'flex',
     },
@@ -109,10 +118,10 @@ const useStyles = makeStyles((theme) => ({
   },
 
   toolbar: {
-    // minHeight: 90,
-    // alignItems: 'flex-start',
-    paddingTop: theme.spacing(1),
-    // paddingBottom: theme.spacing(2),
+    padding:'0 60px',
+    [theme.breakpoints.down('sm')]: {
+      padding: '0 16px',
+    },
   },
   tab: {
     background: 'darkslateblue',
@@ -120,7 +129,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'inline-block',
     padding: '10px 22px',
     marginLeft: '58px',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
   },
 
   listContainer: {
@@ -139,13 +151,19 @@ const useStyles = makeStyles((theme) => ({
     opacity: 0,
     pointerEvents: 'none'
   },
+  iconBtn:{
+    [theme.breakpoints.down('sm')]: {
+      padding:'4px'
+    },
+
+  }
 
 }));
 
 export default function PrimarySearchAppBar() {
   const history = useHistory();
   const toast = NotiToast();
-  const { user, setUser, cartItems,wishListItems,setCartItems,setWishListItems, authOpen, setAuthOpen,dispatchLoadingBarProgress,setLoggedOut } = useContext(AppContext);
+  const { user, setUser, cartItems, wishListItems, setCartItems, setWishListItems, authOpen, setAuthOpen, dispatchLoadingBarProgress, setLoggedOut } = useContext(AppContext);
   const [showCart, setShowCart] = useState(false);
   const [showCategories, setShowCategories] = useState(false);
   const [catOpen, setCatOpen] = useState(false);
@@ -179,13 +197,13 @@ export default function PrimarySearchAppBar() {
   const handleLogin = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
-    setAuthOpen({ comp: 1, state: true });
+    setAuthOpen({ comp: 1, state: true,title:'Login' });
   }
 
   const handleRegister = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
-    setAuthOpen({ comp: 2, state: true });
+    setAuthOpen({ comp: 2, state: true,title:'Register' });
   }
   const handleLogout = () => {
     setAnchorEl(null);
@@ -200,9 +218,9 @@ export default function PrimarySearchAppBar() {
         setCartItems({})
         setWishListItems([])
         setLoggedOut(true)
-        toast(response.data.message,'success')
+        toast(response.data.message, 'success')
       })
-      .catch(error=>{
+      .catch(error => {
       })
   }
 
@@ -253,7 +271,7 @@ export default function PrimarySearchAppBar() {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <IconButton aria-label="show 4 new mails" color="inherit" onClick={()=>history.push('/account/wishlist')}>
+        <IconButton aria-label="show 4 new mails" color="inherit" onClick={() => history.push('/account/wishlist')}>
           <Badge badgeContent={wishListItems.length} color="secondary">
             <FavoriteIcon />
           </Badge>
@@ -262,7 +280,7 @@ export default function PrimarySearchAppBar() {
       </MenuItem>
 
       <MenuItem>
-        <IconButton aria-label="show 11 new notifications" color="inherit" onClick={()=>history.push('/cart')}>
+        <IconButton aria-label="show 11 new notifications" color="inherit" onClick={() => history.push('/cart')}>
           <Badge badgeContent={cartItems.items_count} color="secondary">
             <ShoppingCartIcon />
           </Badge>
@@ -285,14 +303,6 @@ export default function PrimarySearchAppBar() {
   );
 
 
-    // useEffect(()=>{
-    //   dispatchLoadingBarProgress({
-    //     type:'MAKE_NULL'
-    //   })
-    //   console.log('apply')
-    // },[history.location])
-
-
 
   return (
     <div className={classes.grow}>
@@ -313,52 +323,28 @@ export default function PrimarySearchAppBar() {
             </IconButton>
           </Hidden>
 
-
-          <Typography className={classes.title} variant="h6" noWrap>
-            <Link to='/' className={classes.titleLink}>My-Ecommerce</Link>
-          </Typography>
-
-
-          <SearchBox style={{ flex: 1 }} />
-
-
-          {/* 
-          <div className={classes.search}>
-
-
-
-
-            <div className={classes.searchIcon}>
-              <SearchIcon />
+          <Link to='/' className={classes.titleLink}>
+            <div className="d-flex">
+              <ShoppingCartOutlinedIcon style={{marginRight:'7px',marginTop:'7px',fontSize:'30px'}}/>
+              <p style={{ fontFamily: `Sriracha, cursive`,fontSize:'30px',margin:0 }}>STORIUM</p>
             </div>
+          </Link>
 
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-            />
-
-
-
-          </div> */}
-
-
-          {/* <div className={classes.grow} /> */}
+          <Hidden smDown>
+            <SearchBox />
+          </Hidden>
 
 
 
           <div className={classes.sectionDesktop}>
 
-            <IconButton aria-label="show 4 new mails" color="inherit" onClick={()=>history.push('/account/wishlist')}>
+            <IconButton className={classes.iconBtn} aria-label="show 4 new mails" color="inherit" onClick={() => history.push('/account/wishlist')}>
               <Badge badgeContent={wishListItems.length} color="secondary">
-                <FavoriteIcon  />
+                <FavoriteIcon />
               </Badge>
             </IconButton>
 
-            <IconButton color="inherit" onMouseEnter={() => setShowCart(true)} onMouseLeave={() => setShowCart(false)}  onClick={()=>history.push('/cart')}>
+            <IconButton  className={classes.iconBtn} color="inherit" onMouseEnter={() => window.innerWidth > 480 && setShowCart(true)} onMouseLeave={() => setShowCart(false)} onClick={() => history.push('/cart')}>
               <Badge badgeContent={cartItems.items_count} color="secondary">
                 <ShoppingCartIcon />
               </Badge>
@@ -366,6 +352,7 @@ export default function PrimarySearchAppBar() {
 
             <IconButton
               edge="end"
+              className={classes.iconBtn}
               aria-label="account of current user"
               aria-controls={menuId}
               aria-haspopup="true"
@@ -377,7 +364,7 @@ export default function PrimarySearchAppBar() {
 
           </div>
 
-          <div className={classes.sectionMobile}>
+          {/* <div className={classes.sectionMobile}>
             <IconButton
               aria-label="show more"
               aria-controls={mobileMenuId}
@@ -387,7 +374,7 @@ export default function PrimarySearchAppBar() {
             >
               <MoreIcon />
             </IconButton>
-          </div>
+          </div> */}
 
 
 

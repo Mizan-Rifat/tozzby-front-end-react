@@ -17,18 +17,18 @@ export default function Slider() {
     
     return (
         <div className="">
-            <Carousel showArrows={true} showThumbs={false} infiniteLoop={true} showStatus={false} dynamicHeight={true}>
+            <Carousel showArrows={true} showThumbs={false} infiniteLoop={true} showStatus={false} dynamicHeight={true} autoPlay={true}>
                 <div>
-                    <img src={require('../images/1.jpg')} className={classes.imgStyle} />
+                    <img src={require('../../images/1.jpg')} className={classes.imgStyle} />
                 </div>
                 <div>
-                    <img src={require('../images/2.jpg')} className={classes.imgStyle}/>
+                    <img src={require('../../images/2.jpg')} className={classes.imgStyle}/>
                 </div>
                 <div>
-                    <img src={require('../images/3.jpg')}  className={classes.imgStyle}/>
+                    <img src={require('../../images/3.jpg')}  className={classes.imgStyle}/>
                 </div>
                 <div>
-                    <img src={require('../images/4.jpg')}  className={classes.imgStyle}/>
+                    <img src={require('../../images/4.jpg')}  className={classes.imgStyle}/>
                 </div>
             </Carousel>
         </div>

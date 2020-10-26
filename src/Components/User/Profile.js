@@ -9,9 +9,13 @@ import { AppContext } from '../../App';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
-        backgroundColor: theme.palette.background.paper,
-        padding: '20px',
-        border: 0
+       
+        background:'unset',
+        padding: '10px',
+        marginBottom:'5px',
+        ['@media (max-width:480px)']: { 
+            minHeight:'300px',    
+        }
     },
     tag: {
         fontWeight: 'bold',
@@ -34,12 +38,11 @@ export default function Profile() {
 
     const classes = useStyles();
 
-    // console.log({user})
     return (
-        <Paper variant='outlined' square className={classes.paper}>
-            <div className="d-flex justify-content-between">
-                <h5>Profile</h5>
-                <IconButton aria-label="delete" onClick={() => setEditMode(!editMode)}>
+        <div style={{padding:'10px 0'}}>
+            <div className="d-flex justify-content-between" style={{margin:'1rem 0'}}>
+                <h5 style={{ fontWeight: 700 }}>Profile</h5>
+                <IconButton aria-label="delete" onClick={() => setEditMode(!editMode)} style={{padding:0,marginBottom:'8px'}}>
                     {
                         editMode ?
                             <Tooltip title='Personal Information'>
@@ -53,7 +56,7 @@ export default function Profile() {
                 </IconButton>
             </div>
 
-            <div className="" style={{ padding: '20px' }}>
+            <Paper variant='outlined' square className={classes.paper}>
 
                 {
                     editMode ?
@@ -62,10 +65,10 @@ export default function Profile() {
                         :
                         <PersonalInfo user={user} />
                 }
-            </div>
+            </Paper>
 
 
-        </Paper>
+        </div>
     )
 }
 
@@ -75,30 +78,44 @@ function PersonalInfo({ user }) {
     const classes = useStyles();
     console.log({user})
 
+    const [items, setItems] = useState([
+        {
+            name:'Name',
+            value:user.name,
+        },
+        {
+            name:'Gender',
+            value:user.gender != null && user.gender.toUpperCase(),
+        },
+        {
+            name:'Mobile',
+            value:user.phone,
+        },
+        {
+            name:'Email',
+            value:user.email,
+        },
+        {
+            name:'Date Of Birth',
+            value:user.date_of_birth,
+        },
+    ])
+
     return (
         <div>
 
-            <div className="d-flex">
-                <p className={classes.tag}>Name</p>
-                <p className={classes.name}>{user.name}</p>
-            </div>
-            <div className="d-flex">
-                <p className={classes.tag}>Gender</p>
-                <p className={classes.name}>{user.gender != null && user.gender.toUpperCase()}</p>
-                {/* <p className={classes.name}>{user.gender != null ? user.gender[0].toUpperCase() + user.gender.substring(1)}</p> */}
-            </div>
-            <div className="d-flex">
-                <p className={classes.tag}>Mobile</p>
-                <p className={classes.name}>{user.phone}</p>
-            </div>
-            <div className="d-flex">
-                <p className={classes.tag}>Email</p>
-                <p className={classes.name}>{user.email}</p>
-            </div>
-            <div className="d-flex">
-                <p className={classes.tag}>Date Of Birth</p>
-                <p className={classes.name}>{user.date_of_birth}</p>
-            </div>
+            <table>
+                {
+                    items.map((item,index)=>(
+                        <tr key={index} style={{padding:'5px 0'}}>
+                            <td style={{width:'40%',fontWeight:700}}>{item.name}</td>
+                            <td style={{width:'20%'}}>:</td>
+                            <td>{item.value}</td>
+                        </tr>
+                    ))
+                } 
+
+            </table>
 
 
         </div>

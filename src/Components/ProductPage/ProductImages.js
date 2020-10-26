@@ -3,6 +3,7 @@ import React,{useState,useContext} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import MySLider from '../Common/MySLider';
 import {ProductContext} from './Product';
+import Rating from '@material-ui/lab/Rating';
 
 const useStyles = makeStyles(theme => ({
     picContainer: {
@@ -10,8 +11,8 @@ const useStyles = makeStyles(theme => ({
         transition:'.3s ease-in'
     },
     mainImage: {
-        width: '80%',
-        height: '500px'
+        width: '100%',
+        height: 'auto'
     },
     thumbnail: {
         flex: '0 0 auto',
@@ -46,6 +47,13 @@ export default function ProductImages() {
 
     return (
         <>
+            {
+                window.innerWidth < 480 &&
+                <div className='my-3'>    
+                    <h5>{product.name}</h5>
+                    <Rating name="half-rating-read" defaultValue={product.reviews.average_rating} precision={0.5} readOnly />
+                </div>
+            }
             <div className={classes.picContainer}>
                 <img src={product.images[selectedImage].original_image_url} className={classes.mainImage} />
                 
@@ -58,7 +66,7 @@ export default function ProductImages() {
                             <div onClick={()=>setselectedImage(index)} className={classes.cont}>
                                 <div key={index} className={classes.thumbnail}>
                                     <div className={classes.thumbnailImage} 
-                                    style={{ backgroundImage: `url(${item.small_image_url})`, }}/>
+                                    style={{ backgroundImage: `url(${item.original_image_url})`, }}/>
                                 </div>
                             </div>
                         ))

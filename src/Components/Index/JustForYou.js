@@ -34,17 +34,17 @@ export default function JustForYou({ addLoadingBar }) {
     }
 
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_DOMAIN}/api/products?limit=20`)
+        axios.get(`${process.env.REACT_APP_DOMAIN}/api/products?limit=12`)
             .then(response => {
                 setProducts(response.data.data)
                 setNext(response.data.links.next)
                 setLoading(false)
-                addLoadingBar(10)
+                addLoadingBar(20)
 
             }).catch(error => {
                 console.log(error)
                 setLoading(false)
-                addLoadingBar(10)
+                addLoadingBar(20)
 
             })
     }, [])
@@ -52,12 +52,12 @@ export default function JustForYou({ addLoadingBar }) {
 
 
     return (
-        <Paper elevation={0} style={{ position: 'relative', marginTop: '5rem' }}>
+        <Paper variant='outlined' square style={{ position: 'relative', marginTop: '5rem',background:'unset' }}>
             <CategoryTitle title={'Just For You'} />
             <Grid container spacing={1}>
                 {
                     products.map((product, index) => (
-                        <Grid item xs={12} md={2} key={index}>
+                        <Grid item xs={6} md={2} key={index}>
                             <SingleProduct product={product} loading={loading} />
                         </Grid>
                     ))
@@ -68,7 +68,8 @@ export default function JustForYou({ addLoadingBar }) {
             {
                 next != null &&
 
-                <div className="d-flex justify-content-center" style={{ position: 'relative', marginTop: '25px' }}>
+                <div className="d-flex justify-content-center" style={{  padding: '25px 0' }}>
+                    <div style={{position: 'relative',display:'inline-block'}}>
 
                     <Button
                         variant='contained'
@@ -86,11 +87,12 @@ export default function JustForYou({ addLoadingBar }) {
                             size={24}
                             style={{
                                 position: 'absolute',
-                                left: '640px',
+                                left: '89px',
                                 top: '6px',
                             }}
                         />
                     }
+                    </div>
                 </div>
             }
         </Paper>

@@ -11,10 +11,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import { AppContext } from '../../App';
 import LoginForm from './LoginForm';
 import RegistrationForm from './RegistrationForm';
+import { Divider } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     dialogPaper: {
-        width: '600px'
+        width: '600px',
+        ['@media (max-width:480px)']: { 
+            margin:'10px',
+        },
     },
     formDisable: {
         pointerEvents: 'none',
@@ -80,16 +84,18 @@ export default function Auth() {
                 aria-describedby="alert-dialog-slide-description"
                 classes={{ paper: classes.dialogPaper }}
             >
-                <DialogTitle id="alert-dialog-slide-title">{authOpen.comp == 1 ? "Login" : 'Registration'}</DialogTitle>
-
-                <DialogContent style={{ minHeight: '250px' }}>
+                <DialogTitle id="alert-dialog-slide-title">
+                    {authOpen.comp == 1 ? authOpen.title : authOpen.title}
+                </DialogTitle>
+                <Divider />
+                <DialogContent >
 
 
                     {
                         isSuccess ?
 
                             <div className="text-center">
-                                Logged in successfully
+                                Logged in successfully...
                             </div>
 
                             :
@@ -130,7 +136,7 @@ export default function Auth() {
                     }
                 </DialogContent>
 
-                <DialogActions>
+                <DialogActions style={{borderTop:'1px solid rgba(0,0,0,.1)'}}>
 
                     <Button onClick={handleClose} variant='contained' color="secondary">
                         Close

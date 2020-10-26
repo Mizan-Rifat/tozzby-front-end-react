@@ -6,6 +6,7 @@ import Divider from '@material-ui/core/Divider';
 import { ProductContext } from './Product';
 import Axios from 'axios';
 import dateFormat from 'dateformat';
+import { CircularProgress } from '@material-ui/core';
 
 
 const useStyles = makeStyles(() => ({
@@ -14,13 +15,13 @@ const useStyles = makeStyles(() => ({
 
 
 
-export default function ReviewExpansionPanel({ id }) {
+export default function ReviewExpansionPanel({ id, reviews, setReviews }) {
 
     return (
         <ProductExpansionPanel
             summary='Reviews'
             rich={false}
-            details={<ReviewDetails id={id} />}
+            details={<ReviewDetails id={id} reviews={reviews} setReviews={setReviews} />}
         />
     )
 }
@@ -28,31 +29,47 @@ export default function ReviewExpansionPanel({ id }) {
 
 
 
-function ReviewDetails({ id }) {
+function ReviewDetails({ id, reviews, setReviews }) {
     const classes = useStyles();
-    const [reviews, setreviews] = useState([])
 
     useEffect(() => {
         Axios.get(`${process.env.REACT_APP_DOMAIN}/api/reviews?product_id=${id}`)
             .then(response => {
-                setreviews(response.data.data)
+                setReviews({
+                    ...reviews,
+                    reviews: response.data.data,
+                    fetchLoading: false
+                })
+            }).catch(error => {
+                setReviews({
+                    ...reviews,
+                    fetchLoading: false
+                })
             })
     }, [])
 
     return (
+        reviews.fetchLoading ?
+            <div className="d-flex justify-content-center">
+                <CircularProgress
+                    size={24}
+                
+                />
+            </div>
+            :
+            reviews.reviews.length == 0 ?
+                <p>No Review Available</p> :
 
-        reviews.length == 0 ? <p>No Review Available</p> :
+                reviews.reviews.map((item, index) => (
+                    <>
+                        <SingleReview key={index} review={item} />
 
-            reviews.map((item, index) => (
-                <>
-                    <SingleReview key={index} review={item} />
+                        {
+                            index != reviews.length - 1 ? <Divider style={{ margin: '10px  0' }} /> : ''
+                        }
 
-                    {
-                        index != reviews.length - 1 ? <Divider style={{ margin: '10px  0' }} /> : ''
-                    }
-
-                </>
-            ))
+                    </>
+                ))
     )
 }
 

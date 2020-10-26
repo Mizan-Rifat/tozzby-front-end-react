@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext,useRef } from 'react';
 import { AppContext } from '../../App';
 import axios from 'axios';
 import NotiToast from './NotiToast';
@@ -15,6 +15,10 @@ export default function useCartItem() {
     const [inCart, setInCart] = useState(false);
     const [inCartPending, setInCartPending] = useState(false);
     const toast = NotiToast();
+
+
+    const ref=useRef(null)
+    
 
 
     const ueHandle = () => {
@@ -36,10 +40,12 @@ export default function useCartItem() {
     }
 
     const addToCart = (quantity) => {
+  
         if (!authenticated) {
             setAuthOpen({
                 state: true,
-                comp: 1
+                comp: 1,
+                title:'Please Login First'
             })
         } else {
             setInCartPending(true)
@@ -62,12 +68,14 @@ export default function useCartItem() {
     }
 
 
-    const removeFromCart = () => {
-        // setInCart(!inCart)
+    const removeFromCart = (e) => {
+        
+        
         if (!authenticated) {
             setAuthOpen({
                 state: true,
-                comp: 1
+                comp: 1,
+                title:'Please Login First'
             })
         } else {
             setInCartPending(true)
@@ -83,7 +91,7 @@ export default function useCartItem() {
                     setCartItems(response.data.data)
                 }
 
-                // toast('Item removed', 'error')
+                toast('Item removed', 'success')
             })
                 .catch(error => {
                     setInCartPending(false)
@@ -98,7 +106,8 @@ export default function useCartItem() {
         if (!authenticated) {
             setAuthOpen({
                 state: true,
-                comp: 1
+                comp: 1,
+                title:'Please Login First'
             })
         } else {
             const cartitem = cartItems.items.find(item => item.product.id == product.id)
@@ -140,5 +149,5 @@ export default function useCartItem() {
     }, [cartItems, product])
 
 
-    return { inCart, inCartPending, addToCart, removeFromCart, setCartItemProduct, updateCartItem };
+    return { inCart, inCartPending, addToCart, removeFromCart, setCartItemProduct, updateCartItem,ref };
 }

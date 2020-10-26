@@ -60,12 +60,12 @@ const useStyles = makeStyles({
     productContainer: {
         // padding: '0 30px',
         ['@media (max-width:480px)']: {
-            padding: '0 15px'
+            // padding: '0 8px'
         }
 
     },
     paperRoot: {
-        // background:'red',
+        background:'unset',
         position: 'relative',
     }
 
