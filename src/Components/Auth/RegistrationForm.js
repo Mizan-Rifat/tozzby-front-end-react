@@ -17,6 +17,18 @@ const useStyles = makeStyles(theme => ({
         opacity: '0.5',
         background: 'rgba(255, 255, 255, 0.6)'
 
+    },
+    one:{
+        marginTop:'5px'
+    },
+    two:{
+        color:'#007bff',
+        display:'inline-block',
+        marginLeft:'5px',
+        '&:hover':{
+            textDecoration:'underline',
+            cursor:'pointer'
+        }
     }
 }))
 
@@ -145,16 +157,17 @@ export default function RegistrationForm({ setUser, loading, setLoading, isSucce
                 }
 
 
-                <div className="d-flex">
+                <div className="">
                     <Button type='submit' variant='contained' color="primary" className='mr-2'>
                         Register
                     </Button>
-                    <div className="mr-2 mt-2">
+                    {/* <div className="mr-2 mt-2">
                         OR
                     </div>
                     <Button variant='contained' color="primary" className='mr-2' onClick={()=>setAuthOpen({...authOpen,comp:1})}>
                         Login
-                    </Button>
+                    </Button> */}
+                    <p className={classes.one}>Already Have An Account? <span className={classes.two} onClick={()=>setAuthOpen({...authOpen,comp:1,title:'Login'})}>Login</span></p>
                 </div>
 
                 

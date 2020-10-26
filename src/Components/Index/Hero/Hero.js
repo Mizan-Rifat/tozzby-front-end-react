@@ -1,9 +1,7 @@
 import React,{useEffect} from 'react'
 import { Grid, Hidden, Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import CategoryList from '../Sidebars/CategoryList';
 import Slider from './Slider';
-import useLoadingBar from '../Common/useLoadingBar';
 
 
 
@@ -14,8 +12,8 @@ const styles = makeStyles(theme => ({
         // position:'relative'
     },
     imgStyle: {
-        width:'200px',
-        height:'170px',
+        width:'150px',
+        height:'130px',
         transition:'.3s ease-in',
         '&:hover':{
             transform:'scale(1.1)',
@@ -43,16 +41,16 @@ export default function Hero({ addLoadingBar}) {
             <Grid item xs={12} sm={4}>
                 <Grid container spacing={3}>
                     <Grid item xs={6}>
-                        <img src={require('../images/bn.jpg')} className={classes.imgStyle}/>
+                        <img src={require('../../images/bn.jpg')} className={classes.imgStyle}/>
                     </Grid>
                     <Grid item xs={6}>
-                        <img src={require('../images/bn1.jpg')} className={classes.imgStyle}/>
+                        <img src={require('../../images/bn1.jpg')} className={classes.imgStyle}/>
                     </Grid>
                     <Grid item xs={6}>
-                        <img src={require('../images/bn2.jpg')} className={classes.imgStyle}/>
+                        <img src={require('../../images/bn2.jpg')} className={classes.imgStyle}/>
                     </Grid>
                     <Grid item xs={6}>
-                        <img src={require('../images/bn3.jpg')} className={classes.imgStyle}/>
+                        <img src={require('../../images/bn3.jpg')} className={classes.imgStyle}/>
                     </Grid>
                 </Grid>
             </Grid>

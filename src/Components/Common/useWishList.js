@@ -18,7 +18,8 @@ export default function useWishList() {
         if (error.response.status == 401) {
             setAuthOpen({
                 state: true,
-                comp: 1
+                comp: 1,
+                title:'Please Login First'
             })
         }
     }
@@ -27,7 +28,8 @@ export default function useWishList() {
         if (!authenticated) {
             setAuthOpen({
                 state: true,
-                comp: 1
+                comp: 1,
+                title:'Please Login First'
             })
         } else {
             setInWishListPending(true)
@@ -52,7 +54,7 @@ export default function useWishList() {
     }
 
     useEffect(() => {
-        console.log(typeof product == 'object')
+        // console.log(typeof product == 'object')
         if (Object.entries(wishListItems).length > 0 && typeof product == 'object') {
             if (wishListItems.some(item => item.product.id == product.id)) {
 

@@ -6,28 +6,18 @@ import ProductImages from './ProductImages';
 import Axios from 'axios';
 import useLoadingBar from '../Common/useLoadingBar';
 import ProductSpecification from './ProductSpecification';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 export const ProductContext = createContext();
 
 
 const useStyles = makeStyles(theme => ({
-    picContainer: {
-        textAlign: 'center'
-    },
-    mainImage: {
-        width: '80%',
-        maxHeight: '600px'
-    },
-    thumbnail: {
-        flex: '0 0 auto',
-
-        margin: '5px',
-        height: '100px',
-        width: '100px',
-        border: '1px solid black',
-        '&:hover': {
-            border: '1px solid red',
-        }
+    container:{
+        marginTop:'20px',
+        ['@media (max-width:480px)']: { 
+            // padding:'0 !important'
+            marginTop:'10px',
+        },
     }
 }))
 
@@ -62,11 +52,20 @@ export default function Product(props) {
     return (
         <>
             {loadingBarJsx}
-            <Container style={{ marginTop: '70px' }}>
+            <Container className={classes.container}>
                 <Grid container spacing={3}>
 
                     {
-                        loading ? '' :
+                            loading ?
+            
+                            <div className='d-flex justify-content-center align-items-center w-100' style={{minHeight:'400px'}}>
+            
+                                <CircularProgress
+                                    size={24}
+                                />
+                            </div>
+
+                            :
 
                             <ProductContext.Provider value={{ product }}>
                                 <Grid item xs={12} md={6}>

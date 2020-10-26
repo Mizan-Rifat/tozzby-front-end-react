@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-import Hero from '../Hero/Hero';
+import Hero from './Hero/Hero';
 import CategoryBars from '../Bars/CategoryBars'
 import { Container, Grid, Hidden } from '@material-ui/core';
 import Body from './Body';
@@ -15,7 +15,7 @@ export default function Index() {
     return (
 
 
-            <Container>
+            <Container className='lsdfksdflsdf'>
                
                     <Grid container spacing={3}>
                         {/* <Hidden smDown>

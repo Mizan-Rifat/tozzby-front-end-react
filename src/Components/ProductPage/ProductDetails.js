@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect,useReducer } from 'react';
 import Rating from '@material-ui/lab/Rating';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
     },
     chip1: {
         background: '#FF7426',
-        minWidth:'130px',
+        minWidth: '130px',
         color: '#fff',
         '&:hover': {
             background: 'red'
@@ -45,7 +45,7 @@ const useStyles = makeStyles(theme => ({
     },
     chip2: {
         background: 'red',
-        minWidth:'130px',
+        minWidth: '130px',
         color: '#fff',
         '&:hover': {
             background: '#FF7426'
@@ -54,8 +54,8 @@ const useStyles = makeStyles(theme => ({
             background: 'red'
         }
     },
-    chip3:{
-        opacity:.2,
+    chip3: {
+        opacity: .2,
     },
     stock: {
         margin: 0,
@@ -93,9 +93,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function ProductDetails() {
     const classes = useStyles();
-    const [qty, setqty] = useState(1);
-    // const [inCart, setInCart] = useState(false);
-    const [quantity, setQuantity] = useState(1);
 
     const { product } = useContext(ProductContext)
 
@@ -104,55 +101,17 @@ export default function ProductDetails() {
     const { cartItems, setCartItems } = useContext(AppContext)
 
     const [inWishList, inWishListPending, toWishList, setWishListProduct] = useWishList();
-    const {inCart, inCartPending, addToCart, removeFromCart, setCartItemProduct} = useCartItem();
+    const { inCart, inCartPending, addToCart, removeFromCart, setCartItemProduct } = useCartItem();
 
-    // const addToCart = (product_id) => {
-    //     setInCart(!inCart)
+    const [qty, setqty] = useState(1);
+    const [quantity, setQuantity] = useState(1);
 
-
-    //     axios.post(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/add/${product_id}`, {
-    //         "product_id": product_id,
-    //         "quantity": quantity,
-    //         "is_configurable": false
-    //     }, { withCredentials: true })
-    //         .then(response => {
-    //             console.log(response)
-    //             setCartItems(response.data.data)
-    //             toast('Item Added to Cart', 'success')
-    //         })
-    // }
+    const [reviews,setReviews] = useState({
+        reviews:[],
+        fetchLoading:true
+    })
 
 
-    // const removeFromCart = () => {
-    //     setInCart(!inCart)
-    //     const cartitem = cartItems.items.find(item => item.product.id == product.id)
-
-
-    //     axios.get(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/remove-item/${cartitem.id}`, {
-    //         withCredentials: true
-    //     }).then(response => {
-    //         console.log(response)
-    //         if (response.data.data == null) {
-    //             setCartItems({})
-    //         } else {
-    //             setCartItems(response.data.data)
-    //         }
-
-    //         toast('Item removed', 'error')
-    //     })
-    // }
-
-
-    // useEffect(() => {
-    //     setQuantity(cartItems.quantity)
-    //     if (Object.entries(cartItems).length > 0) {
-    //         if (cartItems.items.some(item => item.product.id == product.id)) {
-
-    //             setInCart(true)
-    //         }
-    //     }
-
-    // }, [cartItems])
 
 
     useEffect(() => {
@@ -165,9 +124,28 @@ export default function ProductDetails() {
 
     return (
         <div style={{ padding: '5px' }}>
-            <h5>{product.name}</h5>
-            <Rating name="half-rating-read" defaultValue={5} precision={0.5} readOnly />
-            <p style={{ fontSize: '20px' }}>{product.formated_price}</p>
+
+            {
+                window.innerWidth > 480 &&
+                    <div>    
+                        <h5>{product.name}</h5>
+                        <Rating name="half-rating-read" defaultValue={product.reviews.average_rating} precision={0.5} readOnly />
+                    </div>
+            }
+
+
+            {
+                product.hasOwnProperty('formated_special_price') ?
+                    <div className="d-flex ">
+                        <p style={{ marginRight: '5px',fontSize: '20px' }}>{product.formated_special_price}</p>
+                        <p style={{ textDecoration: 'line-through', fontWeight: 100,fontSize: '20px' }}>{product.formated_price}</p>
+                    </div>
+                    :
+                    <p style={{ fontSize: '20px' }}>{product.formated_price}</p>
+            }
+
+
+            {/* <p style={{ fontSize: '20px' }}>{product.formated_price}</p> */}
             {
                 product.in_stock ?
                     <p className={classes.stock} style={{ background: '#FF5C00' }}>In Stock</p>
@@ -190,9 +168,9 @@ export default function ProductDetails() {
                             disabled={product.in_stock ? false : true}
                             className={
                                 clsx({
-                                  [classes.chip2] : inCart,  
-                                  [classes.chip1] : !inCart,  
-                                  [classes.chip3] : inCartPending, 
+                                    [classes.chip2]: inCart,
+                                    [classes.chip1]: !inCart,
+                                    [classes.chip3]: inCartPending,
                                 })
                             }
                             onClick={() => inCart ? removeFromCart() : addToCart(quantity)}
@@ -235,9 +213,9 @@ export default function ProductDetails() {
 
             <RatingExpansionPanel />
 
-            <ReviewExpansionPanel id={product.id} />
+            <ReviewExpansionPanel id={product.id} reviews={reviews} setReviews={setReviews} />
 
-            <CreateReviewExpansionPanel id={product.id} />
+            <CreateReviewExpansionPanel id={product.id} reviews={reviews} setReviews={setReviews} />
 
 
         </div>

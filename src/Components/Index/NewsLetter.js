@@ -1,5 +1,5 @@
 import React,{useEffect} from 'react'
-import { Paper, Grid,Button } from '@material-ui/core';
+import { Paper, Grid,Button, Hidden } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
@@ -24,7 +24,10 @@ const useStyles = makeStyles(theme => ({
     paperRoot: {
         background: '#FF6108',
         marginTop: '2rem',
-        padding: '30px'
+        padding: '30px',
+        ['@media (max-width:480px)']: { 
+            padding:'10px',
+        }
     },
     icon: {
         padding: '5px',
@@ -37,7 +40,10 @@ const useStyles = makeStyles(theme => ({
     },
     input:{
         padding:'5px 10px',
-        width:'300px'
+        width:'300px',
+        ['@media (max-width:480px)']: { 
+            width:'212px',
+        }
     },
     btn:{
         background:'black',
@@ -47,11 +53,27 @@ const useStyles = makeStyles(theme => ({
         height:'38px',
         '&:hover': {
             background: 'rgba(0,0,0,.9)'
+        },
+        ['@media (max-width:480px)']: { 
+            padding:'6px 6px',
         }
     },
     bgImage: {
         height: '75px',
-        width: '100px'
+        width: '127px'
+    },
+    form:{
+        ['@media (max-width:480px)'] : {
+            padding:'0 10px 5px !important',
+        }
+    },
+    payments:{
+        display:'flex',
+        justifyContent:'center',
+        padding:'20px',
+        ['@media (max-width:480px)'] : {
+            padding:0,
+        }
     }
 }))
 
@@ -70,7 +92,10 @@ export default function NewsLetter({addLoadingBar}) {
 
                 <Grid item md={6}>
                     <div className="d-flex" style={{ color: 'white' }}>
-                        <p className={classes.text}>FOLLOW US</p>
+                        <Hidden smDown>
+                            <p className={classes.text}>FOLLOW US</p>
+                        </Hidden>
+
                         <div className="d-flex ml-3">
                             <div className={classes.icon}>
                                 <FacebookIcon />
@@ -91,7 +116,7 @@ export default function NewsLetter({addLoadingBar}) {
                     </div>
                 </Grid>
 
-                <Grid item md={6}>
+                <Grid item md={6} className={classes.form}>
 
                     <input type='text' placeholder='Email Address' className={classes.input}/>
                     <Button variant='container' className={classes.btn}> Subscribe </Button>
@@ -109,52 +134,52 @@ function PaymentMethods() {
     const classes = useStyles();
 
     return (
-        <Grid container justify='space-around'>
+        <Grid container justify='space-around' style={{marginTop:'2rem'}}>
 
 
-            <Grid item md={3}>
-                <div className="d-flex" style={{ padding: '20px', justifyContent: 'center' }}>
+            <Grid item xs={6} md={3}>
+                <div className={classes.payments} >
                     <div 
                         className={classes.bgImage} 
                         style={{ 
                             backgroundImage: `url(${require('../images/download.png')})`,
-                            backgroundPosition:'-160px 75px'
+                            backgroundPosition:'-160px 86px'
                             }}
                         >
                     </div>
                 </div>
             </Grid>
-            <Grid item md={3}>
-                <div className="d-flex" style={{ padding: '20px', justifyContent: 'center' }}>
+            <Grid item xs={6} md={3}>
+                <div className={classes.payments}>
                 <div 
                         className={classes.bgImage} 
                         style={{ 
                             backgroundImage: `url(${require('../images/download.png')})`,
-                            // backgroundPosition:'-160px 75px'
+                            backgroundPosition:'10px 1px'
                             }}
                         >
                     </div>
                 </div>
             </Grid>
-            <Grid item md={3}>
-                <div className="d-flex" style={{ padding: '20px', justifyContent: 'center' }}>
+            <Grid item xs={6} md={3}>
+                <div className={classes.payments}>
                 <div 
                         className={classes.bgImage} 
                         style={{ 
                             backgroundImage: `url(${require('../images/download.png')})`,
-                            backgroundPosition:'-160px 75px'
+                            backgroundPosition:'-18px 79px'
                             }}
                         >
                     </div>
                 </div>
             </Grid>
-            <Grid item md={3}>
-                <div className="d-flex" style={{ padding: '20px', justifyContent: 'center' }}>
+            <Grid item xs={6} md={3}>
+                <div className={classes.payments}>
                 <div 
                         className={classes.bgImage} 
                         style={{ 
                             backgroundImage: `url(${require('../images/download.png')})`,
-                            backgroundPosition:'-160px 75px'
+                            backgroundPosition:'427px -5px'
                             }}
                         >
                     </div>

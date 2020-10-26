@@ -9,8 +9,9 @@ import Box from '@material-ui/core/Box';
 import InfoTab from './InfoTab';
 import InvoicesTab from './InvoicesTab';
 import ShipmentTab from './ShipmentTab';
-
 import { OrderContext } from './OrderView';
+
+
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -54,6 +55,13 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 700,
     fontSize: '16px',
   },
+  tabPanel:{
+    '& .MuiBox-root':{
+      padding:0,
+      paddingLeft:'8px',
+      marginTop:'8px'
+    }
+  }
 }));
 
 export default function SimpleTabs() {
@@ -96,15 +104,15 @@ export default function SimpleTabs() {
         }
       </Tabs>
 
-      <TabPanel value={value} index={0}>
+      <TabPanel value={value} index={0} className={classes.tabPanel}>
         <InfoTab order={order} />
       </TabPanel>
 
-      <TabPanel value={value} index={1}>
+      <TabPanel value={value} index={1} className={classes.tabPanel}>
         <InvoicesTab order={order} />
       </TabPanel>
 
-      <TabPanel value={value} index={2}>
+      <TabPanel value={value} index={2} className={classes.tabPanel}>
         <ShipmentTab order={order} />
       </TabPanel>
 

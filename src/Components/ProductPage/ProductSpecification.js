@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ProductExpansionPanel from './ProductExpansionPanel';
-import { Paper } from '@material-ui/core';
+import { Paper, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 
@@ -46,7 +46,17 @@ export default function ProductSpecification({ id }) {
                 <div style={{ fontWeight: 'bold' }}>Specification</div>
             </div>
             <div className="" style={{ padding: '20px' }}>
-                <Details data={state} />
+                {
+                    state.loading ?
+                        <div className='d-flex justify-content-center align-items-center' style={{minHeight:'100px'}}>
+                            <CircularProgress
+                                size={24}
+                            />
+                        </div>
+                    :
+                    <Details data={state} />
+                }
+                
             </div>
         </Paper>
     )
@@ -54,10 +64,10 @@ export default function ProductSpecification({ id }) {
 
 function Details({ data }) {
     return (
-        <div className="">
+        <div className="" style={{fontSize:'14px'}}>
             <table>
                 {
-                    data.additionalData.filter(item=>item.value != '').map(item => (
+                    data.additionalData.filter(item=>item.value != '' || item.value != 'None' || item.value != null).map(item => (
                         <tr>
                             <td style={{width:'40%',fontWeight:700}}>{item.label}</td>
                             <td style={{width:'20%'}}>:</td>

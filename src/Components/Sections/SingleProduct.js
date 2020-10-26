@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext,useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -14,8 +14,8 @@ import NotiToast from '../Common/NotiToast';
 import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
 import { useHistory } from 'react-router-dom';
 import Skeleton from '@material-ui/lab/Skeleton';
-import clsx from 'clsx'
-
+import clsx from 'clsx';
+import Rating from '@material-ui/lab/Rating';
 import useWishList from '../Common/useWishList';
 import useCartItem from '../Common/useCartItem';
 import { Link } from '@material-ui/core';
@@ -23,16 +23,12 @@ import { Link } from '@material-ui/core';
 const useStyles = makeStyles(theme => ({
     root: {
         minWidth: '140px',
-        margin: '20px',
+        margin: '10px',
         flex: '0 0 auto',
-        background: '#F4F4F4',
-        // background: '#F7F7E5',
         position: 'relative',
         cursor: 'pointer',
-        // '&:hover': {
-        //     transform: 'scale(1.1)',
-        //     transition: '.3s ease-in'
-        // }
+        
+
     },
 
     media: {
@@ -53,7 +49,7 @@ const useStyles = makeStyles(theme => ({
         display: 'inline'
     },
     options: {
-        background: '#f4f4f4',
+        background: '#fff',
         padding: '0 7px',
         transform: 'translateY(-145px)',
         transition: '.2s ease-out',
@@ -95,6 +91,10 @@ const useStyles = makeStyles(theme => ({
         "100%": {
             transform: "rotate(360deg)"
         }
+    },
+    skeleton:{
+        minWidth:'140px',
+        margin:'10px'
     }
 }));
 
@@ -105,71 +105,27 @@ export default function SingleProduct(props) {
     const { wishlist = false } = props;
     const history = useHistory();
     const classes = useStyles();
-    const { cartItems, setCartItems } = useContext(AppContext)
-    const [showOptions, setShowOptions] = useState()
 
-    // const [inCart, setInCart] = useState(false);
-    // const [inCartPending, setInCartPending] = useState(false);
-
+    const [showOptions, setShowOptions] = useState(false)
 
     const [inWishList, inWishListPending, toWishList, setWishListProduct] = useWishList();
-    const { inCart, inCartPending, addToCart, removeFromCart, setCartItemProduct } = useCartItem();
+    const { inCart, inCartPending, addToCart, removeFromCart, setCartItemProduct,ref} = useCartItem();
+
+    
 
     const toast = NotiToast();
 
-
-
-
-    // const addToCart = () => {
-    //     setInCartPending(true)
-    //     axios.post(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/add/${product.id}?token=true`, {
-    //         "product_id": product.id,
-    //         "quantity": 1,
-    //         "is_configurable": false
-    //     }, { withCredentials: true })
-    //         .then(response => {
-    //             console.log(response)
-    //             setCartItems(response.data.data)
-    //             setInCartPending(false)
-    //             setInCart(!inCart)
-    //             toast('Item Added to Cart', 'success')
-    //         })
-    // }
-
-
-    // const removeFromCart = () => {
-    //     setInCartPending(true)
-    //     const cartitem = cartItems.items.find(item => item.product.id == product.id)
-
-
-    //     axios.get(`${process.env.REACT_APP_DOMAIN}/api/checkout/cart/remove-item/${cartitem.id}?token=true`, {
-    //         withCredentials: true
-    //     }).then(response => {
-    //         console.log(response)
-    //         if (response.data.data == null) {
-    //             setCartItems({})
-    //         } else {
-    //             setCartItems(response.data.data)
-    //         }
-    //         setInCartPending(false)
-    //         setInCart(!inCart)
-    //         toast('Item removed', 'error')
-    //     })
-    // }
-
-
-    // useEffect(() => {
-
-    //     if (Object.entries(cartItems).length > 0) {
-    //         if (cartItems.items.some(item => item.product.id == product.id)) {
-
-    //             setInCart(true)
-    //         } else {
-    //             setInCart(false)
-    //         }
-    //     }
-
-    // }, [cartItems])
+    const mouseEnter = (e)=>{
+        e.preventDefault()
+        setShowOptions(true)
+        console.log('enter')
+    }
+    
+    const mouseLeave = (e)=>{
+        e.preventDefault()
+        setShowOptions(false)
+        console.log('leave')
+    }
 
 
     useEffect(() => {
@@ -184,15 +140,20 @@ export default function SingleProduct(props) {
             {
                 loading ?
                     <div>
-                        <Skeleton animation='wave' height='200px' width='100%' animation='wave' />
-                        <Skeleton animation='wave' height='50px' width='100%' animation='wave' />
-                        <Skeleton animation='wave' height='50px' width='100%' animation='wave' />
+                        <Skeleton animation='wave' height='200px'  animation='wave' className={classes.skeleton} />
+                        <Skeleton animation='wave' height='50px' animation='wave' className={classes.skeleton}/>
+                        <Skeleton animation='wave' height='50px'  animation='wave' className={classes.skeleton} />
                     </div>
 
                     :
 
 
-                    <Card className={`${classes.root} productWrapper`} onMouseEnter={() => setShowOptions(true)} onMouseLeave={() => setShowOptions(false)} >
+
+                    <Card 
+                        className={`${classes.root} productWrapper`} 
+                        onMouseEnter={mouseEnter} 
+                        onMouseLeave={mouseLeave}
+                        >
 
                         <Link href={`/product/${product.id}`}>
                             <CardMedia
@@ -200,7 +161,6 @@ export default function SingleProduct(props) {
                                 image={product.base_image.medium_image_url}
                                 title={product.name}
                                 style={{ backgroundSize: 'contain' }}
-                                // onClick={() => history.push(`/product/${product.id}`)}
                             />
 
                         </Link>
@@ -209,17 +169,27 @@ export default function SingleProduct(props) {
 
 
 
-                            <div className="" style={{ height: '50px' }}>
+                            <div className="" style={{ height: '37px' }}>
                                 <h5 className={classes.name}>
                                     {
-                                        product.name.length > 39 ?
-                                            `${product.name.substring(0, 40)}...`
+                                        product.name.length > 30 ?
+                                            `${product.name.substring(0, 30)}...`
                                             :
                                             product.name
                                     }
                                 </h5>
                             </div>
 
+
+                            <div className="d-block" style={{height:'16px'}}>
+                                <Rating 
+                                    name="half-rating-read" 
+                                    defaultValue={product.reviews.average_rating} 
+                                    precision={0.5} 
+                                    readOnly
+                                    style={{fontSize:'12px'}} 
+                                />
+                            </div>
 
                             {
                                 product.hasOwnProperty('formated_special_price') ?
@@ -275,6 +245,9 @@ export default function SingleProduct(props) {
                                             <CompareArrowsIcon className={classes.fIcon} />
                                         </div>
                                     </Tooltip>
+
+                                    
+                                    
                                 </div>
                             </div>
 
@@ -282,6 +255,8 @@ export default function SingleProduct(props) {
                         </CardContent>
                     </Card>
             }
+
+            <div ref={ref} />
         </>
     );
 }

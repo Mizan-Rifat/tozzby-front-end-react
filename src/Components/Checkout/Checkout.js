@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, createContext } from 'react'
-import { Grid, Container, Paper, IconButton, Divider, Button, } from '@material-ui/core';
+import { Grid, Container, Paper, IconButton, Divider, Button, Hidden, } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { AppContext } from '../../App';
 import HorizontalLinearStepper from './HorizontalLinearStepper';
@@ -22,8 +22,8 @@ const useStyles = makeStyles((theme) => ({
     },
     paper: {
         padding: '5px',
-        background: '#FFFFFF',
-        // border: 'none',
+        background: 'unset',
+        border: 'none',
         margin: '10px 0'
     },
     btn: {
@@ -62,7 +62,19 @@ const useStyles = makeStyles((theme) => ({
         background: '#EEEEEE',
         padding: '20px',
         fontSize: '16px'
-    }
+    },
+    container:{
+        paddingLeft: '50px', 
+        paddingRight: '50px',
+        minHeight:'100px',
+        ['@media (max-width:480px)']: { 
+            padding:'0 16px !important'
+        },
+    },
+    component:{
+        padding:'10px',
+    },
+    
 
 }))
 export const OrderContext = createContext();
@@ -104,11 +116,10 @@ export default function Checkout(props) {
 
                     :
 
-                    < Container style={{ paddingLeft: '50px', paddingRight: '50px', marginTop: '100px',minHeight:'100px' }
-                    }>
-                        <Paper variant="outlined" square className={classes.paper} style={{ border: 'none', }}>
+                    <Container className={classes.container}>
+                        <Paper variant="outlined" square className={classes.paper}>
                             <div className="">
-                                <h5 style={{ fontWeight: 700 }}>Checkout</h5>
+                                <h5 style={{ fontWeight: 700,margin:0 }}>Checkout</h5>
                             </div>
                         </Paper>
                         <Grid container spacing={3}>
@@ -160,12 +171,16 @@ export default function Checkout(props) {
 
                             </Grid>
 
-                            <Grid item xs={12} sm={4}>
-                                <Paper variant="outlined" square className={classes.paper} style={{ position: 'sticky', top: '70px' }}>
-                                    <CartSummary cart={cartItems} />
-                                </Paper>
-                            </Grid>
+                            <Hidden smDown>
+
+                                <Grid item xs={12} sm={4}>
+                                    <Paper variant="outlined" square className={classes.paper} style={{ position: 'sticky', top: '70px' }}>
+                                        <CartSummary cart={cartItems} />
+                                    </Paper>
+                                </Grid>
+                            </Hidden>
                         </Grid>
+                        
                     </Container >
 
             }
@@ -185,7 +200,7 @@ function SingleComponent({ heading, component }) {
             <div className={classes.heading}>
                 <div style={{ fontWeight: 'bold' }}>{heading}</div>
             </div>
-            <div className="" style={{ padding: '20px' }}>
+            <div className={classes.component}>
                 {component}
             </div>
         </Paper>

@@ -16,13 +16,19 @@ const useStyles = makeStyles(() => ({
     },
     thumb: {
         display: 'none'
-    }
+    },
+    
+    ['@media (pointer: coarse)']: { 
+        root:{
+            padding:'13px 0'
+        }
+    },
 }))
 
 
 
 export default function RatingExpansionPanel() {
-    const { product } = useContext(ProductContext)
+    
     return (
         <ProductExpansionPanel
             summary='Customer Rating'
@@ -69,7 +75,7 @@ function RatingSlider({ no, value }) {
         <div className="d-flex justify-content-between">
             <div className='col-2 p-0 m-0'>{no} <StarIcon style={{ color: '#FFB400' }} /></div>
             <div className="col-9" >
-                <Slider disabled defaultValue={value} classes={{ track: classes.track, thumb: classes.thumb }} />
+                <Slider disabled defaultValue={value} classes={{ root: classes.root, track: classes.track, thumb: classes.thumb }} />
             </div>
 
             <div className='col-1 m-0'>{}</div>

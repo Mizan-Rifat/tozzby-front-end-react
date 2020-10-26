@@ -16,18 +16,15 @@ export default function ProductsTable({items,usedFor}) {
                 padding:'3px'
 
             },
-            headerStyle: {
-                textAlign: 'center',
-            },
+       
         },
         {
             title: 'Name',
             field: 'name',
-          
-            headerStyle: {
+            cellStyle: {
                 textAlign: 'center',
-
             },
+          
         },
         {
             title: 'Price',
@@ -35,9 +32,7 @@ export default function ProductsTable({items,usedFor}) {
             cellStyle: {
                 textAlign: 'center',
             },
-            headerStyle: {
-                textAlign: 'center',
-            },
+          
         },
         {
             title: 'Quantity',
@@ -45,19 +40,13 @@ export default function ProductsTable({items,usedFor}) {
             cellStyle: {
                 textAlign: 'center',
             },
-            headerStyle: {
-                textAlign: 'center',
-            },
         },
         {
             title: 'Item Status',
             field: 'item_status',
             cellStyle: {
-                textAlign: 'left',
-                padding:'8px'
-            },
-            headerStyle: {
                 textAlign: 'center',
+                padding:0,
             },
             render: (rowdata) =>
                 <>
@@ -80,18 +69,12 @@ export default function ProductsTable({items,usedFor}) {
             cellStyle: {
                 textAlign: 'center',
             },
-            headerStyle: {
-                textAlign: 'center',
-            },
         },
         {
             title: 'Discount',
             field: 'discount',
             width: '50px',
             cellStyle: {
-                textAlign: 'center',
-            },
-            headerStyle: {
                 textAlign: 'center',
             },
         },
@@ -102,18 +85,12 @@ export default function ProductsTable({items,usedFor}) {
             cellStyle: {
                 textAlign: 'center',
             },
-            headerStyle: {
-                textAlign: 'center',
-            },
         },
         {
             title: 'Grand Total',
             field: 'grand_total',
             width: '50px',
             cellStyle: {
-                textAlign: 'center',
-            },
-            headerStyle: {
                 textAlign: 'center',
             },
         },
@@ -145,7 +122,7 @@ export default function ProductsTable({items,usedFor}) {
     return (
 
         <MaterialTable
-            style={{ boxShadow: 'unset' }}
+            style={{ boxShadow: 'unset',background:'unset' }}
             title=""
             columns={
                 usedFor == 'orderview' ? 
@@ -157,9 +134,10 @@ export default function ProductsTable({items,usedFor}) {
 
             options={{
                 actionsColumnIndex: -1,
-                headerStyle: { backgroundColor: '#F1CB29', fontWeight: 'bold', padding: 0 },
+                headerStyle: { backgroundColor: '#F1CB29', fontWeight: 'bold',textAlign:'center'},
                 search: false,
                 paging: false,
+                sorting:false
             }}
             components={{
                 Toolbar: props => (

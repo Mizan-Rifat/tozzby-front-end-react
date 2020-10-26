@@ -1,23 +1,43 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { Paper, IconButton, Tooltip, Chip } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles,withStyles } from '@material-ui/core/styles';
 import ProfileEdit from './ProfileEdit';
 import PersonIcon from '@material-ui/icons/Person';
 import { AppContext } from '../../App';
-import MaterialTable from 'material-table'
+import MaterialTable,{ MTableToolbar } from 'material-table'
 import axios from 'axios';
 import dateFormat from 'dateformat';
 import { useHistory } from 'react-router-dom';
 
-import {OrderContext} from './UserBody';
- 
+import {ProfileContext} from './UserBody';
+
+
+const StyledMTableToolbar = withStyles({
+    root: {
+        ['@media (max-width:480px)']: { 
+            paddingLeft:'0 !important'
+        }
+    },
+    spacer:{
+        ['@media (max-width:480px)']: { 
+            flex:'unset'
+        }
+    },
+    searchField:{
+        // paddingLeft:0
+    }
+  })(MTableToolbar);
 
 const useStyles = makeStyles((theme) => ({
     paper: {
         backgroundColor: theme.palette.background.paper,
         padding: '20px',
-        border: 0
+        border: 0,
+        ['@media (max-width:480px)']: { 
+            padding:'10px',
+            margin:'10px 0'
+        }
     },
     tag: {
         fontWeight: 'bold',
@@ -37,7 +57,7 @@ export default function Orders() {
     const history = useHistory();
     const classes = useStyles();
 
-    const {orders, setOrders} = useContext(OrderContext);
+    const {orders, setOrders} = useContext(ProfileContext);
 
     const [data, setData] = useState([]);
 
@@ -49,7 +69,6 @@ export default function Orders() {
                 withCredentials: true
             }
         ).then(response => {
-
             setOrders({
                 orders:response.data.data,
                 loading: false
@@ -76,11 +95,11 @@ export default function Orders() {
     }, [orders])
 
     return (
-        <Paper variant='outlined' square className={classes.paper}>
-            <h5>Orders</h5>
+        <div style={{padding:'10px 0'}}>
+            <h5 style={{ fontWeight: 700,margin:'1rem 0'}}>Orders</h5>
 
             <MaterialTable
-                style={{ boxShadow: 'unset' }}
+                style={{ boxShadow: 'unset',background:'unset' }}
                 title=""
                 isLoading={orders.loading}
                 columns={[
@@ -146,12 +165,19 @@ export default function Orders() {
                 options={{
                     actionsColumnIndex: -1,
                     headerStyle: { backgroundColor: '#F1CB29', fontWeight: 'bold' },
-                    pageSize:10
+                    pageSize:orders.orders.length > 10 ? 10 : 5
+                }}
+                components={{
+                    Toolbar: props => (
+                        
+                            <StyledMTableToolbar {...props} />
+                        
+                    )
                 }}
 
             />
 
-        </Paper>
+        </div>
     )
 }
 

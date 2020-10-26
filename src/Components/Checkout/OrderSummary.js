@@ -20,16 +20,25 @@ const useStyles = makeStyles((theme) => ({
     },
 
     thumbnailImage: {
-        height: '90px',
+        height: '100%',
         backgroundSize: 'contain',
+        backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'
     },
     buttonProgress: {
         position: 'absolute',
         left: '47px',
         top: '6px',
     },
+    pname:{
+        fontWeight:700,
+        fontSize:'14px'
+    },
+    row:{
+        ['@media (max-width:480px)']: { 
+            flexDirection:'column-reverse'
+        },
+    }
 
 }))
 
@@ -104,28 +113,31 @@ export default function OrderSummary() {
                             <Divider />
                             {
                                 cartItems.items.map((item, index) => (
+                                    <>
                                     <div className="d-flex mt-1 mb-1" key={index}>
-                                        <div className="col-2">
+                                        <div className="col-3" style={{padding:0,minHeight:'85px'}}>
                                             <div className={classes.thumbnailImage}
                                                 style={{ backgroundImage: `url(${item.product.base_image.small_image_url})` }} />
                                         </div>
-                                        <div className="col-10">
-                                            <h5>{item.product.name}</h5>
-                                            <div className="">{item.formated_base_price} * {item.quantity}</div>
-                                            <div style={{ fontWeight: '700', fontSize: '16px' }}>{item.formated_total}</div>
+                                        <div className="col-9">
+                                            <div className={classes.pname}>{item.product.name}</div>
+                                            <div style={{fontSize: '14px' }}>{item.formated_base_price} * {item.quantity}</div>
+                                            <div style={{ fontWeight: '700', fontSize: '14px' }}>{item.formated_total}</div>
                                         </div>
                                     </div>
+                                    <Divider />
+                                    </>
                                 ))
                             }
 
 
-                            <Divider />
+                            {/* <Divider /> */}
                         </div>
 
                         <div className="placeOrder mt-4">
-                            <div className="d-flex">
+                            <div className={`${classes.row} row`}>
 
-                                <div className="col-6 mt-4">
+                                <div className="col-xs-12 col-md-6 mt-4">
                                     <p style={{ fontWeight: 700, fontSize: '16px', marginBottom: 0 }}>Payment Method</p>
                                     <p className="">
                                         {cartItems.payment != null ?
@@ -149,7 +161,7 @@ export default function OrderSummary() {
 
                                 </div>
 
-                                <div className="col-6">
+                                <div className="col-xs-12 col-md-6">
 
                                     <Paper variant="outlined" square className={classes.paper} style={{ padding: '30px' }}>
 

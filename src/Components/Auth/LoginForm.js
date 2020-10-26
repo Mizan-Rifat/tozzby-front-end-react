@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles';
 import { Button } from '@material-ui/core';
 import axios from 'axios';
@@ -17,6 +17,15 @@ const useStyles = makeStyles(theme => ({
         opacity: '0.5',
         background: 'rgba(255, 255, 255, 0.6)'
 
+    },
+    link:{
+        color:'#007bff',
+        display:'inline-block',
+        marginLeft:'5px',
+        '&:hover':{
+            textDecoration:'underline',
+            cursor:'pointer'
+        }
     }
 }))
 
@@ -30,6 +39,7 @@ export default function LoginForm({ setUser, loading, setLoading, isSuccess, set
     const initState = {
         email: '',
         password: '',
+        remember:false,
         errors: []
     }
 
@@ -69,7 +79,8 @@ export default function LoginForm({ setUser, loading, setLoading, isSuccess, set
 
         axios.post(`${process.env.REACT_APP_DOMAIN}/api/customer/login?token=true`, {
             email: formData.email,
-            password: formData.password
+            password: formData.password,
+            remember: formData.remember ? "on" : "",
         }, {
             withCredentials: true
         })
@@ -123,7 +134,7 @@ export default function LoginForm({ setUser, loading, setLoading, isSuccess, set
             <form className={loading && classes.formDisable} style={{ marginBottom: '0px' }} onSubmit={login}>
 
                 {
-                    fields.map((field, index) => (
+                    fields.filter((item,index)=> index < 2).map((field, index) => (
 
                         <div className="form-group" key={index}>
                             <label htmlFor={field.name}>{field.placeholder}</label>
@@ -147,19 +158,34 @@ export default function LoginForm({ setUser, loading, setLoading, isSuccess, set
                     ))
                 }
 
+                <div className="form-check">
+                    <input 
+                        type="checkbox" 
+                        className="form-check-input" 
+                        id="exampleCheck1"
+                        onChange={e =>
+                            setFormData({
+                                ...formData,
+                                remember: e.target.checked,
+                              })
+                          } 
+                        />
+                    <label className="form-check-label" for="exampleCheck1">Remember me</label>
+                </div>
 
 
-                <Button type='submit' variant='contained' color="primary" className='mr-2'>
+
+
+                <Button type='submit' variant='contained' color="primary" className='mr-2 my-2'>
                     Login
                 </Button>
 
                 <a href="">Forgot Password</a>
 
                 <div className="">
-                    <p>Don't have an account?</p>
-                    <Button variant='contained' color="primary" className='mr-2' onClick={() => setAuthOpen({ ...authOpen, comp: 2 })}>
-                        Register Here
-                    </Button>
+                    <p style={{display:'inline-block'}}>Don't have an account?</p>
+                    <p className={classes.link} onClick={() => setAuthOpen({ ...authOpen, comp: 2,title:'Register' })}>Register</p>
+                 
                 </div>
 
             </form>

@@ -1,34 +1,49 @@
-import React, { useState } from 'react';
+import React,{useState,useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
-import InboxIcon from '@material-ui/icons/Inbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
 import PersonIcon from '@material-ui/icons/Person';
 import ViewListIcon from '@material-ui/icons/ViewList';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
-import { useHistory } from 'react-router-dom';
-import { useEffect } from 'react';
+import { Link, ButtonBase } from '@material-ui/core';
+import {useHistory} from 'react-router-dom'
+
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
-        maxWidth: 360,
-        backgroundColor: theme.palette.background.paper,
+    bottomBar:{
+        height:'50px',
+        // padding:'5px 0',
+        width:'100%',
+        background:'#3f51b5',
+        position:'fixed',
+        bottom:0,
+        color:'white',
+        zIndex:10,
     },
-}));
+    section:{
+        display:'flex',
+        flexDirection:'column',
+        alignItems:'center',
+        padding:'5px 10px'
+    },
+    active:{
+        background:'rgba(0,0,0,0.08)'
+    }
+}))
 
-export default function UserSidebar() {
+
+export default function BottomBar() {
     const classes = useStyles();
     const history = useHistory();
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [slug, setSlug] = useState('');
-    
+
+    const handleClick = (event, index) => {
+        setSelectedIndex(index);
+        history.push(`/account/${lists[index].url}`)
+
+    };
+
     const [lists, setLists] = useState([
         {
             name: 'Profile',
@@ -65,37 +80,24 @@ export default function UserSidebar() {
 
     useEffect(()=>{
         setSlug(window.location.pathname)
-        console.log(window.location.pathname)
     },[window.location.pathname])
 
-    const handleListItemClick = (event, index) => {
-        setSelectedIndex(index);
-        history.push(`/account/${lists[index].url}`)
-
-    };
-
     return (
-        <div className={classes.root}>
-            <List component="nav" aria-label="main mailbox folders">
-
+        <div className={classes.bottomBar}>
+            <div className='d-flex justify-content-around'>
                 {
-                    lists.map((item, index) => (
-                        <ListItem
-                            key={index}
-                            button
-                            selected={slug === item.slug}
-                            onClick={(event) => handleListItemClick(event, index)}
-                        >
-                            <ListItemIcon>
-                                {item.icon}
-                            </ListItemIcon>
-                            <ListItemText primary={item.name} />
-                        </ListItem>
+                    lists.map((list,index)=>(
+                        <ButtonBase onClick={(e)=>handleClick(e,index)} className={slug==list.slug && classes.active}>
+                            <div className={classes.section} key={index}>
+                                {list.icon}
+                                <small>{list.name}</small>
+                            </div>
+                        </ButtonBase>
                     ))
                 }
-            </List>
-
+                
+            </div>
 
         </div>
-    );
+    )
 }

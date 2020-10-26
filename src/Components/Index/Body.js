@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
-import { Grid, Hidden } from '@material-ui/core';
+import { Grid, Hidden, Container } from '@material-ui/core';
 import CategoryBars from '../Bars/CategoryBars';
 import ProductSection from '../Sections/ProductSection';
 import CategoryList from '../Sidebars/CategoryList'
-import Hero from '../Hero/Hero';
+import Hero from './Hero/Hero';
 import { AppContext } from '../../App';
 import IndexTabs from './IndexTabs'
 import JustForYou from './JustForYou';
@@ -18,11 +18,11 @@ export default function Body() {
     const [addLoadingBar, loadingBarJsx] = useLoadingBar();
     return (
 
-        <div >
+        <Container>
             {loadingBarJsx}
             <Hero addLoadingBar={addLoadingBar}/>
             <Elementor addLoadingBar={addLoadingBar}/>
-            <CategoryBars addLoadingBar={addLoadingBar}/>
+            {/* <CategoryBars addLoadingBar={addLoadingBar}/> */}
             <OffersBar addLoadingBar={addLoadingBar}/>
             <IndexTabs addLoadingBar={addLoadingBar}/>
 
@@ -36,6 +36,6 @@ export default function Body() {
 
             <JustForYou addLoadingBar={addLoadingBar}/>
             <NewsLetter addLoadingBar={addLoadingBar}/>
-        </div>
+        </Container>
     )
 }

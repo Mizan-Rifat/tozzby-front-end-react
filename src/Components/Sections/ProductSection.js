@@ -12,8 +12,8 @@ const useStyles = makeStyles({
 
         display: 'flex',
         position: 'absolute',
-        top: '-45px',
-        left:'25px'
+        top: '-47px',
+        // left:'25px'
     },
     titleText: {
         background: '#FF5C00',
@@ -45,7 +45,8 @@ const useStyles = makeStyles({
         width: '100%',
         height: '100%',
         borderRadius: '5px',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        objectFit:'contain'
     },
     bannerContainer: {
         height: '300px',
@@ -61,13 +62,15 @@ const useStyles = makeStyles({
     productContainer: {
         padding: '0 30px',
         ['@media (max-width:480px)']: {
-            padding: '0 15px'
+            padding: '0 5px'
         }
 
     },
     paperRoot: {
-        // background:'#f4f4f4',
         position: 'relative',
+        position: 'relative', 
+        marginTop: '5rem',
+        background:'unset'
     }
 
 })
@@ -98,10 +101,10 @@ export default function ProductSection(props ) {
             .then(response => {
                 setproducts(response.data.data)
                 setLoading(false)
-                addLoadingBar(10)
+                addLoadingBar(20)
             })
             .catch(eeror=>{
-                addLoadingBar(10)
+                addLoadingBar(20)
             })
 
 
@@ -116,7 +119,8 @@ export default function ProductSection(props ) {
 
                     <div style={{ marginTop: '5rem' }}>
 
-                        <Paper elevation={0} className={classes.paperRoot}>
+                        {/* <Paper elevation={0} className={classes.paperRoot}> */}
+                        <Paper variant='outlined' square className={classes.paperRoot}>
                             <CategoryTitle flashSale={flashSale} title={category.name} />
                             <Grid container spacing={2} >
                                 {

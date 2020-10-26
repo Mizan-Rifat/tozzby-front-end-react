@@ -5,7 +5,7 @@ import OrderDetails from './OrderDetails'
 export default function ShipmentTab({ order }) {
     return (
         <div>
-            <h5>Shipment #{order.shipments[0].id}</h5>
+            <p style={{ fontWeight: 700, fontSize: '16px' }}>Shipment #{order.shipments[0].id}</p>
             <div className="mt-3">
                 <table width='200px'>
                     <tr>
