@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Grid, Container, Paper, IconButton, Divider, Button, Chip, Tooltip, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { AppContext } from '../../App';
+import { AppContext } from '../../Routes';
 import { ProfileContext } from './UserBody';
 import SingleProduct from '../Sections/SingleProduct';
 import axios from 'axios';

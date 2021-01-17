@@ -4,7 +4,7 @@ import CategoryBars from '../Bars/CategoryBars';
 import ProductSection from '../Sections/ProductSection';
 import CategoryList from '../Sidebars/CategoryList'
 import Hero from './Hero/Hero';
-import { AppContext } from '../../App';
+import { AppContext } from '../../Routes';
 import IndexTabs from './IndexTabs'
 import JustForYou from './JustForYou';
 import OffersBar from './OffersBar';
@@ -35,7 +35,7 @@ export default function Body() {
             <OffersBar banner={2} addLoadingBar={addLoadingBar}/>
 
             <JustForYou addLoadingBar={addLoadingBar}/>
-            <NewsLetter addLoadingBar={addLoadingBar}/>
+            <NewsLetter addLoadingBar={addLoadingBar}/> 
         </Container>
     )
 }

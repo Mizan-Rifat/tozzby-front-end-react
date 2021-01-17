@@ -17,7 +17,8 @@ import { useEffect } from 'react';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        width: '100%',
+        // width: '100%',
+        height:'100%',
         maxWidth: 360,
         backgroundColor: theme.palette.background.paper,
     },
@@ -76,7 +77,7 @@ export default function UserSidebar() {
 
     return (
         <div className={classes.root}>
-            <List component="nav" aria-label="main mailbox folders">
+            <List component="nav" aria-label="main mailbox folders" style={{height:'100vh'}}>
 
                 {
                     lists.map((item, index) => (

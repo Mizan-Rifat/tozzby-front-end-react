@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { Paper, Divider, Button, } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { AppContext } from '../../App';
+import { AppContext } from '../../Routes';
 import { OrderContext } from './Checkout';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios'
@@ -117,7 +117,7 @@ export default function OrderSummary() {
                                     <div className="d-flex mt-1 mb-1" key={index}>
                                         <div className="col-3" style={{padding:0,minHeight:'85px'}}>
                                             <div className={classes.thumbnailImage}
-                                                style={{ backgroundImage: `url(${item.product.base_image.small_image_url})` }} />
+                                                style={{ backgroundImage: `url(${item.product.base_image[0].small_image_url})` }} />
                                         </div>
                                         <div className="col-9">
                                             <div className={classes.pname}>{item.product.name}</div>

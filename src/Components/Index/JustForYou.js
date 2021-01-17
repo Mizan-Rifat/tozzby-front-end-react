@@ -12,7 +12,7 @@ export default function JustForYou({ addLoadingBar }) {
     const [loading, setLoading] = useState(true);
 
     const [next, setNext] = useState(null);
-    const [nextLoading, setNextLoading] = useState(false);
+    const [nextLoading, setNextLoading] = useState(true);
 
 
     const loadMore = () => {

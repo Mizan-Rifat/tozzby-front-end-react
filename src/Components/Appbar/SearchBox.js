@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
@@ -6,10 +6,10 @@ import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import MenuItem from '@material-ui/core/MenuItem';
 import { fade, makeStyles } from '@material-ui/core/styles';
-import { InputBase, IconButton } from '@material-ui/core';
+import { InputBase, IconButton, InputAdornment } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import ListSubheader from '@material-ui/core/ListSubheader';
-
+import { AppContext } from '../../Routes';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -56,6 +56,12 @@ const useStyles = makeStyles((theme) => ({
         cursor:'pointer'
         
     },
+    searchBtn:{
+        color:'white',
+        '&:hover':{
+            background:'unset'
+        }
+    },
     inputRoot: {
         minWidth: '40%',
         height: '35px',
@@ -79,8 +85,15 @@ const useStyles = makeStyles((theme) => ({
     underline: {
         border: '1px solid yellow',
     },
+    childMenu:{
+        marginLeft:10
+    },
+    subHeader:{
+        color:'unset',
+        position:'unset'
+    }
     
-}));
+}))
 
 export default function SearchBox() {
     const classes = useStyles();
@@ -100,6 +113,11 @@ export default function SearchBox() {
         setOpen(true);
     };
 
+    const { categories } = useContext(AppContext);
+
+
+    console.log({categories})
+
 
     return (
         <div className={classes.search}>
@@ -107,14 +125,28 @@ export default function SearchBox() {
             <FormControl  >
                 <Select disableUnderline defaultValue="0" id="grouped-select" className={classes.formControl} onChange={handleChange}>
                     <MenuItem value="0">
-                        Category
+                        All
                     </MenuItem>
-                    <ListSubheader value={10}>Category 1</ListSubheader>
-                    <MenuItem value={1}>Option 1</MenuItem>
-                    <MenuItem value={2}>Option 2</MenuItem>
-                    <ListSubheader>Category 2</ListSubheader>
-                    <MenuItem value={3}>Option 3</MenuItem>
-                    <MenuItem value={4}>Option 4</MenuItem>
+
+                    {
+                        !categories.loading &&
+                            categories.state.map((category,index)=>(
+                                category.children.length == 0 ?
+
+                            <MenuItem value={1}>{ category.name }</MenuItem>
+
+                            : 
+                            <>
+                                <ListSubheader className={classes.subHeader} value={10}>{category.name}</ListSubheader>
+                                {
+                                    category.children.map((item,index)=>(
+                                        <MenuItem className={classes.childMenu} value={1}>{item.name}</MenuItem>
+                                    ))
+                                }
+                                    
+                            </>
+                        ))
+                    }
                 </Select>
             </FormControl>
 
@@ -125,13 +157,20 @@ export default function SearchBox() {
                     input: classes.inputInput,
                 }}
                 inputProps={{ 'aria-label': 'search' }}
+
+                endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        className={classes.searchBtn}
+                      >
+                        <SearchIcon /> 
+                      </IconButton>
+                    </InputAdornment>
+                  }
             />
 
-            <div className={classes.searchIcon} >
-              
-                <SearchIcon />
-              
-            </div>
+           
 
         </div>
     );

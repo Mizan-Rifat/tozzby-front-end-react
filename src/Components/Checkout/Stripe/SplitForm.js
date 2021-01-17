@@ -1,7 +1,7 @@
 import React, { useState, useContext,useEffect } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import axios from 'axios';
-import { AppContext } from '../../../App';
+import { AppContext } from '../../../Routes';
 import { useHistory } from 'react-router-dom';
 import { OrderContext } from '../Checkout';
 import { Button } from '@material-ui/core';

@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
         background:'black',
         color:'wheat',
         borderRadius:0,
-        marginBottom:'4px',
+        marginBottom:'2px',
         height:'38px',
         '&:hover': {
             background: 'rgba(0,0,0,.9)'

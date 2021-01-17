@@ -6,7 +6,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import Quantity from '../Common/Quantity'
 import axios from 'axios';
-import { AppContext } from '../../App';
+import { AppContext } from '../../Routes';
 import NotiToast from '../Common/NotiToast'
 import CancelIcon from '@material-ui/icons/Cancel';
 import { Link, useHistory } from 'react-router-dom';
@@ -202,7 +202,7 @@ function SingleItem({ item, setCartItems, wishListItems, setWishListItems }) {
 
                 <div className="col-2">
                     <Link to={`/product/${item.product.id}`}>
-                        <img src={item.product.base_image.small_image_url} className={classes.image} />
+                        <img src={item.product.base_image[0].small_image_url} className={classes.image} />
                     </Link>
                 </div>
                 <div className="col-3 mt-3">

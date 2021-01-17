@@ -3,7 +3,7 @@ import ProductExpansionPanel from './ProductExpansionPanel';
 import Rating from '@material-ui/lab/Rating';
 import { Button, CircularProgress } from '@material-ui/core';
 import axios from 'axios';
-import { AppContext } from '../../App';
+import { AppContext } from '../../Routes';
 import NotiToast from '../Common/NotiToast';
 
 export default function CreateReviewExpansionPanel({ id, reviews, setReviews }) {

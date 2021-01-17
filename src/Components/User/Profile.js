@@ -4,7 +4,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import { makeStyles } from '@material-ui/core/styles';
 import ProfileEdit from './ProfileEdit';
 import PersonIcon from '@material-ui/icons/Person';
-import { AppContext } from '../../App';
+import { AppContext } from '../../Routes';
 
 
 const useStyles = makeStyles((theme) => ({

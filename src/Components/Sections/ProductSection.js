@@ -110,7 +110,7 @@ export default function ProductSection(props ) {
 
     }, [])
 
-  
+  console.log({category})
 
     return (
         <>
@@ -146,7 +146,7 @@ export default function ProductSection(props ) {
                                                 <Grid item sm={3} className={classes.categoryContainer}>
 
                                                     <div className={classes.bannerContainer}>
-                                                        <img src={`${process.env.REACT_APP_DOMAIN}/storage/${category.image}`} className={classes.cBanner} />
+                                                        <img src={`${process.env.REACT_APP_DOMAIN}/images/${category.image}`} className={classes.cBanner} />
                                                     </div>
 
                                                 </Grid>

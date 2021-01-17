@@ -23,13 +23,15 @@ const useStyles = makeStyles((theme) => ({
     },
     itemContainer:{
         padding: '20px', 
-        justifyContent: 'center',
+        justifyContent: 'start',
         display:'flex',
         ['@media (max-width:480px)']: { 
             padding:'5px',
-            justifyContent: 'start',
             marginLeft:'70px'
-        }
+        },
+        ['@media (min-width:960px)']: { 
+            justifyContent: 'center',
+        },
     }
 
 }))
@@ -37,6 +39,29 @@ const useStyles = makeStyles((theme) => ({
 export default function Elementor({ addLoadingBar }) {
 
     const classes = useStyles();
+
+    const [items, setitems] = useState([
+        {
+            icon:<LocalShippingOutlinedIcon className={classes.icon} />,
+            title:'Free Delivery',
+            label:'From 99$'
+        },
+        {
+            icon:<MonetizationOnOutlinedIcon className={classes.icon} />,
+            title:'Moneyback Guarantee',
+            label:'1 Week Back'
+        },
+        {
+            icon:<PaymentOutlinedIcon className={classes.icon} />,
+            title:'Payment Method',
+            label:'Secure Payment'
+        },
+        {
+            icon:<ContactSupportOutlinedIcon className={classes.icon} />,
+            title:'Support',
+            label:'24 hours'
+        },
+    ])
  
     useEffect(() => {
         addLoadingBar(10)
@@ -48,48 +73,21 @@ export default function Elementor({ addLoadingBar }) {
         <>
             <Paper elevation={0} variant='outlined' style={{ marginTop: '2rem' }}>
                 <Grid container  >
-                
-                    <Grid item xs={12} md={3}>
-                        <div className={classes.itemContainer}>
-                            <LocalShippingOutlinedIcon className={classes.icon} />
-                            <div className="ml-2" style={{ fontFamily: 'sans-serif', }}>
-                                <p className={classes.text}>Free Delivery</p>
-                                <p style={{ margin: 0, color: '#666695' }}>From 99$</p>
-                            </div>
-                        </div>
-                    </Grid>
-
-                     <Grid item  xs={12} md={3}>
-                        <div className={classes.itemContainer}>
-                            <MonetizationOnOutlinedIcon className={classes.icon} />
-                            <div className="ml-2" style={{ fontFamily: 'sans-serif', }}>
-                                <p className={classes.text}>Moneyback Guarantee</p>
-                                <p style={{ margin: 0, color: '#666695' }}>1 Week Back</p>
-                            </div>
-                        </div>
-                    </Grid>
-                    <Grid item xs={12} md={3}>
-                        <div className={classes.itemContainer}>
-                            <PaymentOutlinedIcon className={classes.icon} />
-                            <div className="ml-2" style={{ fontFamily: 'sans-serif', }}>
-                                <p className={classes.text}>Payment Method</p>
-                                <p style={{ margin: 0, color: '#666695' }}>Secure Payment</p>
-                            </div>
-                        </div>
-                    </Grid>
-                    <Grid item xs={12} md={3}>
-                        <div className={classes.itemContainer}>
-                            <ContactSupportOutlinedIcon className={classes.icon} />
-                            <div className="ml-2" style={{ fontFamily: 'sans-serif', }}>
-                                <p className={classes.text}>Support</p>
-                                <p style={{ margin: 0, color: '#666695' }}>24 hours</p>
-                            </div>
-                        </div>
-                    </Grid>
 
 
-
-
+                    {
+                        items.map((item,index)=>(
+                            <Grid item xs={12} sm={6} md={3}>
+                                <div className={classes.itemContainer}>
+                                    {item.icon}
+                                    <div className="ml-2" style={{ fontFamily: 'sans-serif', }}>
+                                        <p className={classes.text}>{ item.title }</p>
+                                        <p style={{ margin: 0, color: '#666695' }}>{item.label}</p>
+                                    </div>
+                                </div>
+                            </Grid>
+                        ))
+                    }
 
                 </Grid>
             </Paper>

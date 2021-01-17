@@ -13,7 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import { useQueryState } from 'react-router-use-location-state';
-import { AppContext } from '../../App';
+import { AppContext } from '../../Routes';
 import Pagination from '@material-ui/lab/Pagination';
 import CategoryFilterDrawer from './CategoryFilterDrawer'
 
@@ -176,7 +176,7 @@ export default function CategoryBody({ id, search, addLoadingBar,setPageQry,name
 
             <div className="d-flex justify-content-between my-3 w-100">
 
-                <Hidden smUp>
+                <Hidden mdUp>
                     <Button 
                         variant='contained' 
                         size='small' 

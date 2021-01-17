@@ -1,70 +1,99 @@
-import { postAction, getAction } from "./actions";
+// import { getAction, postAction } from "./actions"
+import { getAction, postAction } from "./action";
 
 //urls
-
-const fetch_user_url = (id)=>`/api/`;
-const add_user_url = `/api/`;
-const delete_user_url =(id)=> `/api/`;
-const update_user_url = (id)=>`/api/`;
-
+const session_user_fetching_url = '/api/customer/get?token=true';
+const login_session_user_url = '/login';
+const update_session_user_url =(id)=> `/api/user/update/${id}`;
 
 //actions
+const SESSION_USER_FETCHED = 'storium/session/session_user_fetched'
+const SESSION_USER_LOGGED_IN = 'storium/session/session_user_logged_in'
+const SESSION_USER_LOGGED_OUT = 'storium/session/session_user_logged_out'
+const SESSION_USER_REGISTERED = 'storium/session/session_user_registered'
+const SESSION_USER_UPDATED = 'storium/session/session_user_updated'
 
-const USER_FETCHED = 'pes/user/user_fetched';
-const USER_ADDED = 'pes/user/user_added';
-const USER_DELETED = 'pes/user/user_deleted';
-const USER_UPDATED = 'pes/user/user_updated';
+const FETCHING_TRUE = 'storium/session_user/fetching_true'
+const FETCHING_FALSE = 'storium/session_user/fetching_false'
+const LOADING_TRUE = 'storium/session_user/loading_true'
+const LOADING_FALSE = 'storium/session_user/loading_false'
 
-const LOADING_TRUE = 'pes/user/loading_true';
-const LOADING_FALSE = 'pes/user/loading_false';
-const FETCHING_TRUE = 'pes/user/fetching_true';
-const FETCHING_FALSE = 'pes/user/fetching_false';
-const SET_ERRORS = 'pes/user/set_errors';
-
-// reducers
+const SET_ERRORS = 'storium/session/set_session_errors'
+//reducer
 
 const initState = {
     fetching:true,
     loading:false,
-    user:[],
-    error:{},
+    user:{},
+    error:{
+        message:'',
+        errors:{},
+        errorCode:''
+    },
 };
 
 export default (state=initState,action)=>{
     switch (action.type) {
-        case USER_FETCHED:
+
+        case SESSION_USER_FETCHED:{
+            let {notifications,...user} = action.payload;
+            return {
+                ...state,
+                user:user,
+                fetching:false
+            }
+        }
+        case SESSION_USER_LOGGED_IN:{
+            let {notifications,...user} = action.payload;
+            return {
+                ...state,
+                user:user,
+                fetching:false,
+                loading:false
+               
+            }
+        }
+  
+        case SESSION_USER_LOGGED_OUT:
             
             return {
                 ...state,
                 fetching:false,
                 loading:false,
-                user:action.payload,
-                
+                user:{}
+               
             }
-
-        case USER_ADDED:
+ 
+        case SESSION_USER_REGISTERED:
             
             return {
                 ...state,
                 loading:false,
-                user:[...state.user,action.payload],
-                
+                fetching:false
+               
             }
-        case USER_UPDATED:
+        case SESSION_USER_UPDATED:
             
             return {
                 ...state,
                 loading:false,
-                user:state.user.map(item=>item.id == action.payload.id ? action.payload : item),
-                
+                user:action.payload
+               
             }
-        case USER_DELETED:
+        
+        
+        case FETCHING_TRUE:
             
             return {
                 ...state,
-                loading:false,
-                user:state.user.filter(item => item.id != action.payload),
-                
+                fetching:true
+            }
+        
+        case FETCHING_FALSE:
+            
+            return {
+                ...state,
+                fetching:false
             }
         case LOADING_TRUE:
             
@@ -72,24 +101,12 @@ export default (state=initState,action)=>{
                 ...state,
                 loading:true
             }
+        
         case LOADING_FALSE:
             
             return {
                 ...state,
                 loading:false
-            }
-        case FETCHING_TRUE:
-            
-            return {
-                ...state,
-                fetching:true
-    
-            }
-        case FETCHING_FALSE:
-            
-            return {
-                ...state,
-                fetching:false,
             }
         case SET_ERRORS:
             
@@ -105,81 +122,113 @@ export default (state=initState,action)=>{
     }
 }
 
-// action_creators
+//action creators
 
-export const userFetched = (data) =>{
-    return {
-        type:USER_FETCHED,
-        payload:data
-    }
-}
 
-export const userUpdated = (data) =>{
+export const sessionUserFetched = (user) =>{
     return {
-        type:USER_UPDATED,
-        payload:data
+        type:SESSION_USER_FETCHED,
+        payload:user
     }
 }
-export const userDeleted = (id) =>{
+export const sessionUserUpdated = (user) =>{
     return {
-        type:USER_DELETED,
-        payload:id
-    }
-}
-export const userAdded = (data) =>{
-    return {
-        type:USER_ADDED,
-        payload:data
+        type:SESSION_USER_UPDATED,
+        payload:user
     }
 }
 
+export const userLoggedIn = (user) =>{
+    return {
+        type:SESSION_USER_LOGGED_IN,
+        payload:user
+    }
+}
+
+export const userLoggedOut = () =>{
+    return {
+        type:SESSION_USER_LOGGED_OUT,
+    }
+}
+
+export const userRegistered = (user) =>{
+    return {
+        type:SESSION_USER_REGISTERED,
+        payload:user
+    }
+}
 export const setErrors = (error) =>{
     return {
         type:SET_ERRORS,
         payload:error
     }
 }
-
-export const fetchUser = () => (dispatch) => {
-    
-    const url = fetch_user_url;
+export const fetchSessionUser = () => (dispatch) =>{
+  
+    const url = session_user_fetching_url
     const actions={
         loading:{type:FETCHING_TRUE},
-        success:userFetched,
+        success:sessionUserFetched,
         error:setErrors
     }
     return getAction(actions,url,dispatch);
 }
 
-export const addUser = (newData) => (dispatch) => {
+
+export const updateSessionUser = (data) => (dispatch) => {
     
-    const url = add_user_url;
+    const url = update_session_user_url(data.id);
+
     const actions={
         loading:{type:LOADING_TRUE},
-        success:userAdded,
+        success:sessionUserUpdated,
         error:setErrors
     }
-    return postAction(actions,url,newData,dispatch);
+    return postAction(actions,url,data,dispatch);
 }
 
-export const updateUser = (newData) => (dispatch) => {
-
-    const url = update_user_url();
+export const loginUser = (formData) => (dispatch) => {
+  
+    const url = login_session_user_url
     const actions={
         loading:{type:LOADING_TRUE},
-        success:userUpdated,
+        success:userLoggedIn,
         error:setErrors
     }
-    return postAction(actions,url,newData,dispatch,'put');
+    const data = {
+        email:formData.email,
+        password:formData.password,
+        remember:formData.remember,
+    }
+
+    return postAction(actions,url,data,dispatch);
 }
-
-export const deleteUser = (id) => (dispatch) => {
-
-    const url = delete_user_url(id);
+export const logoutUser = () => (dispatch) => {
+  
+    const url ='/logout'
+    const actions={
+        loading:{type:FETCHING_TRUE},
+        success:userLoggedOut,
+        error:setErrors
+    }
+    return postAction(actions,url,{},dispatch);
+}
+export const registerUser = (formData) => (dispatch) => {
+  
+    const url ='/register'
     const actions={
         loading:{type:LOADING_TRUE},
-        success:userDeleted,
+        success:userRegistered,
         error:setErrors
     }
-    return postAction(actions,url,{},dispatch,'delete');
+
+    const data = {
+        name:formData.name,
+        email:formData.email,
+        password:formData.password,
+        password_confirmation:formData.password_confirmation,
+    }
+
+    return postAction(actions,url,data,dispatch);
 }
+

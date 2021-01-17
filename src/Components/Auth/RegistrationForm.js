@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import { Button } from '@material-ui/core';
+import { Button,TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 
 
@@ -29,6 +29,10 @@ const useStyles = makeStyles(theme => ({
             textDecoration:'underline',
             cursor:'pointer'
         }
+    },
+    textfield:{
+      
+        margin:'12px 0'
     }
 }))
 
@@ -134,22 +138,28 @@ export default function RegistrationForm({ setUser, loading, setLoading, isSucce
                 {
                     fields.map((field, index) => (
 
-                        <div className="form-group" key={index}>
-                            <label htmlFor={field.name}>{field.placeholder}</label>
+                        <div className="" key={index}>
 
-                            <input type={field.type}
-                                className={`form-control ${hasError(field.name) && 'invalid'} `}
+                            <TextField
+                                className={classes.textfield}
+                                type={field.type}
                                 id={field.name}
-                                aria-describedby={field.name}
                                 placeholder={field.placeholder}
                                 name={field.name}
                                 onChange={handleFieldChange}
                                 value={field.value}
+                                fullWidth
+                                variant="outlined"
+                                InputProps={{
+                                    classes:{
+                                        input:classes.textFieldInput
+                                    }
+                                }}
+                                label={field.placeholder}
+                                margin='dense'
+                                error={hasError(field.name)}
+                                helperText={ renderError(field.name)}
                             />
-
-                            {
-                                renderError(field.name)
-                            }
 
                         </div>
 
@@ -157,7 +167,7 @@ export default function RegistrationForm({ setUser, loading, setLoading, isSucce
                 }
 
 
-                <div className="">
+                <div className="mt-3">
                     <Button type='submit' variant='contained' color="primary" className='mr-2'>
                         Register
                     </Button>

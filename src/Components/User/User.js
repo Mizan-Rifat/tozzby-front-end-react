@@ -3,7 +3,7 @@ import { Container, Grid, Hidden } from '@material-ui/core';
 import UserSidebar from './UserSidebar';
 import UserBody from './UserBody';
 import Profile from './Profile'
-import { AppContext } from '../../App';
+import { AppContext } from '../../Routes';
 import AuthCheck from '../Common/AuthCheck';
 import BackDrop from '../Common/BackDrop';
 import { makeStyles } from '@material-ui/core/styles';
@@ -57,29 +57,28 @@ export default function User() {
 
                     !authenticated ?
 
-                        <div className="text-center" style={{minHeight:'400px'}}>
+                        <div className="text-center" >
                             <h5 style={{ marginTop: '100px' }}>You need to be logged in to view this page.</h5>
                         </div>
                         :
 
-                        <Container >
+                        <Container>
 
                             <Grid container spacing={3}>
-                                <Hidden xsDown>
-                                    <Grid item md={3}>
+                                <Hidden smDown>
+                                    <Grid item xs={3}>
                                         <UserSidebar />
                                     </Grid>
                                 </Hidden>
 
                                 <Grid item xs={12} md={9}>
                                     <UserBody />
-                                    {/* <Profile /> */}
                                 </Grid>
                             </Grid>
 
                         </Container>
             }
-            <Hidden smUp>
+            <Hidden mdUp>
                 <BottomBar />
             </Hidden>
         </>

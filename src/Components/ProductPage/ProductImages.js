@@ -8,11 +8,14 @@ import Rating from '@material-ui/lab/Rating';
 const useStyles = makeStyles(theme => ({
     picContainer: {
         textAlign: 'center',
-        transition:'.3s ease-in'
+        transition:'.3s ease-in',
+        width:'100%',
+        height:450
     },
     mainImage: {
         width: '100%',
-        height: 'auto'
+        height: '100%',
+        objectFit:'contain'
     },
     thumbnail: {
         flex: '0 0 auto',
@@ -31,7 +34,7 @@ const useStyles = makeStyles(theme => ({
         }
     },
     thumbnailImage:{
-        height:'90px',
+        height:'100%',
         backgroundSize:'contain',
         backgroundPosition:'center',
         backgroundRepeat:'no-repeat'
@@ -54,10 +57,11 @@ export default function ProductImages() {
                     <Rating name="half-rating-read" defaultValue={product.reviews.average_rating} precision={0.5} readOnly />
                 </div>
             }
+
             <div className={classes.picContainer}>
                 <img src={product.images[selectedImage].original_image_url} className={classes.mainImage} />
-                
             </div>
+
             <div>
                 <MySLider>
 

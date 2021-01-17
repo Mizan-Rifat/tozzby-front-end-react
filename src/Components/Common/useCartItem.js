@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext,useRef } from 'react';
-import { AppContext } from '../../App';
+import { AppContext } from '../../Routes';
 import axios from 'axios';
 import NotiToast from './NotiToast';
 import AuthCheck from './AuthCheck';

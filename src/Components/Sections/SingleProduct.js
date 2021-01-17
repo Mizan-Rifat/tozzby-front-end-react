@@ -9,7 +9,7 @@ import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
 import Tooltip from '@material-ui/core/Tooltip';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import axios from 'axios'
-import { AppContext } from '../../App';
+import { AppContext } from '../../Routes';
 import NotiToast from '../Common/NotiToast';
 import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
 import { useHistory } from 'react-router-dom';
@@ -111,7 +111,7 @@ export default function SingleProduct(props) {
     const [inWishList, inWishListPending, toWishList, setWishListProduct] = useWishList();
     const { inCart, inCartPending, addToCart, removeFromCart, setCartItemProduct,ref} = useCartItem();
 
-    
+  
 
     const toast = NotiToast();
 
@@ -129,6 +129,7 @@ export default function SingleProduct(props) {
 
 
     useEffect(() => {
+
         setWishListProduct(product)
         setCartItemProduct(product)
     }, [product])
@@ -156,9 +157,10 @@ export default function SingleProduct(props) {
                         >
 
                         <Link href={`/product/${product.id}`}>
+                           
                             <CardMedia
                                 className={classes.media}
-                                image={product.base_image.medium_image_url}
+                                image={product.base_image[0].url}
                                 title={product.name}
                                 style={{ backgroundSize: 'contain' }}
                             />

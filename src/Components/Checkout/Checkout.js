@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, createContext } from 'react'
 import { Grid, Container, Paper, IconButton, Divider, Button, Hidden, } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { AppContext } from '../../App';
+import { AppContext } from '../../Routes';
 import HorizontalLinearStepper from './HorizontalLinearStepper';
 import { useHistory, Route, Switch, Redirect } from 'react-router-dom';
 import AddressForm from './AddressForm';
@@ -124,7 +124,7 @@ export default function Checkout(props) {
                         </Paper>
                         <Grid container spacing={3}>
 
-                            <Grid item xs={12} sm={8}>
+                            <Grid item xs={12} md={8}>
 
 
                                 <OrderContext.Provider value={{ order, setOrder }}>

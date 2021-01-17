@@ -1,5 +1,5 @@
 import React,{useState,useContext,useEffect} from 'react';
-import {AppContext} from '../../App';
+import {AppContext} from '../../Routes';
 
 export default function AuthCheck() {
 

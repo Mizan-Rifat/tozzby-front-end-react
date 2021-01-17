@@ -44,7 +44,11 @@ export default function Footer() {
 
                     <div className="d-flex" style={{marginBottom:'5px'}}>
                         <ShoppingCartOutlinedIcon style={{marginRight:'7px',marginTop:'7px',fontSize:'30px'}}/>
-                        <p style={{ fontFamily: `Sriracha, cursive`,fontSize:'30px',margin:0 }}>STORIUM</p>
+                        <p style={{ fontFamily: `Sriracha, cursive`,fontSize:'30px',margin:0 }}>
+                            {
+                                process.env.REACT_APP_NAME.toUpperCase()
+                            }   
+                        </p>
                     </div>
                     
                     <div>

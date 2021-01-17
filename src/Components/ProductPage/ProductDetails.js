@@ -16,7 +16,7 @@ import Quantity from '../Common/Quantity';
 import { ProductContext } from './Product';
 import CreateReviewExpansionPanel from './CreateReviewExpansionPanel';
 import axios from 'axios';
-import { AppContext } from '../../App';
+import { AppContext } from '../../Routes';
 import NotiToast from '../Common/NotiToast';
 import useCartItem from '../Common/useCartItem';
 import useWishList from '../Common/useWishList';

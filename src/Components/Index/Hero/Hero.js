@@ -12,13 +12,20 @@ const styles = makeStyles(theme => ({
         // position:'relative'
     },
     imgStyle: {
-        width:'150px',
-        height:'130px',
+        width:'100%',
+        height:'100%',
         transition:'.3s ease-in',
         '&:hover':{
             transform:'scale(1.1)',
             cursor:'pointer'
         }
+    },
+    imgContainer:{
+        ['@media (max-width:480px)']: { 
+            height:160
+        },
+        height:'175px',
+        overflow:'hidden'
     }
 }))
 
@@ -34,23 +41,31 @@ export default function Hero({ addLoadingBar}) {
 
         <Grid container spacing={3} className={classes.root}>
 
-            <Grid item xs={12} sm={8}>
+            <Grid item xs={12} sm={12} md={8}>
                 <Slider />
             </Grid>
 
-            <Grid item xs={12} sm={4}>
-                <Grid container spacing={3}>
+            <Grid item xs={12} sm={12} md={4}>
+                <Grid container spacing={2}>
                     <Grid item xs={6}>
-                        <img src={require('../../images/bn.jpg')} className={classes.imgStyle}/>
+                        <div className={classes.imgContainer}>
+                            <img src={require('../../images/bn.jpg')} className={classes.imgStyle}/>
+                        </div>
                     </Grid>
                     <Grid item xs={6}>
-                        <img src={require('../../images/bn1.jpg')} className={classes.imgStyle}/>
+                        <div className={classes.imgContainer}>
+                            <img src={require('../../images/bn1.jpg')} className={classes.imgStyle}/>
+                        </div>
                     </Grid>
                     <Grid item xs={6}>
-                        <img src={require('../../images/bn2.jpg')} className={classes.imgStyle}/>
+                        <div className={classes.imgContainer}>
+                            <img src={require('../../images/bn2.jpg')} className={classes.imgStyle}/>
+                        </div>
                     </Grid>
                     <Grid item xs={6}>
-                        <img src={require('../../images/bn3.jpg')} className={classes.imgStyle}/>
+                        <div className={classes.imgContainer}>
+                            <img src={require('../../images/bn3.jpg')} className={classes.imgStyle}/>
+                        </div>
                     </Grid>
                 </Grid>
             </Grid>

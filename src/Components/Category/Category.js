@@ -6,7 +6,7 @@ import CategorySidebar from './CategorySidebar';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
-import { AppContext } from '../../App';
+import { AppContext } from '../../Routes';
 import useLoadingBar from '../Common/useLoadingBar'
 import { useQueryState } from 'react-router-use-location-state'
 import CategoryFilterDrawer from './CategoryFilterDrawer';

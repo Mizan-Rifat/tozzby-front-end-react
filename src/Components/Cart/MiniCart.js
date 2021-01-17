@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles'
 import { Paper } from '@material-ui/core';
-import { AppContext } from '../../App';
+import { AppContext } from '../../Routes';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { IconButton, Button, Tooltip } from '@material-ui/core'
 import { Link } from 'react-router-dom';
@@ -124,7 +124,7 @@ function SingleItem({ item, setCartItems }) {
     return (
         <div className="d-flex mb-2">
             <div className="col-3">
-                <img src={item.product.base_image.small_image_url} className={classes.image} />
+                <img src={item.product.base_image[0].small_image_url} className={classes.image} />
             </div>
             <div className="col-7 p-0">
                 <div className={classes.sf}>{item.name}</div>

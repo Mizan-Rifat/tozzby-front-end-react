@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles';
-import { Button } from '@material-ui/core';
+import { Button,TextField } from '@material-ui/core';
 import axios from 'axios';
 
 
@@ -26,6 +26,13 @@ const useStyles = makeStyles(theme => ({
             textDecoration:'underline',
             cursor:'pointer'
         }
+    },
+    textFieldInput:{
+        // padding:'10px 14px'
+    },
+    textfield:{
+      
+        margin:'12px 0'
     }
 }))
 
@@ -136,29 +143,36 @@ export default function LoginForm({ setUser, loading, setLoading, isSuccess, set
                 {
                     fields.filter((item,index)=> index < 2).map((field, index) => (
 
-                        <div className="form-group" key={index}>
-                            <label htmlFor={field.name}>{field.placeholder}</label>
-
-                            <input type={field.type}
-                                className={`form-control ${hasError(field.name) && 'invalid'} `}
+                        <div className="" key={index}>
+                           
+                            <TextField
+                                className={classes.textfield}
+                                type={field.type}
                                 id={field.name}
-                                aria-describedby={field.name}
                                 placeholder={field.placeholder}
                                 name={field.name}
                                 onChange={handleFieldChange}
                                 value={field.value}
+                                fullWidth
+                                variant="outlined"
+                                InputProps={{
+                                    classes:{
+                                        input:classes.textFieldInput
+                                    }
+                                }}
+                                label={field.placeholder}
+                                margin='dense'
+                                error={hasError(field.name)}
+                                helperText={ renderError(field.name)}
                             />
-
-                            {
-                                renderError(field.name)
-                            }
+                         
 
                         </div>
 
                     ))
                 }
 
-                <div className="form-check">
+                <div className="form-check" style={{marginTop:'1rem'}}>
                     <input 
                         type="checkbox" 
                         className="form-check-input" 

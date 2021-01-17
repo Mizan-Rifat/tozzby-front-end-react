@@ -35,6 +35,7 @@
     "react-toast-notifications": "^2.4.0",
     "react-top-loading-bar": "^1.2.0",
     "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
     "slick-carousel": "^1.8.1"
   },
   "scripts": {

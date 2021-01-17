@@ -8,7 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
-import { AppContext } from '../../App';
+import { AppContext } from '../../Routes';
 import LoginForm from './LoginForm';
 import RegistrationForm from './RegistrationForm';
 import { Divider } from '@material-ui/core';
@@ -68,9 +68,14 @@ export default function Auth() {
 
     const renderError = (field) => (
 
-        formData.errors.hasOwnProperty(field) ? <small style={{ color: 'red' }}>{formData.errors[field][0]}</small> : ''
+        formData.errors.hasOwnProperty(field) ? formData.errors[field][0] : ''
 
     )
+    // const renderError = (field) => (
+
+    //     formData.errors.hasOwnProperty(field) ? <small style={{ color: 'red' }}>{formData.errors[field][0]}</small> : ''
+
+    // )
     // ---------------------
 
     return (
